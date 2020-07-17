@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp
+fmt.h
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.h
+geometry.h
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h
+algorithm
+-
+iostream
+-
+
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.h
+vector
+-
+functional
+-
+geometry.h
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h
+
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h
+vector
+-
+ostream
+-
+
