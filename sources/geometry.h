@@ -6,7 +6,7 @@
 // class implementing point
 template <typename real>
 class point {
-private:
+protected:
     std::vector <real> components;
 
 public:
@@ -90,7 +90,41 @@ public:
 
         return true;
     }
+
+    bool operator!= (const point <real>& other) {
+        return !((*this) == other);
+    }
 };
+
+
+template <typename real>
+class point2d : public point <real> {
+public:
+    point2d () {}
+
+    point2d (const point2d<real>& P) {
+        point <real>::components = P.get_components();
+    }
+
+    point2d (const point<real>& P) {
+        point <real>::components = P.get_components();
+    }
+
+    point2d (const double x, const double y) {
+        point<real>::components.resize(2);
+        point<real>::components[0] = x;
+        point<real>::components[1] = y;
+    }
+
+    real getx () {
+        return point<real>::components[0];
+    }
+
+    real gety () {
+        return point<real>::components[1];
+    }
+};
+
 
 // operator overload for outputing point<double>
 
@@ -112,3 +146,10 @@ real euclidean_distance (const point<real>& A, const point<real>& B) {
 
     return total;
 }
+
+
+point <double> walk (
+    const point <double>& nearest, 
+    const point <double>& sample, 
+    const double scaler
+);

@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources",
+  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/src.dir/fmt.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp"
+},
+{
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources",
+  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/src.dir/rrt.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/rrt.cpp",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/rrt.cpp"
+},
+{
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources",
+  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/src.dir/prm.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/prm.cpp",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/prm.cpp"
+},
+{
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources",
+  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/src.dir/geometry.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.cpp",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.cpp"
+},
+{
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources",
+  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/src.dir/planning.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.cpp",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.cpp"
+},
+{
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test",
+  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/../sources -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/test.dir/test.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp"
+}
+]

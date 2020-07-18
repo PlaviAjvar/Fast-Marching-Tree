@@ -199,6 +199,87 @@ geometry.cpp.s:
 	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/geometry.cpp.s
 .PHONY : geometry.cpp.s
 
+planning.o: planning.cpp.o
+
+.PHONY : planning.o
+
+# target to build an object file
+planning.cpp.o:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/planning.cpp.o
+.PHONY : planning.cpp.o
+
+planning.i: planning.cpp.i
+
+.PHONY : planning.i
+
+# target to preprocess a source file
+planning.cpp.i:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/planning.cpp.i
+.PHONY : planning.cpp.i
+
+planning.s: planning.cpp.s
+
+.PHONY : planning.s
+
+# target to generate assembly for a file
+planning.cpp.s:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/planning.cpp.s
+.PHONY : planning.cpp.s
+
+prm.o: prm.cpp.o
+
+.PHONY : prm.o
+
+# target to build an object file
+prm.cpp.o:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/prm.cpp.o
+.PHONY : prm.cpp.o
+
+prm.i: prm.cpp.i
+
+.PHONY : prm.i
+
+# target to preprocess a source file
+prm.cpp.i:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/prm.cpp.i
+.PHONY : prm.cpp.i
+
+prm.s: prm.cpp.s
+
+.PHONY : prm.s
+
+# target to generate assembly for a file
+prm.cpp.s:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/prm.cpp.s
+.PHONY : prm.cpp.s
+
+rrt.o: rrt.cpp.o
+
+.PHONY : rrt.o
+
+# target to build an object file
+rrt.cpp.o:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/rrt.cpp.o
+.PHONY : rrt.cpp.o
+
+rrt.i: rrt.cpp.i
+
+.PHONY : rrt.i
+
+# target to preprocess a source file
+rrt.cpp.i:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/rrt.cpp.i
+.PHONY : rrt.cpp.i
+
+rrt.s: rrt.cpp.s
+
+.PHONY : rrt.s
+
+# target to generate assembly for a file
+rrt.cpp.s:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/rrt.cpp.s
+.PHONY : rrt.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -214,6 +295,15 @@ help:
 	@echo "... geometry.o"
 	@echo "... geometry.i"
 	@echo "... geometry.s"
+	@echo "... planning.o"
+	@echo "... planning.i"
+	@echo "... planning.s"
+	@echo "... prm.o"
+	@echo "... prm.i"
+	@echo "... prm.s"
+	@echo "... rrt.o"
+	@echo "... rrt.i"
+	@echo "... rrt.s"
 .PHONY : help
 
 

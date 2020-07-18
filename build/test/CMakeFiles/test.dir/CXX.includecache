@@ -7,18 +7,34 @@
 #IncludeRegexTransform: 
 
 ../sources/fmt.h
-vector
--
-functional
--
-geometry.h
-../sources/geometry.h
 
 ../sources/geometry.h
 vector
 -
 ostream
 -
+
+../sources/planning.h
+geometry.h
+../sources/geometry.h
+vector
+-
+
+../sources/prm.h
+geometry.h
+../sources/geometry.h
+planning.h
+../sources/planning.h
+
+../sources/rrt.h
+vector
+-
+functional
+-
+geometry.h
+../sources/geometry.h
+planning.h
+../sources/planning.h
 
 /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include/numpy/__multiarray_api.h
 
@@ -465,6 +481,12 @@ matplotlibcpp.h
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/matplotlibcpp.h
 geometry.h
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/geometry.h
+planning.h
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/planning.h
+rrt.h
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/rrt.h
+prm.h
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/prm.h
 fmt.h
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/fmt.h
 functional

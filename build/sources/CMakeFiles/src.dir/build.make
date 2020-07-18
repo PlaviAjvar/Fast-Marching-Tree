@@ -80,42 +80,87 @@ include sources/CMakeFiles/src.dir/flags.make
 sources/CMakeFiles/src.dir/fmt.cpp.o: sources/CMakeFiles/src.dir/flags.make
 sources/CMakeFiles/src.dir/fmt.cpp.o: ../sources/fmt.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object sources/CMakeFiles/src.dir/fmt.cpp.o"
-	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/src.dir/fmt.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/src.dir/fmt.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp
 
 sources/CMakeFiles/src.dir/fmt.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/fmt.cpp.i"
-	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp > CMakeFiles/src.dir/fmt.cpp.i
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp > CMakeFiles/src.dir/fmt.cpp.i
 
 sources/CMakeFiles/src.dir/fmt.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/fmt.cpp.s"
-	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp -o CMakeFiles/src.dir/fmt.cpp.s
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp -o CMakeFiles/src.dir/fmt.cpp.s
+
+sources/CMakeFiles/src.dir/rrt.cpp.o: sources/CMakeFiles/src.dir/flags.make
+sources/CMakeFiles/src.dir/rrt.cpp.o: ../sources/rrt.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object sources/CMakeFiles/src.dir/rrt.cpp.o"
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/src.dir/rrt.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/rrt.cpp
+
+sources/CMakeFiles/src.dir/rrt.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/rrt.cpp.i"
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/rrt.cpp > CMakeFiles/src.dir/rrt.cpp.i
+
+sources/CMakeFiles/src.dir/rrt.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/rrt.cpp.s"
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/rrt.cpp -o CMakeFiles/src.dir/rrt.cpp.s
+
+sources/CMakeFiles/src.dir/prm.cpp.o: sources/CMakeFiles/src.dir/flags.make
+sources/CMakeFiles/src.dir/prm.cpp.o: ../sources/prm.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object sources/CMakeFiles/src.dir/prm.cpp.o"
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/src.dir/prm.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/prm.cpp
+
+sources/CMakeFiles/src.dir/prm.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/prm.cpp.i"
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/prm.cpp > CMakeFiles/src.dir/prm.cpp.i
+
+sources/CMakeFiles/src.dir/prm.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/prm.cpp.s"
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/prm.cpp -o CMakeFiles/src.dir/prm.cpp.s
 
 sources/CMakeFiles/src.dir/geometry.cpp.o: sources/CMakeFiles/src.dir/flags.make
 sources/CMakeFiles/src.dir/geometry.cpp.o: ../sources/geometry.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object sources/CMakeFiles/src.dir/geometry.cpp.o"
-	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/src.dir/geometry.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object sources/CMakeFiles/src.dir/geometry.cpp.o"
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/src.dir/geometry.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.cpp
 
 sources/CMakeFiles/src.dir/geometry.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/geometry.cpp.i"
-	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.cpp > CMakeFiles/src.dir/geometry.cpp.i
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.cpp > CMakeFiles/src.dir/geometry.cpp.i
 
 sources/CMakeFiles/src.dir/geometry.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/geometry.cpp.s"
-	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.cpp -o CMakeFiles/src.dir/geometry.cpp.s
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.cpp -o CMakeFiles/src.dir/geometry.cpp.s
+
+sources/CMakeFiles/src.dir/planning.cpp.o: sources/CMakeFiles/src.dir/flags.make
+sources/CMakeFiles/src.dir/planning.cpp.o: ../sources/planning.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object sources/CMakeFiles/src.dir/planning.cpp.o"
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/src.dir/planning.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.cpp
+
+sources/CMakeFiles/src.dir/planning.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/planning.cpp.i"
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.cpp > CMakeFiles/src.dir/planning.cpp.i
+
+sources/CMakeFiles/src.dir/planning.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/planning.cpp.s"
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.cpp -o CMakeFiles/src.dir/planning.cpp.s
 
 # Object files for target src
 src_OBJECTS = \
 "CMakeFiles/src.dir/fmt.cpp.o" \
-"CMakeFiles/src.dir/geometry.cpp.o"
+"CMakeFiles/src.dir/rrt.cpp.o" \
+"CMakeFiles/src.dir/prm.cpp.o" \
+"CMakeFiles/src.dir/geometry.cpp.o" \
+"CMakeFiles/src.dir/planning.cpp.o"
 
 # External object files for target src
 src_EXTERNAL_OBJECTS =
 
 sources/libsrc.a: sources/CMakeFiles/src.dir/fmt.cpp.o
+sources/libsrc.a: sources/CMakeFiles/src.dir/rrt.cpp.o
+sources/libsrc.a: sources/CMakeFiles/src.dir/prm.cpp.o
 sources/libsrc.a: sources/CMakeFiles/src.dir/geometry.cpp.o
+sources/libsrc.a: sources/CMakeFiles/src.dir/planning.cpp.o
 sources/libsrc.a: sources/CMakeFiles/src.dir/build.make
 sources/libsrc.a: sources/CMakeFiles/src.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX static library libsrc.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX static library libsrc.a"
 	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && $(CMAKE_COMMAND) -P CMakeFiles/src.dir/cmake_clean_target.cmake
 	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/src.dir/link.txt --verbose=$(VERBOSE)
 

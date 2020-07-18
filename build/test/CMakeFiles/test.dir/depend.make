@@ -3,6 +3,9 @@
 
 test/CMakeFiles/test.dir/test.cpp.o: ../sources/fmt.h
 test/CMakeFiles/test.dir/test.cpp.o: ../sources/geometry.h
+test/CMakeFiles/test.dir/test.cpp.o: ../sources/planning.h
+test/CMakeFiles/test.dir/test.cpp.o: ../sources/prm.h
+test/CMakeFiles/test.dir/test.cpp.o: ../sources/rrt.h
 test/CMakeFiles/test.dir/test.cpp.o: /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include/numpy/__multiarray_api.h
 test/CMakeFiles/test.dir/test.cpp.o: /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include/numpy/_neighborhood_iterator_imp.h
 test/CMakeFiles/test.dir/test.cpp.o: /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include/numpy/_numpyconfig.h

@@ -4,6 +4,9 @@
 test/CMakeFiles/test.dir/test.cpp.o
  ../sources/fmt.h
  ../sources/geometry.h
+ ../sources/planning.h
+ ../sources/prm.h
+ ../sources/rrt.h
  /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include/numpy/__multiarray_api.h
  /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include/numpy/_neighborhood_iterator_imp.h
  /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include/numpy/_numpyconfig.h

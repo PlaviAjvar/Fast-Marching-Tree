@@ -80,15 +80,15 @@ include test/CMakeFiles/test.dir/flags.make
 test/CMakeFiles/test.dir/test.cpp.o: test/CMakeFiles/test.dir/flags.make
 test/CMakeFiles/test.dir/test.cpp.o: ../test/test.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object test/CMakeFiles/test.dir/test.cpp.o"
-	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test && /Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/test.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test && /usr/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/test.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp
 
 test/CMakeFiles/test.dir/test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/test.cpp.i"
-	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp > CMakeFiles/test.dir/test.cpp.i
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp > CMakeFiles/test.dir/test.cpp.i
 
 test/CMakeFiles/test.dir/test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/test.cpp.s"
-	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp -o CMakeFiles/test.dir/test.cpp.s
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp -o CMakeFiles/test.dir/test.cpp.s
 
 # Object files for target test
 test_OBJECTS = \

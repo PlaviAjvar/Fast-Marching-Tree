@@ -12,3 +12,15 @@ std::ostream& operator << (std::ostream& os, const point <double> P) {
     os << ")";
     return os;
 }
+
+// walk along direction from nearest to sample
+
+point <double> walk (
+    const point <double>& nearest, 
+    const point <double>& sample, 
+    const double scaler
+) {
+
+    point <double> diff(sample - nearest);
+    return nearest + diff * scaler;
+}
