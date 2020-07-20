@@ -99,6 +99,7 @@ output fmt (
 
     // connect nodes amongst themselves
     std::vector <labeled_node <double>> lgraph = induced_graph(graph, distance, collision_check, radius, stepsize);
+    std::vector <std::pair <point<double>, point<double>>> elist;
 
     std::cout << "Induced graph connected" << std::endl;
 
@@ -141,6 +142,7 @@ output fmt (
                 x->set_backpointer(y_near);
                 //std::cout << x->get_point() << " -> " << y_near->get_point() << std::endl;
                 pq.push(x);
+                elist.push_back(std::make_pair(x->get_point(), y_near->get_point()));
             }
         }
 
@@ -163,5 +165,5 @@ output fmt (
     // reconstruct path in treeified graph
     std::vector <point <double>> path = reconstruct_path(&lgraph[0], &lgraph.back());
     paths.push_back(path);
-    return output(paths, lgraph);
+    return output(paths, elist);
 }

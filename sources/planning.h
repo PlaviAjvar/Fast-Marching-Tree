@@ -199,7 +199,7 @@ protected:
 public:
     output () {}
 
-    output (const output& other) : path(other.path), edge_list(other.edge_list) {}
+    output (const output& other) : path(other.get_paths()), edge_list(other.get_edgelist()) {}
 
     output (
         const std::vector <std::vector <point<double>>>& _path, 

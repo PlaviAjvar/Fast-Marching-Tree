@@ -94,6 +94,10 @@ public:
             throw std::domain_error("Algorithm label has to be either RRT, PRM or FMT");
         }
 
+        // std::cout << start << " " << goal << std::endl;
+       
+        // for (auto&& edge : out.get_edgelist()) std::cout << edge.first << " -> " << edge.second << std::endl;
+
         return out;
     }
 };
@@ -137,9 +141,9 @@ public:
 
     constexpr static unsigned int num_samplesA = 500;
     constexpr static double stepsizeA = 1e-2;
-    constexpr static double radiusA = 1e-2;
+    constexpr static double radiusA = 1e-2; // 5 / num_samples
 
-    static bool test_collisionA(point <double> P) {
+    static bool test_collisionA (point <double> P) {
         const double eps = 1e-3;
         bool col = (P[0] < eps || P[0] > 1-eps || P[1] < eps || P[1] > 1-eps) || (P[0] < 0.6 && (P[0] < 0.2 + P[1] && P[0] > -0.2 + P[1]));
         return col;
@@ -167,6 +171,122 @@ public:
     }
 
     // TEST B
+
+    static point <double> startB () {
+        return point <double>(std::vector<double>{0.1, 0.3});
+    }
+
+    static point <double> goalB () {
+        return point <double>(std::vector<double>{0.8, 0.8});
+    }
+
+    static point <double> startB2 () {
+        return point <double>(std::vector <double>{0.1, 0.8});
+    }
+
+    static point <double> goalB2 () {
+        return point <double>(std::vector <double>{0.8, 0.1});
+    }
+
+    static std::vector <point <double>> startsB () {
+        return std::vector <point <double>>{startB(), startB2()};
+    }
+
+    static std::vector <point<double>> goalsB () {
+        return std::vector <point <double>>{goalB(), goalB2()};
+    }
+
+    static std::vector <std::pair<double,double>> joint_limitsB () {
+        return std::vector <std::pair<double,double>>{{0,1}, {0,1}};
+    }
+
+    static std::function <double(const point <double>&, const point <double>&)> distanceB () {
+        return euclidean_distance <double>;
+    }
+
+    constexpr static unsigned int num_samplesB = 500;
+    constexpr static double stepsizeB = 1e-2;
+    constexpr static double radiusB = 1e-2; // 5 / num_samples
+
+
+    static bool test_collisionB (point <double> P) {
+        const double eps = 1e-3;
+
+        if (P[0] < eps || P[0] > 1-eps || P[1] < eps || P[1] > 1-eps) {
+            return true;
+        }
+        if (P[0] < 0.2 && P[1] > 0.45 && P[1] < 0.55) {
+            return true;
+        }
+
+        if (P[1] < 0.5 && P[0] < 0.6 && P[1] < P[0]) {
+            return true;
+        }
+
+        if (P[0] > 0.7 && P[1] > 0.3 && P[1] < 0.7) {
+            return true;
+        }
+
+        if (P[0] < 0.6 && P[0] > 0.5 && P[1] > 0.7) {
+            return true;
+        }
+
+        return false;
+    }
+
+    static size_t add_obstacle_edgesB (
+        std::vector <point2d <double>>& current, 
+        std::vector <point2d <double>>& previous, 
+        const std::function<bool(point<double>)> test_collision
+    ) {
+        // left part
+        previous.push_back(point2d <double>(0, 0.45));
+        current.push_back(point2d <double>(0.2, 0.45));
+
+        previous.push_back(point2d <double>(0.2, 0.45));
+        current.push_back(point2d <double>(0.2, 0.55));
+
+        previous.push_back(point2d <double>(0.2, 0.55));
+        current.push_back(point2d <double>(0, 0.55));
+
+        // bottom part
+        previous.push_back(point2d <double>(0, 0));
+        current.push_back(point2d <double>(0.5, 0.5));
+
+        previous.push_back(point2d <double>(0.5, 0.5));
+        current.push_back(point2d <double>(0.6, 0.5));
+
+        previous.push_back(point2d <double>(0.6, 0.5));
+        current.push_back(point2d <double>(0.6, 0));
+
+        // right part
+        previous.push_back(point2d <double>(1, 0.3));
+        current.push_back(point2d <double>(0.7, 0.3));
+
+        previous.push_back(point2d <double>(0.7, 0.3));
+        current.push_back(point2d <double>(0.7, 0.7));
+
+        previous.push_back(point2d <double>(0.7, 0.7));
+        current.push_back(point2d <double>(1, 0.7));
+
+        // upper part
+        previous.push_back(point2d <double>(0.5, 1));
+        current.push_back(point2d <double>(0.5, 0.7));
+
+        previous.push_back(point2d <double>(0.5, 0.7));
+        current.push_back(point2d <double>(0.6, 0.7));
+
+        previous.push_back(point2d <double>(0.6, 0.7));
+        current.push_back(point2d <double>(0.6, 1));
+
+        return 12;
+    }
+
+    static point <double> get_sampleB () {
+        return get_sample(joint_limitsB(), 2);
+    }
+
+    // function which generates random sample
 
     static point <double> get_sample(const std::vector <std::pair <double,double>>& joint_limits, size_t dimension) {
         std::vector <double> components;
@@ -272,6 +392,8 @@ int main (int argc, char *argv[]) {
     try {
         testA_sq = test(tb.startA(), tb.goalA(), tb.joint_limitsA(), tb.test_collisionA, tb.get_sampleA, tb.distanceA(), tb.num_samplesA, tb.stepsizeA, tb.radiusA);
         testA_mq = test(tb.startsA(), tb.goalsA(), tb.joint_limitsA(), tb.test_collisionA, tb.get_sampleA, tb.distanceA(), tb.num_samplesA, tb.stepsizeA, tb.radiusA);
+        testB_sq = test(tb.startB(), tb.goalB(), tb.joint_limitsB(), tb.test_collisionB, tb.get_sampleB, tb.distanceB(), tb.num_samplesB, tb.stepsizeB, tb.radiusB);
+        testB_mq = test(tb.startsB(), tb.goalsB(), tb.joint_limitsB(), tb.test_collisionB, tb.get_sampleB, tb.distanceB(), tb.num_samplesB, tb.stepsizeB, tb.radiusB);
     }
     catch (std::logic_error err) {
         std::cout << err.what() << std::endl;
@@ -306,19 +428,29 @@ int main (int argc, char *argv[]) {
             if (algorithm == "PRM") out = testA_mq.run_test(algorithm);
             else out = testA_sq.run_test(algorithm);
         }
-        // else if (test_label == "B") {
-        //     if (algorithm == "PRM") out = testB_mq.run_test(algorithm);
-        //     else out = testB_sq.run_test(algorithm);
-        // }
+        else if (test_label == "B") {
+            if (algorithm == "PRM") out = testB_mq.run_test(algorithm);
+            else out = testB_sq.run_test(algorithm);
+        }
     }
     catch (std::logic_error err) {
         std::cout << err.what() << std::endl;
         throw;
     }
 
+    for (size_t qry = 0; qry < out.get_paths().size(); ++qry) {
+        std::vector <point <double>> path = out.get_paths()[qry];
+        if (path.size() == 0) {
+            std::cout << "Path for query " << qry + 1 << " not found." << std::endl;
+        }
+        else {
+            std::cout << "Path for query " << qry + 1 << " found." << std::endl;
+        }
+    }
+
     // plot graph
     if (test_label == "A") plot_graph(out, tb.test_collisionA, tb.add_obstacle_edgesA, one_by_one, write_to_file);
-    //else if (test_label == "B")) plot_graph(out, tb.test_collisionB, (algorithm != "PRM"));
+    else if (test_label == "B") plot_graph(out, tb.test_collisionB, tb.add_obstacle_edgesB, one_by_one, write_to_file);
 
     return 0;
 }
