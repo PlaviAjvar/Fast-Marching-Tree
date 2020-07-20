@@ -33,10 +33,8 @@ std::vector <point<double>> backtrack (
     labeled_node <double>* goal
 );
 
-bool path_clear(
-    const point <double> A,
-    const point <double> B,
-    const std::function <bool(point<double>)>& collision_check,
-    const double stepsize,
-    const double epsilon = 1e-6
+std::vector <point <double>> get_samples(
+    unsigned int num_samples,
+    const std::function <point<double>()>& get_sample,
+    const std::function <bool(point<double>)>& collision_check
 );

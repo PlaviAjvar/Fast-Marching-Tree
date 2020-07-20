@@ -2,6 +2,7 @@
 
 #include "geometry.h"
 #include <vector>
+#include <iostream>
 
 // defines node class for graphs
 
@@ -70,42 +71,96 @@ template <typename real>
 class labeled_node : public node <real> {
 private:
     bool mark;
+    bool closed;
+    double distance;
     labeled_node <real>* backpointer;
 
 public:
-    labeled_node () {}
+    labeled_node () {
+        backpointer = nullptr;
+    }
 
     labeled_node (const node <real>& vertex) {
         node<real>::sample = vertex.get_point();
         node<real>::neighbor = vertex.get_neighbors();
+        backpointer = nullptr;
     }
 
     labeled_node (const point <real> _sample) {
         node<real>::sample = _sample;
+        backpointer = nullptr;
     }
 
     labeled_node (
         const point <real> _sample, 
         std::vector <node<real>*> _neighbor
-    ) : node<real>(_sample, _neighbor) {}
-
-    std::vector <labeled_node<real>*> get_labeled_neighbors () const {
-        std::vector <labeled_node <real>*> labeled_neighbor;
-        labeled_neighbor.reserve(node<real>::neighbor.size());
-
-        for (auto&& vertex : node<real>::neighbor) {
-            labeled_neighbor.push_back(dynamic_cast <labeled_node <real>*>(vertex));
-        }
-
-        return labeled_neighbor;
+    ) : node<real>(_sample, _neighbor) {
+        backpointer = nullptr;
     }
 
+    std::vector <labeled_node<real>*> get_labeled_neighbors () const {
+        std::vector <labeled_node <real>*> labeled_neighbors;
+        labeled_neighbors.reserve(node<real>::neighbor.size());
+
+        for (auto&& vertex : node<real>::neighbor) {
+            labeled_neighbors.push_back(dynamic_cast <labeled_node <real>*>(vertex));
+        }
+
+        return labeled_neighbors;
+    }
+
+    std::vector <labeled_node<real>*> get_marked_neighbors () const {
+        std::vector <labeled_node <real>*> marked_neighbors;
+        marked_neighbors.reserve(node <real>::neighbor.size());
+
+        for (auto&& vertex : node<real>::neighbor) {
+            labeled_node <real>* lvertex = dynamic_cast <labeled_node <real>*>(vertex);
+            if (lvertex -> is_marked()) {
+                marked_neighbors.push_back(lvertex);
+            }
+        }
+
+        return marked_neighbors;
+    }
+
+    std::vector <labeled_node<real>*> get_unmarked_neighbors () const {
+        std::vector <labeled_node <real>*> unmarked_neighbors;
+        unmarked_neighbors.reserve(node <real>::neighbor.size());
+
+        for (auto&& vertex : node<real>::neighbor) {
+            labeled_node <real>* lvertex = dynamic_cast <labeled_node <real>*>(vertex);
+            if (!lvertex->is_marked() && !lvertex->is_closed()) {
+                unmarked_neighbors.push_back(lvertex);
+            }
+        }
+
+        return unmarked_neighbors;
+    }
+
+    void treeify () {
+        node <real>::neighbor.resize(1);
+        node <real>::neighbor[0] = backpointer;
+
+        // if backpointer is nullptr, node has no neighbors
+        if (backpointer == nullptr) {
+            node <real>::neighbor.clear();
+        }
+    }
+    
     labeled_node <double>* get_backpointer() const {
         return backpointer;
     }
 
     bool is_marked () const {
         return mark;
+    }
+
+    bool is_closed () const {
+        return closed;
+    }
+
+    double get_distance () const {
+        return distance;
     }
 
     void set_backpointer (labeled_node <double> * const bp) {
@@ -118,6 +173,14 @@ public:
 
     void remove_mark () {
         mark = false;
+    }
+
+    void close() {
+        closed = true;
+    }
+
+    void set_distance (double dist) {
+        distance = dist;
     }
 };
 
@@ -208,3 +271,9 @@ public:
         return !path[0].empty();
     }
 };
+
+std::vector <point <double>> get_samples (
+    unsigned int num_samples,
+    const std::function <point<double>()>& get_sample,
+    const std::function <bool(point<double>)>& collision_check
+);

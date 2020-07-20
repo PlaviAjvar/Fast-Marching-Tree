@@ -1,4 +1,5 @@
 #include "planning.h"
+#include <iostream>
 
 // returns path from start to goal in tree
 // the endpoints are the first and last entry of vector
@@ -48,6 +49,11 @@ std::vector <std::pair<point<double>, point<double>>> output_rrt::edgelist_from_
     return elist;    
 }
 
+template <class T>
+std::ostream& operator<< (std::ostream& os, std::vector <T> v) {
+    for(auto&& e : v) std::cout << e << " ";
+    return os;
+}
 
 // obtain edgelist from graph
 
@@ -63,4 +69,29 @@ std::vector <std::pair<point<double>, point<double>>> output::edgelist_from_grap
     }
 
     return edge_list;
+}
+
+
+// helper function for obtaining list of samples
+
+std::vector <point <double>> get_samples(
+    unsigned int num_samples,
+    const std::function <point<double>()>& get_sample,
+    const std::function <bool(point<double>)>& collision_check
+) {
+
+    // obtain all samples
+    std::vector <point <double>> samples;
+    samples.reserve(num_samples);
+
+    for (size_t i = 0; i < num_samples; ++i) {
+        point <double> sample = get_sample();
+        
+        // if sample is in free space add it
+        if (!collision_check(sample)) {
+            samples.push_back(sample);
+        }
+    }
+
+    return samples;
 }

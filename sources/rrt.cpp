@@ -101,7 +101,7 @@ num_samples is the number of samples used in algorithm
 */
 
 
-output_rrt rrt(
+output rrt(
     const point <double> start,
     const point <double> goal,
     const std::vector <std::pair<double,double>>& joint_limits,

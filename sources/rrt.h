@@ -46,7 +46,7 @@ point <double> new_state (
 
 std::vector <std::pair<point<double>, point<double>>> edgelist (std::vector <tree_node <double>>& tree);
 
-output_rrt rrt (
+output rrt (
     const point <double> start,
     const point <double> goal,
     const std::vector <std::pair<double,double>>& joint_limits,

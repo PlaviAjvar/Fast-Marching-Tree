@@ -3,30 +3,6 @@
 #include <queue>
 #include <iostream>
 
-// check if path is clear between two points
-
-bool path_clear(
-    const point <double> A,
-    const point <double> B,
-    const std::function <bool(point<double>)>& collision_check,
-    const double stepsize,
-    const double epsilon
-) {
-
-    for (double scaler = stepsize; scaler <= 1 + epsilon; scaler += stepsize) {
-        // point 1 step further down line
-        point <double> step_further = walk(A, B, scaler);
-
-        // if no collision update new configuration
-        if (collision_check(step_further)) {
-            return false;
-        }
-    }
-    
-    return true;
-}
-
-
 // implements connect procedure on prm graph
 
 std::vector <labeled_node <double>> prm_connect(
@@ -133,19 +109,7 @@ output prm (
     const double stepsize,
     const double radius
 ) { 
-
-    // obtain all samples
-    std::vector <point <double>> samples;
-    samples.reserve(num_samples);
-
-    for (size_t i = 0; i < num_samples; ++i) {
-        point <double> sample = get_sample();
-        
-        // if sample is in free space add it
-        if (!collision_check(sample)) {
-            samples.push_back(sample);
-        }
-    }
+    std::vector <point <double>> samples(get_samples(num_samples, get_sample, collision_check));
 
     size_t free_samples = samples.size();
     size_t num_queries = start.size();

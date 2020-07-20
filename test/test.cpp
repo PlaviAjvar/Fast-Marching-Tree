@@ -85,7 +85,7 @@ public:
             out = rrt(start, goal, joint_limits, test_collision, get_sample, distance, num_samples, stepsize);
         }
         else if (algorithm == "FMT") {
-            //out = fmt(start, goal, joint_limits, test_collision, get_sample, distance, num_samples, stepsize, radius);
+            out = fmt(start, goal, joint_limits, test_collision, get_sample, distance, num_samples, stepsize, radius);
         }
         else if (algorithm == "PRM") {
             out = prm(starts, goals, joint_limits, test_collision, get_sample, distance, num_samples, stepsize, radius);
@@ -278,9 +278,10 @@ int main (int argc, char *argv[]) {
         throw;
     }
 
-    std::string algorithm = "RRT";
+    std::string algorithm = "FMT";
     std::string test_label = "A";
     bool one_by_one = false;
+    bool write_to_file = false;
 
     for (size_t i = 0; i < argc; ++i) {
         std::string flag(argv[i]);
@@ -290,8 +291,11 @@ int main (int argc, char *argv[]) {
         if (flag == "A" || flag == "B") {
             test_label = flag;
         }
-        if (flag == "-obo") {
+        if (flag == "-seq") {
             one_by_one = true;
+        }
+        if (flag == "-file") {
+            write_to_file = true;
         }
     }
 
@@ -313,7 +317,7 @@ int main (int argc, char *argv[]) {
     }
 
     // plot graph
-    if (test_label == "A") plot_graph(out, tb.test_collisionA, tb.add_obstacle_edgesA, one_by_one);
+    if (test_label == "A") plot_graph(out, tb.test_collisionA, tb.add_obstacle_edgesA, one_by_one, write_to_file);
     //else if (test_label == "B")) plot_graph(out, tb.test_collisionB, (algorithm != "PRM"));
 
     return 0;

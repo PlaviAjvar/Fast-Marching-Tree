@@ -3,6 +3,9 @@
 
 sources/CMakeFiles/src.dir/fmt.cpp.o
  /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp
+ /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.h
+ /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h
+ /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.h
 sources/CMakeFiles/src.dir/geometry.cpp.o
  /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.cpp
  /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h

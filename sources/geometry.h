@@ -153,3 +153,11 @@ point <double> walk (
     const point <double>& sample, 
     const double scaler
 );
+
+bool path_clear(
+    const point <double> A,
+    const point <double> B,
+    const std::function <bool(point<double>)>& collision_check,
+    const double stepsize,
+    const double epsilon = 1e-6
+);
