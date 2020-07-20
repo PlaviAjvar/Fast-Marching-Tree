@@ -129,7 +129,6 @@ output_rrt rrt(
             new_cfg = new_state(*nearest, sample, stepsize, collision_check);
         }
         catch (std::length_error err) {
-            std::cout << err.what() << "\n";
             throw;
         }
 

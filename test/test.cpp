@@ -5,49 +5,185 @@
 #include "prm.h"
 #include "fmt.h"
 #include <functional>
+#include <random>
 namespace plt = matplotlibcpp;
 
 class test {
+private:
+    std::vector <point<double>> starts, goals;
+    std::vector <std::pair <double,double>> joint_limits;
+    unsigned int num_samples;
+    double stepsize, radius;
+    std::function<bool(point<double>)> test_collision;
+    std::function<point<double>()> get_sample;
+    std::function <double(const point <double>&, const point <double>&)> distance;
 
 public:
     test () {}
 
-    test (const test& P) {}
+    test (
+        const std::vector <point<double>>& _starts,
+        const std::vector <point<double>>& _goals,
+        const std::vector <std::pair <double,double>>& _joint_limits,
+        const std::function<bool(point<double>)> _test_collision,
+        const std::function<point<double>()> _get_sample,
+        std::function <double(const point <double>&, const point <double>&)> _distance,
+        const unsigned int _num_samples,
+        const double _stepsize,
+        const double _radius
+    ) : starts(_starts), goals(_goals), joint_limits(_joint_limits), num_samples(_num_samples), stepsize(_stepsize), radius(_radius),
+    test_collision(_test_collision), get_sample(_get_sample), distance(_distance) {
 
-    bool test_collisionA(point <double> P, const double eps = 1e-3) const {
-        bool col = (P[0] < eps || P[0] > 1-eps || P[1] < eps || P[1] > 1-eps) || (P[0] < 0.6 && (P[0] < 0.2 + P[1] && P[0] > -0.2 + P[1]));
-        return col;
+        if (_starts.size() != _goals.size()) {
+            throw std::length_error("Number of starting points has to equal number of goal points");
+        }
+
+        if (_joint_limits.size() != (_starts.begin())->get_dimension()) {
+            throw std::domain_error("Number of joints has to equal dimension of configuration space points");
+        }
+
+        if (_stepsize < 0 || _radius < 0) {
+            throw std::domain_error("Stepsize and radius have to be positive");
+        }
     }
 
-    point <double> get_sample2d() const {
-        double x = double(rand()) / RAND_MAX;
-        double y = double(rand()) / RAND_MAX;
-        point <double> sample(std::vector<double>{x, y});
-        return sample;
+    test (
+        const point <double>& start,
+        const point <double>& goal,
+        const std::vector <std::pair <double,double>>& _joint_limits,
+        const std::function<bool(point<double>)> _test_collision,
+        const std::function<point<double>()> _get_sample,
+        std::function <double(const point <double>&, const point <double>&)> _distance,
+        const unsigned int _num_samples,
+        const double _stepsize,
+        const double _radius
+    ) : joint_limits(_joint_limits), num_samples(_num_samples), stepsize(_stepsize), radius(_radius),
+    test_collision(_test_collision), get_sample(_get_sample), distance(_distance) {
+
+        starts.push_back(start);
+        goals.push_back(goal);
+
+        if (_joint_limits.size() != (start.get_dimension())) {
+            throw std::domain_error("Number of joints has to equal dimension of configuration space points");
+        }
+
+        if (_stepsize < 0 || _radius < 0) {
+            throw std::domain_error("Stepsize and radius have to be positive");
+        }
+    }
+
+    output run_test (const std::string& algorithm) const {
+        if (algorithm != "PRM" && starts.size() > 1) {
+            throw std::domain_error("Only PRM can have multiple start and goal points");
+        }
+
+        point <double> start = starts[0];
+        point <double> goal = goals[0];
+        output out;
+
+        if (algorithm == "RRT") {
+            out = rrt(start, goal, joint_limits, test_collision, get_sample, distance, num_samples, stepsize);
+        }
+        else if (algorithm == "FMT") {
+            //out = fmt(start, goal, joint_limits, test_collision, get_sample, distance, num_samples, stepsize, radius);
+        }
+        else if (algorithm == "PRM") {
+            out = prm(starts, goals, joint_limits, test_collision, get_sample, distance, num_samples, stepsize, radius);
+        }
+        else {
+            throw std::domain_error("Algorithm label has to be either RRT, PRM or FMT");
+        }
+
+        return out;
     }
 };
 
 
-size_t add_obstacle_edges(
-    std::vector <point2d <double>>& current, 
-    std::vector <point2d <double>>& previous, 
-    const std::function<bool(point<double>)>& test_collision
-) {
+class test_battery {
+public:
+    // TEST A
 
-    // dummy code, insert real code
+    static point <double> startA () {
+        return point <double>(std::vector<double>{0.1, 0.4});
+    }
 
-    previous.push_back(point2d <double>(0, 0.2));
-    current.push_back(point2d <double>(0.6, 0.8));
+    static point <double> goalA () {
+        return point <double>(std::vector<double>{0.4, 0.1});
+    }
 
-    previous.push_back(point2d <double>(0.6, 0.8));
-    current.push_back(point2d <double>(0.6, 0.4));
+    static point <double> startA2 () {
+        return point <double>(std::vector <double>{0.4, 0.8});
+    }
 
-    previous.push_back(point2d <double>(0.6, 0.4));
-    current.push_back(point2d <double>(0.2, 0));
+    static point <double> goalA2 () {
+        return point <double>(std::vector <double>{0.8, 0.9});
+    }
 
-    return 3;
-}
+    static std::vector <point <double>> startsA () {
+        return std::vector <point <double>>{startA(), startA2()};
+    }
 
+    static std::vector <point<double>> goalsA () {
+        return std::vector <point <double>>{goalA(), goalA2()};
+    }
+
+    static std::vector <std::pair<double,double>> joint_limitsA () {
+        return std::vector <std::pair<double,double>>{{0,1}, {0,1}};
+    }
+
+    static std::function <double(const point <double>&, const point <double>&)> distanceA () {
+        return euclidean_distance <double>;
+    }
+
+    constexpr static unsigned int num_samplesA = 500;
+    constexpr static double stepsizeA = 1e-2;
+    constexpr static double radiusA = 1e-2;
+
+    static bool test_collisionA(point <double> P) {
+        const double eps = 1e-3;
+        bool col = (P[0] < eps || P[0] > 1-eps || P[1] < eps || P[1] > 1-eps) || (P[0] < 0.6 && (P[0] < 0.2 + P[1] && P[0] > -0.2 + P[1]));
+        return col;
+    }
+
+    static size_t add_obstacle_edgesA (
+        std::vector <point2d <double>>& current, 
+        std::vector <point2d <double>>& previous, 
+        const std::function<bool(point<double>)> test_collision
+    ) {
+        previous.push_back(point2d <double>(0, 0.2));
+        current.push_back(point2d <double>(0.6, 0.8));
+
+        previous.push_back(point2d <double>(0.6, 0.8));
+        current.push_back(point2d <double>(0.6, 0.4));
+
+        previous.push_back(point2d <double>(0.6, 0.4));
+        current.push_back(point2d <double>(0.2, 0));
+
+        return 3;
+    }
+
+    static point <double> get_sampleA () {
+        return get_sample(joint_limitsA(), 2);
+    }
+
+    // TEST B
+
+    static point <double> get_sample(const std::vector <std::pair <double,double>>& joint_limits, size_t dimension) {
+        std::vector <double> components;
+        std::random_device r;
+
+        for (size_t dim = 0; dim < dimension; ++dim) {
+            double lower = joint_limits[dim].first;
+            double upper = joint_limits[dim].second;
+            std::uniform_real_distribution<double> unif(lower, upper);
+            std::default_random_engine re(r());
+            components.push_back(unif(re));
+        }
+
+        point <double> sample(components);
+        return sample;
+    }
+};
 
 size_t add_graph_edges(
     std::vector <point2d <double>>& current, 
@@ -87,6 +223,7 @@ size_t add_path_edges(
 void plot_graph(
     const output& result,
     const std::function<bool(point<double>)>& test_collision,
+    const std::function <size_t(std::vector <point2d <double>>&, std::vector <point2d <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges,
     bool delay_active = true,
     bool save_image = false
 ) {
@@ -115,7 +252,7 @@ void plot_graph(
         plt::plot(std::vector <double>{previous[i].getx(), current[i].getx()}, std::vector <double>{previous[i].gety(), current[i].gety()}, lineflag); 
         
         if (delay_active) {
-            plt::pause(0.01);
+            plt::pause(0.001);
         }
     }
 
@@ -128,51 +265,56 @@ void plot_graph(
 }
 
 
-int main () {
-    srand(time(NULL));
+int main (int argc, char *argv[]) {
+    test_battery tb;
+    test testA_sq, testA_mq, testB_sq, testB_mq;
 
-    // simple collision test
-    double x_start, y_start;
-    double x_goal, y_goal;
-    x_start = 0.1;
-    y_start = 0.4;
-    x_goal = 0.4;
-    y_goal = 0.1;
+    try {
+        testA_sq = test(tb.startA(), tb.goalA(), tb.joint_limitsA(), tb.test_collisionA, tb.get_sampleA, tb.distanceA(), tb.num_samplesA, tb.stepsizeA, tb.radiusA);
+        testA_mq = test(tb.startsA(), tb.goalsA(), tb.joint_limitsA(), tb.test_collisionA, tb.get_sampleA, tb.distanceA(), tb.num_samplesA, tb.stepsizeA, tb.radiusA);
+    }
+    catch (std::logic_error err) {
+        std::cout << err.what() << std::endl;
+        throw;
+    }
 
-    point <double> start2(std::vector <double>{0.4, 0.8});
-    point <double> goal2(std::vector <double>{0.8, 0.9});
+    std::string algorithm = "RRT";
+    std::string test_label = "A";
+    bool one_by_one = false;
 
-    point <double> start(std::vector<double>{x_start, y_start});
-    point <double> goal(std::vector<double>{x_goal, y_goal});
-    std::vector <point <double>> starts{start, start2};
-    std::vector <point <double>> goals{goal, goal2};
-    std::vector <std::pair<double,double>> joint_limits{{0,1}, {0,1}};
-    unsigned int num_samples = 500;
-    double step_size = 1e-2;
-    double radius = 1e-2;
+    for (size_t i = 0; i < argc; ++i) {
+        std::string flag(argv[i]);
+        if (flag == "RRT" || flag == "PRM" || flag == "FMT") {
+            algorithm = flag;
+        }
+        if (flag == "A" || flag == "B") {
+            test_label = flag;
+        }
+        if (flag == "-obo") {
+            one_by_one = true;
+        }
+    }
 
-    test testA;
-    std::function<bool(point<double>)> test_collision = [&testA] (point <double> P) { return testA.test_collisionA(P); };
-    std::function<point<double>()> get_sample = [&testA] () { return testA.get_sample2d(); };
-    std::function <double(const point <double>&, const point <double>&)> distance(euclidean_distance <double>);
+    output out;
 
-    output_rrt resultRRT = rrt (
-        start, goal, joint_limits, 
-        test_collision, get_sample,
-        distance, num_samples, step_size
-    );
-
-    output resultPRM = prm (
-        starts, goals, joint_limits,
-        test_collision, get_sample,
-        distance, num_samples, step_size, radius
-    );
-
-    std::cout << "In main" << std::endl;
+    try {
+        if (test_label == "A") {
+            if (algorithm == "PRM") out = testA_mq.run_test(algorithm);
+            else out = testA_sq.run_test(algorithm);
+        }
+        // else if (test_label == "B") {
+        //     if (algorithm == "PRM") out = testB_mq.run_test(algorithm);
+        //     else out = testB_sq.run_test(algorithm);
+        // }
+    }
+    catch (std::logic_error err) {
+        std::cout << err.what() << std::endl;
+        throw;
+    }
 
     // plot graph
-    // plot_graph(resultRRT, test_collision);
-    plot_graph(resultPRM, test_collision, false);
+    if (test_label == "A") plot_graph(out, tb.test_collisionA, tb.add_obstacle_edgesA, one_by_one);
+    //else if (test_label == "B")) plot_graph(out, tb.test_collisionB, (algorithm != "PRM"));
 
     return 0;
 }
