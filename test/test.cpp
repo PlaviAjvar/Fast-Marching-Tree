@@ -6,6 +6,8 @@
 #include "fmt.h"
 #include <functional>
 #include <random>
+#include <sstream>
+#include <cmath>
 namespace plt = matplotlibcpp;
 
 class test {
@@ -105,7 +107,9 @@ public:
 
 class test_battery {
 public:
-    // TEST A
+    /***************************
+    TEST A (pointlike robot 2D)
+    ***************************/
 
     static point <double> startA () {
         return point <double>(std::vector<double>{0.1, 0.4});
@@ -143,15 +147,15 @@ public:
     constexpr static double stepsizeA = 1e-2;
     constexpr static double radiusA = 1e-2; // 5 / num_samples
 
-    static bool test_collisionA (point <double> P) {
+    static bool test_collisionA (const point <double> P) {
         const double eps = 1e-3;
         bool col = (P[0] < eps || P[0] > 1-eps || P[1] < eps || P[1] > 1-eps) || (P[0] < 0.6 && (P[0] < 0.2 + P[1] && P[0] > -0.2 + P[1]));
         return col;
     }
 
     static size_t add_obstacle_edgesA (
-        std::vector <point2d <double>>& current, 
-        std::vector <point2d <double>>& previous, 
+        std::vector <point <double>>& current, 
+        std::vector <point <double>>& previous, 
         const std::function<bool(point<double>)> test_collision
     ) {
         previous.push_back(point2d <double>(0, 0.2));
@@ -170,7 +174,9 @@ public:
         return get_sample(joint_limitsA(), 2);
     }
 
-    // TEST B
+    /***************************
+    TEST B (pointlike robot 2D)
+    ***************************/
 
     static point <double> startB () {
         return point <double>(std::vector<double>{0.1, 0.3});
@@ -209,7 +215,7 @@ public:
     constexpr static double radiusB = 1e-2; // 5 / num_samples
 
 
-    static bool test_collisionB (point <double> P) {
+    static bool test_collisionB (const point <double> P) {
         const double eps = 1e-3;
 
         if (P[0] < eps || P[0] > 1-eps || P[1] < eps || P[1] > 1-eps) {
@@ -235,8 +241,8 @@ public:
     }
 
     static size_t add_obstacle_edgesB (
-        std::vector <point2d <double>>& current, 
-        std::vector <point2d <double>>& previous, 
+        std::vector <point <double>>& current, 
+        std::vector <point <double>>& previous, 
         const std::function<bool(point<double>)> test_collision
     ) {
         // left part
@@ -286,6 +292,101 @@ public:
         return get_sample(joint_limitsB(), 2);
     }
 
+    /***************************
+    TEST C (pointlike robot 3D)
+    ***************************/
+
+    static point <double> startC () {
+        return point <double>(std::vector<double>{0.1, 0.5, 0.5});
+    }
+
+    static point <double> goalC () {
+        return point <double>(std::vector<double>{0.5, 0.1, 0.9});
+    }
+
+    static std::vector<point <double>> startsC () {
+        std::vector <point <double>> starts{startC()};
+        return starts;
+    }
+
+    static std::vector <point <double>> goalsC () {
+        std::vector <point <double>> goals{goalC()};
+        return goals;
+    }
+
+    static std::vector <std::pair<double,double>> joint_limitsC () {
+        return std::vector <std::pair<double,double>>{{0,1}, {0,1}, {0,1}};
+    }
+
+    static std::function <double(const point <double>&, const point <double>&)> distanceC () {
+        return euclidean_distance <double>;
+    }
+
+    constexpr static unsigned int num_samplesC = 2500;
+    constexpr static double stepsizeC = 1e-2;
+    constexpr static double radiusC = 1e-2; // same as old
+
+    static bool test_collisionC (const point <double> P) {
+        const double eps = 1e-3;
+
+        if (P[0] < eps || P[0] > 1-eps || P[1] < eps || P[1] > 1-eps || P[2] < eps || P[2] > 1-eps) {
+            return true;
+        }
+
+        if (P[0] < 0.4 && P[1] > 0.4 && P[1] < 0.6) {
+            return false;
+        }
+
+        if (P[0] > 0.6 && P[1] > 0.4 && P[1] < 0.6) {
+            return false;
+        }
+
+        if (P[0] > 0.4 && P[0] < 0.6) {
+            return false;
+        }
+
+        return true;
+    }
+
+    static point <double> get_sampleC () {
+        return get_sample(joint_limitsC(), 3);
+    }
+
+    static size_t add_obstacle_edgesC (
+        std::vector <point <double>>& current, 
+        std::vector <point <double>>& previous, 
+        const std::function<bool(point<double>)> test_collision
+    ) {
+        // left side
+        previous.push_back(point2d <double>(0, 0.4));
+        current.push_back(point2d <double>(0.4, 0.4));
+
+        previous.push_back(point2d <double>(0.4, 0.4));
+        current.push_back(point2d <double>(0.4, 0));
+
+        previous.push_back(point2d <double>(0, 0.6));
+        current.push_back(point2d <double>(0.4, 0.6));
+        
+        previous.push_back(point2d <double>(0.4, 0.6));
+        current.push_back(point2d <double>(0.4, 1));
+
+        // right side
+
+        previous.push_back(point2d <double>(1, 0.4));
+        current.push_back(point2d <double>(0.6, 0.4));
+
+        previous.push_back(point2d <double>(0.6, 0.4));
+        current.push_back(point2d <double>(0.6, 0));
+
+        previous.push_back(point2d <double>(1, 0.6));
+        current.push_back(point2d <double>(0.6, 0.6));
+        
+        previous.push_back(point2d <double>(0.6, 0.6));
+        current.push_back(point2d <double>(0.6, 1));
+
+        return 8;
+    }
+
     // function which generates random sample
 
     static point <double> get_sample(const std::vector <std::pair <double,double>>& joint_limits, size_t dimension) {
@@ -306,8 +407,8 @@ public:
 };
 
 size_t add_graph_edges(
-    std::vector <point2d <double>>& current, 
-    std::vector <point2d <double>>& previous, 
+    std::vector <point <double>>& current, 
+    std::vector <point <double>>& previous, 
     const std::vector <std::pair<point<double>, point<double>>>& elist
 ) {
 
@@ -324,8 +425,8 @@ size_t add_graph_edges(
 
 
 size_t add_path_edges(
-    std::vector <point2d <double>>& current, 
-    std::vector <point2d <double>>& previous, 
+    std::vector <point <double>>& current, 
+    std::vector <point <double>>& previous, 
     const std::vector <std::vector <point <double>>>& paths
 ) {
 
@@ -339,16 +440,27 @@ size_t add_path_edges(
     return current.size();
 }
 
+std::ostream& operator<< (std::ostream& os, std::vector <std::vector <double>> v) {
+    for (auto row : v) {
+        for (auto el : v) {
+            os << el << " ";
+        }
+        os << std::endl;
+    }
+    return os;
+}
 
-void plot_graph(
+
+// plot 2D graph
+void plot_graph (
     const output& result,
     const std::function<bool(point<double>)>& test_collision,
-    const std::function <size_t(std::vector <point2d <double>>&, std::vector <point2d <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges,
+    const std::function <size_t(std::vector <point <double>>&, std::vector <point <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges,
     bool delay_active = true,
     bool save_image = false
 ) {
 
-    std::vector <point2d <double>> current, previous;
+    std::vector <point <double>> current, previous;
 
     // add obstacle edges
     size_t cutoffA = add_obstacle_edges(current, previous, test_collision);
@@ -366,10 +478,102 @@ void plot_graph(
         std::string lineflag;
 
         if (i < cutoffA) lineflag = "g-";
-        else if (i < cutoffB) lineflag = "b-";
+        else if (i < cutoffB) lineflag = "-b";
         else lineflag = "r-";
 
-        plt::plot(std::vector <double>{previous[i].getx(), current[i].getx()}, std::vector <double>{previous[i].gety(), current[i].gety()}, lineflag); 
+        point2d <double> prev(previous[i]);
+        point2d <double> cur(current[i]);
+        plt::plot(std::vector <double>{prev.getx(), cur.getx()}, std::vector <double>{prev.gety(), cur.gety()}, lineflag); 
+        
+        if (delay_active) {
+            plt::pause(0.001);
+        }
+    }
+
+    if (!save_image) {
+        plt::show();
+    }
+    else {
+        plt::save("./output.png");
+    }
+}
+
+// get as many as possible discrete levels of green-blue
+std::vector <std::string> get_levels () {
+    std::vector <std::string> levels;
+
+    for (unsigned int lev = 1; lev < 256; ++lev) {
+        std::stringstream ss;
+        ss << std::hex << lev;
+        std::string res = ss.str();
+
+        for(auto &ch : res) {
+            ch = toupper(ch);
+        }
+        if (res.size() == 1) res = "0" + res;
+
+        levels.push_back("#00" + res + "FF");
+    }
+
+    return levels;
+}
+
+// get discrete level of blue from z coordinate
+std::string scale_color (
+    const std::vector <std::string>& levels,
+    const double z,
+    const double zlim
+) {
+    size_t levelcnt = levels.size();
+    double quant = zlim / levelcnt;
+    size_t lev = z / quant;
+    return levels[lev];
+}
+
+
+// plot 3D graph
+void plot_3d (
+    const output& result,
+    const std::function<bool(point<double>)>& test_collision,
+    const std::function <size_t(std::vector <point <double>>&, std::vector <point <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges,
+    bool delay_active = true,
+    bool save_image = false,
+    double zlim = 1
+) {
+
+    std::vector <point <double>> current, previous;
+
+    // add obstacle edges
+    size_t cutoffA = add_obstacle_edges(current, previous, test_collision);
+
+    // add graph edges
+    size_t cutoffB = add_graph_edges(current, previous, result.get_edgelist());
+
+    // add path edges
+    size_t cutoffC = add_path_edges(current, previous, result.get_paths());
+
+    plt::xlim(0, 1);
+    plt::ylim(0, 1);
+
+    std::vector <std::string> levels(get_levels());
+
+    for (size_t i = 0; i < cutoffC; ++i) {
+        std::string lineflag;
+        point3d <double> prev(previous[i]);
+        point3d <double> cur(current[i]);
+
+        if (i < cutoffA) {
+            lineflag = "g-";
+        }
+        else if (i < cutoffB) {
+            // if blue scale it
+            lineflag = scale_color(levels, cur.getz(), zlim);
+        }
+        else {
+            lineflag = "r-";
+        }
+
+        plt::plot(std::vector <double>{prev.getx(), cur.getx()}, std::vector <double>{prev.gety(), cur.gety()}, lineflag); 
         
         if (delay_active) {
             plt::pause(0.001);
@@ -387,21 +591,25 @@ void plot_graph(
 
 int main (int argc, char *argv[]) {
     test_battery tb;
-    test testA_sq, testA_mq, testB_sq, testB_mq;
+    test testA_sq, testA_mq, testB_sq, testB_mq, testC, testC_mq;
 
     try {
         testA_sq = test(tb.startA(), tb.goalA(), tb.joint_limitsA(), tb.test_collisionA, tb.get_sampleA, tb.distanceA(), tb.num_samplesA, tb.stepsizeA, tb.radiusA);
         testA_mq = test(tb.startsA(), tb.goalsA(), tb.joint_limitsA(), tb.test_collisionA, tb.get_sampleA, tb.distanceA(), tb.num_samplesA, tb.stepsizeA, tb.radiusA);
         testB_sq = test(tb.startB(), tb.goalB(), tb.joint_limitsB(), tb.test_collisionB, tb.get_sampleB, tb.distanceB(), tb.num_samplesB, tb.stepsizeB, tb.radiusB);
         testB_mq = test(tb.startsB(), tb.goalsB(), tb.joint_limitsB(), tb.test_collisionB, tb.get_sampleB, tb.distanceB(), tb.num_samplesB, tb.stepsizeB, tb.radiusB);
+
+        testC = test(tb.startC(), tb.goalC(), tb.joint_limitsC(), tb.test_collisionC, tb.get_sampleC, tb.distanceC(), tb.num_samplesC, tb.stepsizeC, tb.radiusC);
+        testC_mq = test(tb.startsC(), tb.goalsC(), tb.joint_limitsC(), tb.test_collisionC, tb.get_sampleC, tb.distanceC(), tb.num_samplesC, tb.stepsizeC, tb.radiusC);
     }
     catch (std::logic_error err) {
         std::cout << err.what() << std::endl;
         throw;
     }
+    
 
     std::string algorithm = "FMT";
-    std::string test_label = "A";
+    std::string test_label = "C";
     bool one_by_one = false;
     bool write_to_file = false;
 
@@ -410,9 +618,12 @@ int main (int argc, char *argv[]) {
         if (flag == "RRT" || flag == "PRM" || flag == "FMT") {
             algorithm = flag;
         }
-        if (flag == "A" || flag == "B") {
+        if (flag == "A" || flag == "B" || flag == "C") {
             test_label = flag;
         }
+        if (flag == "point2D-A") flag = "A";
+        if (flag == "point2D-B") flag = "B";
+        if (flag == "point3D") flag = "C";
         if (flag == "-seq") {
             one_by_one = true;
         }
@@ -432,6 +643,10 @@ int main (int argc, char *argv[]) {
             if (algorithm == "PRM") out = testB_mq.run_test(algorithm);
             else out = testB_sq.run_test(algorithm);
         }
+        else if (test_label == "C") {
+            if (algorithm == "PRM") out = testC_mq.run_test(algorithm);
+            else out = testC.run_test(algorithm);
+        }
     }
     catch (std::logic_error err) {
         std::cout << err.what() << std::endl;
@@ -447,10 +662,13 @@ int main (int argc, char *argv[]) {
             std::cout << "Path for query " << qry + 1 << " found." << std::endl;
         }
     }
+    
+    std::cout << out.get_paths().size() << std::endl;
 
     // plot graph
     if (test_label == "A") plot_graph(out, tb.test_collisionA, tb.add_obstacle_edgesA, one_by_one, write_to_file);
     else if (test_label == "B") plot_graph(out, tb.test_collisionB, tb.add_obstacle_edgesB, one_by_one, write_to_file);
+    else if (test_label == "C") plot_3d(out, tb.test_collisionC, tb.add_obstacle_edgesC, one_by_one, write_to_file, 1);
 
     return 0;
 }

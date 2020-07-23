@@ -24,10 +24,18 @@ geometry.h
 planning.h
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.h
 
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.cpp
+geometry.h
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h
+
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h
 vector
 -
 ostream
+-
+functional
+-
+iostream
 -
 
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.cpp

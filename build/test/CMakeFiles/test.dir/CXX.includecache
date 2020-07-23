@@ -17,6 +17,10 @@ vector
 -
 ostream
 -
+functional
+-
+iostream
+-
 
 ../sources/planning.h
 geometry.h
@@ -498,5 +502,9 @@ fmt.h
 functional
 -
 random
+-
+sstream
+-
+cmath
 -
 
