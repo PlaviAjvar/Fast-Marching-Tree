@@ -45,7 +45,7 @@ std::vector <point <double>> reconstruct_path (
     labeled_node <double> *cur_node(goal);
 
     // iterate over path in reverse order
-    while (cur_node != nullptr) {
+    while (cur_node) {
         path.push_back(cur_node->get_point());
 
         // adjust current node
@@ -79,7 +79,6 @@ output fmt (
     const double stepsize,
     const double radius
 ) {
-
     // obtain all samples
     std::vector <point <double>> samples(get_samples(num_samples, get_sample, collision_check));
 
@@ -101,7 +100,7 @@ output fmt (
     std::vector <labeled_node <double>> lgraph = induced_graph(graph, distance, collision_check, radius, stepsize);
     std::vector <std::pair <point<double>, point<double>>> elist;
 
-    std::cout << "Induced graph connected" << std::endl;
+    std::cout << std::endl << "Induced graph connected " << "(" << lgraph.size() << " nodes)" << std::endl;
 
     // unmarked nodes are treated as infinitely distant
     // add start node to V_open
@@ -113,7 +112,6 @@ output fmt (
     while (!pq.empty()) {
         labeled_node <double>* z = pq.top();
         pq.pop();
-        //std::cout << z->get_point() << std::endl;
 
         // if we´ve reached goal
         if (z == &lgraph.back()) {
@@ -140,7 +138,6 @@ output fmt (
                 x->set_distance(y_near->get_distance() + distance(y_near->get_point(), x->get_point()));
                 x->add_mark();
                 x->set_backpointer(y_near);
-                //std::cout << x->get_point() << " -> " << y_near->get_point() << std::endl;
                 pq.push(x);
                 elist.push_back(std::make_pair(x->get_point(), y_near->get_point()));
             }
@@ -151,15 +148,12 @@ output fmt (
         z->remove_mark();
     }
 
-    // remove all edges from graph, except backpointers in shortest path tree
-    for (auto&& vertex : lgraph) {
-        vertex.treeify();
-    }
     std::vector <std::vector <point <double>>> paths;
 
     // if there is no path return empty path
     if (!found_path) {
-        return output(paths, lgraph);
+        paths.resize(1);
+        return output(paths, elist);
     }
 
     // reconstruct path in treeified graph

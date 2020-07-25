@@ -47,3 +47,21 @@ bool path_clear(
     
     return true;
 }
+
+
+// get path length
+
+double path_length (
+    std::vector <point <double>> path,
+    const std::function <double(const point <double>&, const point <double>&)> distance
+) {
+
+    size_t nodecnt = path.size();
+    double len = 0;
+
+    for (size_t i = 1; i < nodecnt; ++i) {
+        len += distance(path[i-1], path[i]);
+    }
+
+    return len;
+}

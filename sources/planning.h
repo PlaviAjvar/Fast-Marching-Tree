@@ -78,24 +78,46 @@ private:
 public:
     labeled_node () {
         backpointer = nullptr;
+        mark = false;
+        closed = false;
+        distance = 0;
+    }
+
+    labeled_node (const labeled_node <real>& vertex) {
+        node<real>::sample = vertex.get_point();
+        node<real>::neighbor = vertex.get_neighbors();
+        backpointer = nullptr;
+        mark = false;
+        closed = false;
+        distance = 0;
     }
 
     labeled_node (const node <real>& vertex) {
         node<real>::sample = vertex.get_point();
         node<real>::neighbor = vertex.get_neighbors();
         backpointer = nullptr;
+        mark = false;
+        closed = false;
+        distance = 0;
     }
 
     labeled_node (const point <real> _sample) {
         node<real>::sample = _sample;
         backpointer = nullptr;
+        mark = false;
+        closed = false;
+        distance = 0;
     }
 
     labeled_node (
         const point <real> _sample, 
         std::vector <node<real>*> _neighbor
     ) : node<real>(_sample, _neighbor) {
+        
         backpointer = nullptr;
+        mark = false;
+        closed = false;
+        distance = 0;
     }
 
     std::vector <labeled_node<real>*> get_labeled_neighbors () const {
@@ -135,16 +157,6 @@ public:
         }
 
         return unmarked_neighbors;
-    }
-
-    void treeify () {
-        node <real>::neighbor.resize(1);
-        node <real>::neighbor[0] = backpointer;
-
-        // if backpointer is nullptr, node has no neighbors
-        if (backpointer == nullptr) {
-            node <real>::neighbor.clear();
-        }
     }
     
     labeled_node <double>* get_backpointer() const {
@@ -197,7 +209,9 @@ protected:
     ) const;
 
 public:
-    output () {}
+    output () {
+        //path.resize(1);
+    }
 
     output (const output& other) : path(other.get_paths()), edge_list(other.get_edgelist()) {}
 

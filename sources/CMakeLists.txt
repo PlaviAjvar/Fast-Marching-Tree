@@ -12,4 +12,8 @@ add_library(
     planning.h
 )
 
-target_include_directories(src PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories( 
+    src
+    PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)

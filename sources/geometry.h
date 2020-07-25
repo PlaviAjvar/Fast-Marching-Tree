@@ -20,7 +20,7 @@ public:
 
     point (const std::vector <real>& comp) : components(comp) {}
 
-    point (const point <real>& P) : components(P.get_components()) {}
+    point (const point <real>& P) : components(P.components) {}
 
     std::vector <real> get_components () const {
         return this->components;
@@ -266,7 +266,7 @@ real euclidean_distance (const point<real>& A, const point<real>& B) {
         total += (A[index] - B[index]) * (A[index] - B[index]);
     }
 
-    return total;
+    return sqrt(total);
 }
 
 // weighed euclidean distance
@@ -326,4 +326,9 @@ bool path_clear(
     const std::function <bool(point<double>)>& collision_check,
     const double stepsize,
     const double epsilon = 1e-6
+);
+
+double path_length (
+    std::vector <point <double>> path,
+    const std::function <double(const point <double>&, const point <double>&)> distance
 );

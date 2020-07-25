@@ -65,7 +65,10 @@
         "utility": "cpp",
         "deque": "cpp",
         "queue": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "stack": "cpp"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }

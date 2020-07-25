@@ -8,6 +8,8 @@
 #include <random>
 #include <sstream>
 #include <cmath>
+#include <chrono>
+#include <fstream>
 namespace plt = matplotlibcpp;
 
 class test {
@@ -96,11 +98,20 @@ public:
             throw std::domain_error("Algorithm label has to be either RRT, PRM or FMT");
         }
 
-        // std::cout << start << " " << goal << std::endl;
-       
-        // for (auto&& edge : out.get_edgelist()) std::cout << edge.first << " -> " << edge.second << std::endl;
-
         return out;
+    }
+
+    // some useful getters
+    unsigned int get_num_samples () const {
+        return num_samples;
+    }
+
+    double get_radius () const {
+        return radius;
+    }
+
+    double get_stepsize() const {
+        return stepsize;
     }
 };
 
@@ -145,7 +156,7 @@ public:
 
     constexpr static unsigned int num_samplesA = 500;
     constexpr static double stepsizeA = 1e-2;
-    constexpr static double radiusA = 1e-2; // 5 / num_samples
+    constexpr static double radiusA = 0.1; // 50 / num_samples
 
     static bool test_collisionA (const point <double> P) {
         const double eps = 1e-3;
@@ -171,7 +182,7 @@ public:
     }
 
     static point <double> get_sampleA () {
-        return get_sample(joint_limitsA(), 2);
+        return get_sample_util(joint_limitsA(), 2);
     }
 
     /***************************
@@ -212,7 +223,7 @@ public:
 
     constexpr static unsigned int num_samplesB = 500;
     constexpr static double stepsizeB = 1e-2;
-    constexpr static double radiusB = 1e-2; // 5 / num_samples
+    constexpr static double radiusB = 0.1; // 50 / num_samples
 
 
     static bool test_collisionB (const point <double> P) {
@@ -289,7 +300,7 @@ public:
     }
 
     static point <double> get_sampleB () {
-        return get_sample(joint_limitsB(), 2);
+        return get_sample_util(joint_limitsB(), 2);
     }
 
     /***************************
@@ -324,7 +335,7 @@ public:
 
     constexpr static unsigned int num_samplesC = 2500;
     constexpr static double stepsizeC = 1e-2;
-    constexpr static double radiusC = 1e-2; // same as old
+    constexpr static double radiusC = 1e-1; // same as old
 
     static bool test_collisionC (const point <double> P) {
         const double eps = 1e-3;
@@ -349,7 +360,7 @@ public:
     }
 
     static point <double> get_sampleC () {
-        return get_sample(joint_limitsC(), 3);
+        return get_sample_util(joint_limitsC(), 3);
     }
 
     static size_t add_obstacle_edgesC (
@@ -387,9 +398,118 @@ public:
         return 8;
     }
 
+    // functions returning test info with test label as argument
+    static point <double> start (std::string label) {
+        if (label == "A") return startA();
+        if (label == "B") return startB();
+        if (label == "C") return startC();
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
+
+    static point <double> goal (std::string label) {
+        if (label == "A") return goalA();
+        if (label == "B") return goalB();
+        if (label == "C") return goalC();
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
+
+    static std::vector<point <double>> starts (std::string label) {
+        if (label == "A") return startsA();
+        if (label == "B") return startsB();
+        if (label == "C") return startsC();
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
+
+    static std::vector <point <double>> goals (std::string label) {
+        if (label == "A") return goalsA();
+        if (label == "B") return goalsB();
+        if (label == "C") return goalsC();
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
+
+    static std::vector <std::pair<double,double>> joint_limits (std::string label) {
+        if (label == "A") return joint_limitsA();
+        if (label == "B") return joint_limitsB();
+        if (label == "C") return joint_limitsC();
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
+
+    static std::function <double(const point <double>&, const point <double>&)> distance (std::string label) {
+        if (label == "A" || label == "B" || label == "C") return euclidean_distance <double>;
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
+
+    static unsigned int num_samples (std::string label) {
+        if (label == "A") return num_samplesA;
+        if (label == "B") return num_samplesB;
+        if (label == "C") return num_samplesC;
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
+
+    static double stepsize (std::string label) {
+        if (label == "A") return stepsizeA;
+        if (label == "B") return stepsizeB;
+        if (label == "C") return stepsizeC;
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
+
+    static double radius (std::string label) {
+        if (label == "A") return radiusA;
+        if (label == "B") return radiusB;
+        if (label == "C") return radiusC;
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
+
+    std::function<bool(point<double>)> test_colision (std::string label) {
+        if (label == "A") return test_collisionA;
+        if (label == "B") return test_collisionB;
+        if (label == "C") return test_collisionC;
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
+
+    std::function<point<double>()> get_sample (std::string label) {
+        if (label == "A") return get_sampleA;
+        if (label == "B") return get_sampleB;
+        if (label == "C") return get_sampleC;
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
+
+    std::function <size_t(std::vector <point <double>>&, std::vector <point <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges (
+        std::string label
+    ) {
+        if (label == "A") return add_obstacle_edgesA;
+        if (label == "B") return add_obstacle_edgesB;
+        if (label == "C") return add_obstacle_edgesC;
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
+
     // function which generates random sample
 
-    static point <double> get_sample(const std::vector <std::pair <double,double>>& joint_limits, size_t dimension) {
+    static point <double> get_sample_util (const std::vector <std::pair <double,double>>& joint_limits, size_t dimension) {
         std::vector <double> components;
         std::random_device r;
 
@@ -473,6 +593,9 @@ void plot_graph (
 
     plt::xlim(0, 1);
     plt::ylim(0, 1);
+
+    plt::plot(std::vector <double>{0.4}, std::vector <double>{0.1}, "rx");
+    plt::plot(std::vector <double>{0.1}, std::vector <double>{0.4}, "rx");
 
     for (size_t i = 0; i < cutoffC; ++i) {
         std::string lineflag;
@@ -591,27 +714,13 @@ void plot_3d (
 
 int main (int argc, char *argv[]) {
     test_battery tb;
-    test testA_sq, testA_mq, testB_sq, testB_mq, testC, testC_mq;
-
-    try {
-        testA_sq = test(tb.startA(), tb.goalA(), tb.joint_limitsA(), tb.test_collisionA, tb.get_sampleA, tb.distanceA(), tb.num_samplesA, tb.stepsizeA, tb.radiusA);
-        testA_mq = test(tb.startsA(), tb.goalsA(), tb.joint_limitsA(), tb.test_collisionA, tb.get_sampleA, tb.distanceA(), tb.num_samplesA, tb.stepsizeA, tb.radiusA);
-        testB_sq = test(tb.startB(), tb.goalB(), tb.joint_limitsB(), tb.test_collisionB, tb.get_sampleB, tb.distanceB(), tb.num_samplesB, tb.stepsizeB, tb.radiusB);
-        testB_mq = test(tb.startsB(), tb.goalsB(), tb.joint_limitsB(), tb.test_collisionB, tb.get_sampleB, tb.distanceB(), tb.num_samplesB, tb.stepsizeB, tb.radiusB);
-
-        testC = test(tb.startC(), tb.goalC(), tb.joint_limitsC(), tb.test_collisionC, tb.get_sampleC, tb.distanceC(), tb.num_samplesC, tb.stepsizeC, tb.radiusC);
-        testC_mq = test(tb.startsC(), tb.goalsC(), tb.joint_limitsC(), tb.test_collisionC, tb.get_sampleC, tb.distanceC(), tb.num_samplesC, tb.stepsizeC, tb.radiusC);
-    }
-    catch (std::logic_error err) {
-        std::cout << err.what() << std::endl;
-        throw;
-    }
-    
+    test test_sq, test_mq;
 
     std::string algorithm = "FMT";
-    std::string test_label = "C";
+    std::string test_label = "A";
     bool one_by_one = false;
     bool write_to_file = false;
+    std::string mode = "-normal";
 
     for (size_t i = 0; i < argc; ++i) {
         std::string flag(argv[i]);
@@ -621,54 +730,179 @@ int main (int argc, char *argv[]) {
         if (flag == "A" || flag == "B" || flag == "C") {
             test_label = flag;
         }
-        if (flag == "point2D-A") flag = "A";
-        if (flag == "point2D-B") flag = "B";
-        if (flag == "point3D") flag = "C";
+        if (flag == "point2D-A") test_label = "A";
+        if (flag == "point2D-B") test_label = "B";
+        if (flag == "point3D") test_label = "C";
         if (flag == "-seq") {
             one_by_one = true;
         }
         if (flag == "-file") {
             write_to_file = true;
         }
-    }
-
-    output out;
-
-    try {
-        if (test_label == "A") {
-            if (algorithm == "PRM") out = testA_mq.run_test(algorithm);
-            else out = testA_sq.run_test(algorithm);
-        }
-        else if (test_label == "B") {
-            if (algorithm == "PRM") out = testB_mq.run_test(algorithm);
-            else out = testB_sq.run_test(algorithm);
-        }
-        else if (test_label == "C") {
-            if (algorithm == "PRM") out = testC_mq.run_test(algorithm);
-            else out = testC.run_test(algorithm);
+        if (flag == "-sim" || flag == "-param" || flag == "-normal") {
+            mode = flag;
         }
     }
-    catch (std::logic_error err) {
-        std::cout << err.what() << std::endl;
-        throw;
-    }
 
-    for (size_t qry = 0; qry < out.get_paths().size(); ++qry) {
-        std::vector <point <double>> path = out.get_paths()[qry];
-        if (path.size() == 0) {
-            std::cout << "Path for query " << qry + 1 << " not found." << std::endl;
+    // run algorithm normally and display results
+
+    if (mode == "-normal") {
+        auto begin = std::chrono::high_resolution_clock::now();
+        output out;
+
+        try {
+            test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
+                tb.get_sample(test_label), tb.distance(test_label), tb.num_samples(test_label), tb.stepsize(test_label), tb.radius(test_label));
+
+            out = test_sq.run_test(algorithm);
+        }
+        catch (std::logic_error err) {
+            std::cout << err.what() << std::endl;
+            throw;
+        }
+
+        auto end = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+        std::cout << std::endl;
+
+        for (size_t qry = 0; qry < out.get_paths().size(); ++qry) {
+            std::vector <point <double>> path = out.get_paths()[qry];
+            if (path.size() == 0) {
+                std::cout << "Path for query " << qry + 1 << " not found" << std::endl;
+            }
+            else {
+                std::cout << "Path for query " << qry + 1 << " found" << std::endl;
+            }
+        }
+
+        std::cout << std::endl << "Elapsed time: " << elapsed.count() * 1e-9 << " seconds" << std::endl;
+
+        double path_len;
+        auto path = out.get_paths()[0];
+
+        if (path.size() != 0) {
+            path_len = path_length(path, tb.distance(test_label));
+            std::cout << std::endl << "Path length: " << path_len << std::endl << std::endl;
         }
         else {
-            std::cout << "Path for query " << qry + 1 << " found." << std::endl;
+            std::cout << std::endl << "Path length: NaN" << std::endl << std::endl;
+        }
+
+        // plot graph
+        if (test_label == "A" || test_label == "B") {
+            plot_graph(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label), one_by_one, write_to_file);
+        }
+        else{
+            plot_3d(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label), one_by_one, write_to_file);
         }
     }
-    
-    std::cout << out.get_paths().size() << std::endl;
 
-    // plot graph
-    if (test_label == "A") plot_graph(out, tb.test_collisionA, tb.add_obstacle_edgesA, one_by_one, write_to_file);
-    else if (test_label == "B") plot_graph(out, tb.test_collisionB, tb.add_obstacle_edgesB, one_by_one, write_to_file);
-    else if (test_label == "C") plot_3d(out, tb.test_collisionC, tb.add_obstacle_edgesC, one_by_one, write_to_file, 1);
+    // if simulation mode is active run algorithm num_iter times and average the execution times
+    else if (mode == "-sim") {
+        // number of repeats
+        size_t num_iter = 20;
+
+        auto begin = std::chrono::high_resolution_clock::now();
+        output out;
+
+        for (size_t iter = 0; iter < num_iter; ++iter) {
+            try {
+                test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
+                    tb.get_sample(test_label), tb.distance(test_label), tb.num_samples(test_label), tb.stepsize(test_label), tb.radius(test_label));
+
+                out = test_sq.run_test(algorithm);
+            }
+            catch (std::logic_error err) {
+                std::cout << err.what() << std::endl;
+                throw;
+            }
+        }
+
+        auto end = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+        std::cout << std::endl << "Average elapsed time over " << num_iter << " executions: " << elapsed.count() / num_iter * 1e-9 << " seconds" << std::endl << std::endl;
+    }
+
+    // simulate various parameter values
+    else if (mode == "-param") {
+        // number of iterations
+        const size_t num_iter = 27;
+        const size_t num_repeats = 5;
+        std::vector <output> out(num_iter);
+        std::vector <test> tests(num_iter);
+        std::vector <double> elapsed_time(num_iter);
+        std::vector <double> avg_length(num_iter);
+        std::vector <bool> path_failed(num_iter);
+
+        double radii[] = {tb.radius(test_label) / 2, tb.radius(test_label), tb.radius(test_label) * 2};
+        double stepsizes[] = {tb.stepsize(test_label) / 2, tb.stepsize(test_label), tb.stepsize(test_label) * 2};
+        unsigned int nums_samples[] = {tb.num_samples(test_label) / 2, tb.num_samples(test_label), tb.num_samples(test_label) * 2};
+
+        try {
+            for (size_t iter = 0; iter < num_iter; ++iter) {
+                auto begin = std::chrono::high_resolution_clock::now();
+                double radius, stepsize;
+                unsigned int num_samples;
+                
+                std::cout << std::endl;
+                std::cout << "*************************" << std::endl;
+                std::cout << "Iteration " << iter+1 << std::endl;
+                std::cout << "*************************" << std::endl;
+
+                radius = radii[iter % 3];
+                stepsize = stepsizes[(iter / 3) % 3];
+                num_samples = nums_samples[iter / 9];
+
+                tests[iter] = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
+                    tb.get_sample(test_label), tb.distance(test_label), num_samples, stepsize, radius);
+
+                // calculate average path length
+                for (size_t repeat = 0; repeat < num_repeats; ++repeat) {
+                    // get path
+                    out[iter] = tests[iter].run_test(algorithm);
+                    auto path = out[iter].get_paths()[0];
+                    double path_len = path_length(path, tb.distance(test_label));
+
+                    // test existance of path
+                    if (path.size() > 0) {
+                        avg_length[iter] += path_len;
+                    }
+                    else {
+                        path_failed[iter] = true;
+                    }
+                }
+
+                avg_length[iter] /= num_repeats;
+
+                auto end = std::chrono::high_resolution_clock::now();
+                auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+                elapsed_time[iter] = elapsed.count() / num_repeats * 1e-9;
+            }
+
+            // output list of parameter combinations and relevant diagnostics to file
+            std::ofstream ofs("diagnostics" + algorithm + ".txt");
+            ofs << "Diagnostic information" << std::endl;
+            ofs << "Path length and runtime averaged over 5 executions" << std::endl;
+            ofs << "Connected if path was found in all 5 executions" << std::endl << std::endl;
+
+            for (size_t iter = 0; iter < num_iter; ++iter) {
+                ofs << "test" << test_label << " (num_samples = " << tests[iter].get_num_samples();
+                ofs << ", stepsize = " << tests[iter].get_stepsize();
+                ofs << ", radius = " << tests[iter].get_radius() << ") : ";;
+
+                if (!path_failed[iter]) {
+                    ofs << "is connected (path_length = " << avg_length[iter] << ", elapsed_time = " << elapsed_time[iter] << ")" << std::endl;
+                }
+                else {
+                    ofs << "is not connected" << std::endl;
+                }
+            }
+        }
+        catch (std::logic_error err) {
+            std::cout << err.what() << std::endl;
+            throw;
+        }
+    }
 
     return 0;
 }
