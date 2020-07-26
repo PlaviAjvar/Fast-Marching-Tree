@@ -147,7 +147,7 @@ public:
         point<real>::components[1] = y;
         point<real>::components[2] = z;
     }
-
+    
     real getx () const {
         return point<real>::components[0];
     }
@@ -156,7 +156,7 @@ public:
         return point<real>::components[1];
     }
 
-    real getz() const {
+    real getz () const {
         return point<real>::components[2];
     }
 };
@@ -173,23 +173,6 @@ public:
     box (const box& B) : box_limits(B.box_limits) {}
 
     box (const std::vector <std::pair <real, real>>& _box_limits) : box_limits(_box_limits) {}
-
-    bool in_box (const point <real> point) const {
-        if (box_limits.size() != point.get_dimension()) {
-            throw std::length_error("Dimensionality of box differs from dimensionality of point");
-        }
-
-        size_t dimension = point.get_dimension();
-
-        for (size_t dim = 0; dim < dimension; ++dim) {
-            // coordinate falls outside the feasible range
-            if (point[dim] < box_limits[dim].first || point[dim] > box_limits[dim].second) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     // get meshgrid
     void meshgrid (
@@ -211,15 +194,11 @@ public:
             std::vector <real> xr, yr, zr;
 
             for (real y = box_limits[1].first; y <= box_limits[1].second; y += stepsize) {
-                // for (real z = box_limits[2].first; z <= box_limits[2].second; z += stepsize) {
-                //     xr.push_back(x);
-                //     yr.push_back(y);
-                //     zr.push_back(z);
-                // }
-
-                xr.push_back(x);
-                yr.push_back(y);
-                zr.push_back(0);
+                for (real z = box_limits[2].first; z <= box_limits[2].second; z += stepsize) {
+                    xr.push_back(x);
+                    yr.push_back(y);
+                    zr.push_back(z);
+                }
             }
             
             X.push_back(xr);
@@ -227,6 +206,8 @@ public:
             Z.push_back(zr);
         }
     }
+
+
 };
 
 
@@ -410,30 +391,24 @@ public:
 };
 
 
-// class representing 2D arm manipulator
+// class representing generic 3D arm manipulator
 template <typename real>
-class arm2d {
-private:
-    point2d <real> base;
+class arm {
+protected:
+    point <real> base;
     std::vector <real> link_lengths;
     std::vector <std::pair <real,real>> joint_limits;
 
 public:
-    arm2d () {}
+    arm () {}
 
-    arm2d (const arm2d <real>& robot) : base(robot.base), link_lengths(robot.link_lengths), joint_limits(robot.joint_limits) {}
+    arm (const arm <real>& robot) : base(robot.base), link_lengths(robot.link_lengths), joint_limits(robot.joint_limits) {}
 
-    arm2d (
-        const point2d <real> _base,
+    arm (
+        const point <real> _base,
         const std::vector <real>& _link_lengths,
         const std::vector <std::pair <real,real>>& _joint_limits
     ) : base(_base), link_lengths(_link_lengths), joint_limits(_joint_limits) {}
-
-    std::vector <std::pair <point2d <real>, point2d <real>>> get_links (
-        const point <real> configuration
-    ) const {
-        return dir_kine(configuration);
-    }
 
     std::vector <std::pair <real,real>> get_joint_limits () const {
         return joint_limits;
@@ -443,17 +418,66 @@ public:
         return link_lengths;
     }
 
+    bool intersects (
+        const box <real>& obstacle,
+        const point <real>& configuration
+    ) const {
+        throw std::logic_error("nah");
+    }
+
+    virtual bool intersects (
+        const polygon <real>& obstacle,
+        const point <real>& configuration
+    ) const {
+        throw std::logic_error("Never should call this method in base class");
+    }
+
+    virtual std::vector <std::pair <point <real>, point <real>>> dir_kine (
+        const point <real> configuration
+    ) const {
+        throw std::logic_error("nah");
+    }
+};
+
+
+// helper function for converting pair of points to pair of 2D points
+template <typename real>
+std::pair <point2d <real>, point2d <real>> linkto2d (
+    const std::pair <point <real>, point <real>> link
+) {
+    point2d <real> fi(link.first);
+    point2d <real> se(link.second);
+    std::pair <point2d <real>, point2d <real>> link2d{fi, se};
+    return link2d;
+}
+
+
+// class representing 2D arm manipulator
+template <typename real>
+class arm2d : public arm <real> {
+public:
+    arm2d () {}
+
+    arm2d (const arm2d <real>& robot) : arm<real>(robot.base, robot.link_lengths, robot.joint_limits) {}
+
+    arm2d (
+        const point2d <real> _base,
+        const std::vector <real>& _link_lengths,
+        const std::vector <std::pair <real,real>>& _joint_limits
+    ) : arm<real>(_base, _link_lengths, _joint_limits) {}
+
     // check if 2D arm intersects polygon
     bool intersects (
         const polygon <real>& obstacle,
         const point <real>& configuration
-    ) const {
-        auto links = get_links(configuration);
+    ) const override {
+        auto links = dir_kine(configuration);
 
         // check intersection of links with obstacles
         for (const auto& link : links) {
             for (const auto& edge : obstacle.get_edges()) {
-                if (lines_intersect2d(link, edge)) {
+                std::pair <point2d <real>, point2d <real>> link2d = linkto2d(link);
+                if (lines_intersect2d(link2d, edge)) {
                     return true;
                 }
             }
@@ -463,7 +487,9 @@ public:
         for (auto it = links.begin(); it != links.end(); ++it) {
             if (std::next(it, 1) != links.end()) {
                 for (auto jt = std::next(it, 2); jt != links.end(); ++jt) {
-                    if (lines_intersect2d(*it, *jt)) {
+                    std::pair <point2d <real>, point2d <real>> A = linkto2d(*it);
+                    std::pair <point2d <real>, point2d <real>> B = linkto2d(*jt);
+                    if (lines_intersect2d(A, B)) {
                         return true;
                     }
                 }
@@ -474,76 +500,116 @@ public:
     }
 
     // solve direct kinematics for planar arm
-    std::vector <std::pair <point2d <real>, point2d <real>>> dir_kine (
+    std::vector <std::pair <point <real>, point <real>>> dir_kine (
         const point <real> configuration
-    ) const {
+    ) const override {
 
-        if (configuration.get_dimension() != link_lengths.size()) {
+        if (configuration.get_dimension() != arm<real>::link_lengths.size()) {
             throw std::length_error("Dimension of configuration and number of joints in planar arm differ");
         }
 
         for (size_t dim = 0; dim < configuration.get_dimension(); ++dim) {
-            if (configuration[dim] < joint_limits[dim].first || configuration[dim] > joint_limits[dim].second) {
+            if (configuration[dim] < arm<real>::joint_limits[dim].first || configuration[dim] > arm<real>::joint_limits[dim].second) {
                 throw std::domain_error("Configuration coordinates lie outside joint limits");
             }
         }   
 
         // calculate links, based on configuration vector
-        std::vector <std::pair <point2d <real>, point2d <real>>> links;
-        point2d <real> current(base);
+        std::vector <std::pair <point <real>, point <real>>> links;
+        point <real> current(arm<real>::base);
         real total_angle = 0;
 
         for (size_t dim = 0; dim < configuration.get_dimension(); ++dim) {
             total_angle += configuration[dim];
-            point2d <real> next = current + point2d <real>(cos(total_angle), sin(total_angle)) * link_lengths[dim];
+            point <real> next = current + point2d <real>(cos(total_angle), sin(total_angle)) * arm<real>::link_lengths[dim];
             // std::cout << "link(" << total_angle * 180 / M_PI << ") = " << "(" << current << "," << next << ")" << std::endl;
             links.push_back({current, next});
             current = next;
         }
 
         return links;
-    }   
+    } 
 };
 
 // class representing workspace
 template <typename real>
 class workspace {
-private:
-    std::vector <polygon<real>> obstacles;
-    arm2d <real> robot;
+protected:
+    arm <real>* robot;
 
 public:
     workspace () {}
 
-    workspace (const workspace& W) : obstacles(W.obstacles), robot(W.robot) {}
+    workspace (const workspace <real>& W) {
+        robot = new arm <real>(*W.robot);
+    }
 
     workspace (
-        const std::vector <polygon<real>> _obstacles,
-        const arm2d<real>& _robot
-    ) : obstacles(_obstacles), robot(_robot) {}
+        const arm <real>& _robot
+    ) {
+        robot = new arm <real>(_robot);
+    }
 
-    // test if specific configuration colifs
-    bool collides (const point <real> configuration) {
-        for (const auto& obstacle : obstacles) {
-            if (robot.intersects(obstacle, configuration)) {
-                //std::cout << std::endl << "collides(" << configuration << ") = " << "true" << std::endl << std::endl;
-                return true;
-            }
-        }
-        //std::cout << std::endl << "collides(" << configuration << ") = " << "false" << std::endl << std::endl;
-        return false;
+    workspace (
+        arm <real>* const _robot
+    ) {
+        robot = _robot;
     }
 
     // return link lengths
     std::vector <real> get_link_lengths () const {
-        return robot.get_link_lengths();
+        return robot->get_link_lengths();
     }
 
-    arm2d <real> get_robot () const {
-        return robot;
+    arm <real>& get_robot () const {
+        return *robot;
+    }
+
+    ~workspace () {
+        delete robot;
+    }
+};
+
+
+// define 2D workspace
+template <typename real>
+class workspace2d : public workspace <real> {
+private:
+    std::vector <polygon<real>> obstacles;
+
+public:
+    workspace2d () {}
+
+    workspace2d (const workspace2d <real>& ws) : obstacles(ws.obstacles), workspace <real>(*ws.robot) {}
+
+    workspace2d (
+        const std::vector <polygon<real>> _obstacles,
+        const arm <real>& _robot
+    ) : obstacles(_obstacles), workspace <real>(_robot) {}
+
+    workspace2d (
+        const std::vector <polygon<real>> _obstacles,
+        arm <real>* const _robot
+    ) : obstacles(_obstacles), workspace <real>(_robot) {}
+
+    // test if specific configuration colifs
+    bool collides (const point <real> configuration) {
+        for (const auto& obstacle : obstacles) {
+            if (workspace<real>::robot->intersects(obstacle, configuration)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     const std::vector <polygon<real>> get_obstacles () const {
         return obstacles;
     }
+};
+
+
+// define 3D workspace
+template <typename real>
+class workspace3d : public workspace <real> {
+    
 };

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "geometry.h"
 #include "planning.h"
 
@@ -20,7 +22,6 @@ std::vector <labeled_node <double>> induced_graph (
     const double radius,
     const double stepsize
 );
-
 
 class compare {
 public:

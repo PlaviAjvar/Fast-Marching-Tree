@@ -215,6 +215,9 @@ fmt_BINARY_DIR:STATIC=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build
 //Value Computed by CMake
 fmt_SOURCE_DIR:STATIC=/Users/tanja.ah/Desktop/Fast-Marching-Tree
 
+//Dependencies for the target
+plot_LIB_DEPENDS:STATIC=general;src;general;Python2::Python;
+
 
 ########################
 # INTERNAL cache entries
@@ -312,7 +315,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=3
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

@@ -100,14 +100,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles/progress.marks
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/plot/CMakeFiles/progress.marks
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plot/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plot/clean
 .PHONY : clean
 
 # The main clean target
@@ -117,57 +117,60 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plot/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plot/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named src
+# Convenience name for target.
+plot/CMakeFiles/plot.dir/rule:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plot/CMakeFiles/plot.dir/rule
+.PHONY : plot/CMakeFiles/plot.dir/rule
 
-# Build rule for target.
-src: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src
-.PHONY : src
+# Convenience name for target.
+plot: plot/CMakeFiles/plot.dir/rule
 
-# fast build rule for target.
-src/fast:
-	$(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/build
-.PHONY : src/fast
-
-#=============================================================================
-# Target rules for targets named test
-
-# Build rule for target.
-test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test
-.PHONY : test
-
-# fast build rule for target.
-test/fast:
-	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/build
-.PHONY : test/fast
-
-#=============================================================================
-# Target rules for targets named plot
-
-# Build rule for target.
-plot: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plot
 .PHONY : plot
 
 # fast build rule for target.
 plot/fast:
-	$(MAKE) $(MAKESILENT) -f plot/CMakeFiles/plot.dir/build.make plot/CMakeFiles/plot.dir/build
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f plot/CMakeFiles/plot.dir/build.make plot/CMakeFiles/plot.dir/build
 .PHONY : plot/fast
+
+plot.o: plot.cpp.o
+
+.PHONY : plot.o
+
+# target to build an object file
+plot.cpp.o:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f plot/CMakeFiles/plot.dir/build.make plot/CMakeFiles/plot.dir/plot.cpp.o
+.PHONY : plot.cpp.o
+
+plot.i: plot.cpp.i
+
+.PHONY : plot.i
+
+# target to preprocess a source file
+plot.cpp.i:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f plot/CMakeFiles/plot.dir/build.make plot/CMakeFiles/plot.dir/plot.cpp.i
+.PHONY : plot.cpp.i
+
+plot.s: plot.cpp.s
+
+.PHONY : plot.s
+
+# target to generate assembly for a file
+plot.cpp.s:
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(MAKE) $(MAKESILENT) -f plot/CMakeFiles/plot.dir/build.make plot/CMakeFiles/plot.dir/plot.cpp.s
+.PHONY : plot.cpp.s
 
 # Help Target
 help:
@@ -178,8 +181,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... plot"
-	@echo "... src"
-	@echo "... test"
+	@echo "... plot.o"
+	@echo "... plot.i"
+	@echo "... plot.s"
 .PHONY : help
 
 
@@ -191,6 +195,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

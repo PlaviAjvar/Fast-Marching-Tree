@@ -1,16 +1,15 @@
-#include "matplotlibcpp.h"
 #include "geometry.h"
 #include "planning.h"
 #include "rrt.h"
 #include "prm.h"
 #include "fmt.h"
+#include "plot.h"
 #include <functional>
 #include <random>
 #include <sstream>
 #include <cmath>
 #include <chrono>
 #include <fstream>
-namespace plt = matplotlibcpp;
 
 class test {
 private:
@@ -468,7 +467,7 @@ public:
         return lims;
     }
 
-    static workspace <double> workspaceD (const std::string label) {
+    static workspace2d <double> workspaceD (const std::string label) {
         // form polygons from points
         std::vector <std::pair <point2d<double>, point2d<double>>> edgesA(edgesD_A());
         std::vector <std::pair <point2d<double>, point2d<double>>> edgesB(edgesD_B());
@@ -498,9 +497,8 @@ public:
         // for (auto e : lims) std::cout << "(" << e.first << " " << e.second << ")" << ",";
         // std::cout << std::endl;
 
-        arm2d <double> planar(base, link_lengths, lims);
-
-        workspace <double> ws(obstacles, planar);
+        arm2d <double>* planar = new arm2d <double>(base, link_lengths, lims);
+        workspace2d <double> ws(obstacles, planar);
         return ws;
     }
 
@@ -688,13 +686,12 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    static workspace <double> getws (std::string label) {
+    static workspace2d <double> getws (std::string label) {
         if (label == "D" || label == "DT") return workspaceD(label);
         
         // invalid test label
         throw std::domain_error("Invalid test label");
     }
-
 
 
     // get polygon edges from counterclockwise list of points
@@ -747,245 +744,6 @@ public:
         return 0;
     }
 };
-
-
-size_t add_graph_edges(
-    std::vector <point <double>>& current, 
-    std::vector <point <double>>& previous, 
-    const std::vector <std::pair<point<double>, point<double>>>& elist
-) {
-
-    for (const auto& vertex : elist) {
-        point2d <double> prev_point(vertex.first);
-        point2d <double> cur_point(vertex.second);
-
-        previous.push_back(prev_point);
-        current.push_back(cur_point);
-    }
-
-    return current.size();
-}
-
-
-size_t add_path_edges(
-    std::vector <point <double>>& current, 
-    std::vector <point <double>>& previous, 
-    const std::vector <std::vector <point <double>>>& paths
-) {
-
-    for (auto&& path : paths) {
-        for (size_t i = 1; i < path.size(); ++i) {
-            previous.push_back(path[i-1]);
-            current.push_back(path[i]);
-        }
-    }
-
-    return current.size();
-}
-
-std::ostream& operator<< (std::ostream& os, std::vector <std::vector <double>> v) {
-    for (auto row : v) {
-        for (auto el : v) {
-            os << el << " ";
-        }
-        os << std::endl;
-    }
-    return os;
-}
-
-
-// plot 2D graph
-void plot_graph (
-    const output& result,
-    const std::function<bool(point<double>)>& test_collision,
-    const std::function <size_t(std::vector <point <double>>&, std::vector <point <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges,
-    const std::vector <std::pair <double, double>> joint_lims,
-    bool delay_active = true,
-    bool save_image = false
-) {
-
-    std::vector <point <double>> current, previous;
-
-    // add obstacle edges
-    size_t cutoffA = add_obstacle_edges(current, previous, test_collision);
-
-    // add graph edges
-    size_t cutoffB = add_graph_edges(current, previous, result.get_edgelist());
-
-    // add path edges
-    size_t cutoffC = add_path_edges(current, previous, result.get_paths());
-
-    plt::xlim(joint_lims[0].first, joint_lims[0].second);
-    plt::ylim(joint_lims[1].first, joint_lims[1].second);
-
-    for (size_t i = 0; i < cutoffC; ++i) {
-        std::string lineflag;
-
-        if (i < cutoffA) lineflag = "g-";
-        else if (i < cutoffB) lineflag = "b-";
-        else lineflag = "r-";
-
-        point2d <double> prev(previous[i]);
-        point2d <double> cur(current[i]);
-        plt::plot(std::vector <double>{prev.getx(), cur.getx()}, std::vector <double>{prev.gety(), cur.gety()}, lineflag); 
-        
-        if (delay_active) {
-            plt::pause(0.001);
-        }
-    }
-
-    if (!save_image) {
-        plt::show();
-    }
-    else {
-        plt::save("./output.png");
-    }
-}
-
-// get as many as possible discrete levels of green-blue
-std::vector <std::string> get_levels () {
-    std::vector <std::string> levels;
-
-    for (unsigned int lev = 1; lev < 256; ++lev) {
-        std::stringstream ss;
-        ss << std::hex << lev;
-        std::string res = ss.str();
-
-        for(auto &ch : res) {
-            ch = toupper(ch);
-        }
-        if (res.size() == 1) res = "0" + res;
-
-        levels.push_back("#00" + res + "FF");
-    }
-
-    return levels;
-}
-
-// get discrete level of blue from z coordinate
-std::string scale_color (
-    const std::vector <std::string>& levels,
-    const double z,
-    const double zlim
-) {
-    size_t levelcnt = levels.size();
-    double quant = zlim / levelcnt;
-    size_t lev = z / quant;
-    return levels[lev];
-}
-
-
-// plot 3D graph
-void plot_3d (
-    const output& result,
-    const std::function<bool(point<double>)>& test_collision,
-    const std::function <size_t(std::vector <point <double>>&, std::vector <point <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges,
-    const std::vector <std::pair <double, double>> joint_lims,
-    bool delay_active = true,
-    bool save_image = false,
-    double zlim = 1
-) {
-
-    std::vector <point <double>> current, previous;
-
-    // add obstacle edges
-    size_t cutoffA = add_obstacle_edges(current, previous, test_collision);
-
-    // add graph edges
-    size_t cutoffB = add_graph_edges(current, previous, result.get_edgelist());
-
-    // add path edges
-    size_t cutoffC = add_path_edges(current, previous, result.get_paths());
-
-    plt::xlim(joint_lims[0].first, joint_lims[0].second);
-    plt::ylim(joint_lims[1].first, joint_lims[1].second);
-
-    std::vector <std::string> levels(get_levels());
-
-    for (size_t i = 0; i < cutoffC; ++i) {
-        std::string lineflag;
-        point3d <double> prev(previous[i]);
-        point3d <double> cur(current[i]);
-
-        if (i < cutoffA) {
-            lineflag = "g-";
-        }
-        else if (i < cutoffB) {
-            // if blue scale it
-            lineflag = scale_color(levels, cur.getz(), zlim);
-        }
-        else {
-            lineflag = "r-";
-        }
-
-        plt::plot(std::vector <double>{prev.getx(), cur.getx()}, std::vector <double>{prev.gety(), cur.gety()}, lineflag); 
-        
-        if (delay_active) {
-            plt::pause(0.001);
-        }
-    }
-
-    if (!save_image) {
-        plt::show();
-    }
-    else {
-        plt::save("./output.png");
-    }
-}
-
-// display single snapshot
-void disp_snapshot(
-    const workspace <double>& ws, 
-    const point <double> config, 
-    const std::string color,
-    const std::string name
-) {
-    auto robot = ws.get_robot();
-    auto edges = robot.dir_kine(config);
-    std::vector <double> xs;
-    std::vector <double> ys;
-
-    for (const auto& edge : edges) {
-        xs.push_back(edge.first.getx());
-        xs.push_back(edge.second.getx());
-        ys.push_back(edge.first.gety());
-        ys.push_back(edge.second.gety());
-    }
-
-    plt::named_plot(name, xs, ys, color + "-");
-}
-
-
-// display snapshots of 2D planar arm in its movement from start to goal
-void display_snapshots (
-    const workspace <double>& ws,
-    const std::vector <point <double>>& path
-) {
-    std::vector <std::string> names{"start","2nd","3rd","4th","5th","goal"};
-    std::vector <std::string> colors{"y", "m", "c", "r", "g", "b"};
-    size_t num_snapshots = colors.size();
-
-    for (const auto& polygon : ws.get_obstacles()) {
-        for (const auto& edge : polygon.get_edges()) {
-            point2d <double> prev = edge.first;
-            point2d <double> cur = edge.second;
-            plt::plot(std::vector <double>{prev.getx(), cur.getx()}, std::vector <double>{prev.gety(), cur.gety()}, "g-");
-        }
-    }
-
-    disp_snapshot(ws, path[0], colors[0], names[0]);
-
-    for (size_t i = 1; i < num_snapshots - 1; ++i) {
-        double jump = double(path.size()) / num_snapshots;
-        size_t path_idx = i * jump;
-        disp_snapshot(ws, path[path_idx], colors[i], names[i]);
-    }
-
-    disp_snapshot(ws, path.back(), colors.back(), names.back());
-    plt::legend();
-    plt::show();
-}
-
 
 int main (int argc, char *argv[]) {
     test_battery tb;

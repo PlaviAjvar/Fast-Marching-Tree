@@ -75,20 +75,41 @@ CMAKE_BINARY_DIR = /Users/tanja.ah/Desktop/Fast-Marching-Tree/build
 # The main recursive "all" target.
 all: sources/all
 all: test/all
+all: plot/all
 
 .PHONY : all
 
 # The main recursive "preinstall" target.
 preinstall: sources/preinstall
 preinstall: test/preinstall
+preinstall: plot/preinstall
 
 .PHONY : preinstall
 
 # The main recursive "clean" target.
 clean: sources/clean
 clean: test/clean
+clean: plot/clean
 
 .PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory plot
+
+# Recursive "all" directory target.
+plot/all: plot/CMakeFiles/plot.dir/all
+
+.PHONY : plot/all
+
+# Recursive "preinstall" directory target.
+plot/preinstall:
+
+.PHONY : plot/preinstall
+
+# Recursive "clean" directory target.
+plot/clean: plot/CMakeFiles/plot.dir/clean
+
+.PHONY : plot/clean
 
 #=============================================================================
 # Directory level rules for directory sources
@@ -133,7 +154,7 @@ test/clean: test/CMakeFiles/test.dir/clean
 sources/CMakeFiles/src.dir/all:
 	$(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/depend
 	$(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target src"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=3,4,5,6,7,8 "Built target src"
 .PHONY : sources/CMakeFiles/src.dir/all
 
 # Build rule for subdir invocation for target.
@@ -158,14 +179,15 @@ sources/CMakeFiles/src.dir/clean:
 
 # All Build rule for target.
 test/CMakeFiles/test.dir/all: sources/CMakeFiles/src.dir/all
+test/CMakeFiles/test.dir/all: plot/CMakeFiles/plot.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=7,8 "Built target test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=9,10 "Built target test"
 .PHONY : test/CMakeFiles/test.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 10
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 0
 .PHONY : test/CMakeFiles/test.dir/rule
@@ -179,6 +201,33 @@ test: test/CMakeFiles/test.dir/rule
 test/CMakeFiles/test.dir/clean:
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/clean
 .PHONY : test/CMakeFiles/test.dir/clean
+
+#=============================================================================
+# Target rules for target plot/CMakeFiles/plot.dir
+
+# All Build rule for target.
+plot/CMakeFiles/plot.dir/all: sources/CMakeFiles/src.dir/all
+	$(MAKE) $(MAKESILENT) -f plot/CMakeFiles/plot.dir/build.make plot/CMakeFiles/plot.dir/depend
+	$(MAKE) $(MAKESILENT) -f plot/CMakeFiles/plot.dir/build.make plot/CMakeFiles/plot.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=1,2 "Built target plot"
+.PHONY : plot/CMakeFiles/plot.dir/all
+
+# Build rule for subdir invocation for target.
+plot/CMakeFiles/plot.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 8
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plot/CMakeFiles/plot.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 0
+.PHONY : plot/CMakeFiles/plot.dir/rule
+
+# Convenience name for target.
+plot: plot/CMakeFiles/plot.dir/rule
+
+.PHONY : plot
+
+# clean rule for target.
+plot/CMakeFiles/plot.dir/clean:
+	$(MAKE) $(MAKESILENT) -f plot/CMakeFiles/plot.dir/build.make plot/CMakeFiles/plot.dir/clean
+.PHONY : plot/CMakeFiles/plot.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

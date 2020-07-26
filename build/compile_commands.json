@@ -26,7 +26,12 @@
 },
 {
   "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test",
-  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/../sources -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/test.dir/test.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp",
+  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/../sources -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/../plot -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/test.dir/test.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp",
   "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp"
+},
+{
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/plot",
+  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/plot/../plot -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/plot/../sources -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/plot -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/plot.dir/plot.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/plot/plot.cpp",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/plot/plot.cpp"
 }
 ]

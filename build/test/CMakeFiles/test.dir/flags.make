@@ -6,5 +6,5 @@ CXX_FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sd
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/../sources -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include 
+CXX_INCLUDES = -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/../sources -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/../plot -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include 
 

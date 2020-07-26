@@ -100,6 +100,8 @@ test_EXTERNAL_OBJECTS =
 test/test: test/CMakeFiles/test.dir/test.cpp.o
 test/test: test/CMakeFiles/test.dir/build.make
 test/test: sources/libsrc.a
+test/test: plot/libplot.a
+test/test: sources/libsrc.a
 test/test: /System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config/libpython2.7.dylib
 test/test: test/CMakeFiles/test.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable test"

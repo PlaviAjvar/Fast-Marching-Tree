@@ -4,15 +4,15 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp" "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test/CMakeFiles/test.dir/test.cpp.o"
+  "/Users/tanja.ah/Desktop/Fast-Marching-Tree/plot/plot.cpp" "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/plot/CMakeFiles/plot.dir/plot.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "../test/../sources"
-  "../test/../plot"
-  "../test"
+  "../plot/../plot"
+  "../plot/../sources"
+  "../plot"
   "../sources"
   "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7"
   "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include"
@@ -21,7 +21,6 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
   "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources/CMakeFiles/src.dir/DependInfo.cmake"
-  "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/plot/CMakeFiles/plot.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

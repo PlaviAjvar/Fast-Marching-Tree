@@ -6,3 +6,6 @@
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test/CMakeFiles/rebuild_cache.dir
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test/CMakeFiles/edit_cache.dir
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test/CMakeFiles/test.dir
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/plot/CMakeFiles/rebuild_cache.dir
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/plot/CMakeFiles/edit_cache.dir
+/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/plot/CMakeFiles/plot.dir

@@ -9,7 +9,8 @@
 					"childIndexes" : 
 					[
 						1,
-						2
+						2,
+						3
 					],
 					"minimumCMakeVersion" : 
 					{
@@ -29,7 +30,7 @@
 					"source" : "sources",
 					"targetIndexes" : 
 					[
-						0
+						1
 					]
 				},
 				{
@@ -43,7 +44,21 @@
 					"source" : "test",
 					"targetIndexes" : 
 					[
-						1
+						2
+					]
+				},
+				{
+					"build" : "plot",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "plot",
+					"targetIndexes" : 
+					[
+						0
 					]
 				}
 			],
@@ -55,18 +70,27 @@
 					[
 						0,
 						1,
-						2
+						2,
+						3
 					],
 					"name" : "fmt",
 					"targetIndexes" : 
 					[
 						0,
-						1
+						1,
+						2
 					]
 				}
 			],
 			"targets" : 
 			[
+				{
+					"directoryIndex" : 3,
+					"id" : "plot::@c145a046ca529118533e",
+					"jsonFile" : "target-plot-Debug-eb1dae848e60561e2d9e.json",
+					"name" : "plot",
+					"projectIndex" : 0
+				},
 				{
 					"directoryIndex" : 1,
 					"id" : "src::@5d746b4c5dd79dd0e6ad",
@@ -77,7 +101,7 @@
 				{
 					"directoryIndex" : 2,
 					"id" : "test::@36f028580bb02cc8272a",
-					"jsonFile" : "target-test-Debug-051e177ff7e051062f7c.json",
+					"jsonFile" : "target-test-Debug-d0ebab3aa14945773378.json",
 					"name" : "test",
 					"projectIndex" : 0
 				}
