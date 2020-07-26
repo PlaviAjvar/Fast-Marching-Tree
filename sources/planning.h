@@ -198,7 +198,6 @@ public:
 
 
 // class representing output from algorithms
-
 class output {
 protected:
     std::vector <std::vector <point <double>>> path;
@@ -210,7 +209,7 @@ protected:
 
 public:
     output () {
-        //path.resize(1);
+        path.resize(1);
     }
 
     output (const output& other) : path(other.get_paths()), edge_list(other.get_edgelist()) {}
@@ -289,5 +288,6 @@ public:
 std::vector <point <double>> get_samples (
     unsigned int num_samples,
     const std::function <point<double>()>& get_sample,
-    const std::function <bool(point<double>)>& collision_check
+    const std::function <bool(point<double>)>& collision_check,
+    const size_t max_iter = 10000
 );

@@ -21,6 +21,8 @@ functional
 -
 iostream
 -
+cmath
+-
 
 ../sources/planning.h
 geometry.h

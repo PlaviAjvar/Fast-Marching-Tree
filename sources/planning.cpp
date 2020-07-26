@@ -77,14 +77,15 @@ std::vector <std::pair<point<double>, point<double>>> output::edgelist_from_grap
 std::vector <point <double>> get_samples(
     unsigned int num_samples,
     const std::function <point<double>()>& get_sample,
-    const std::function <bool(point<double>)>& collision_check
+    const std::function <bool(point<double>)>& collision_check,
+    const size_t max_iter
 ) {
 
     // obtain all samples
     std::vector <point <double>> samples;
     samples.reserve(num_samples);
 
-    for (size_t i = 0; i < num_samples; ++i) {
+    for (size_t i = 0; i < max_iter && samples.size() < num_samples; ++i) {
         point <double> sample = get_sample();
         
         // if sample is in free space add it

@@ -111,10 +111,20 @@ output rrt(
     const unsigned int num_samples,
     const double stepsize
 ) {
+    if (collision_check(start)) {
+        throw std::domain_error("Start has to be in free space");
+    }
+    if (collision_check(goal)) {
+        throw std::domain_error("Goal has to be in free space");
+    }
+
     // initialize tree with starting point
     std::vector <tree_node <double>> tree;
     tree.reserve(num_samples + 2);
     tree.push_back(tree_node <double>(start, nullptr));
+
+    // std::cout << "collision_check(" << start << ") = " << collision_check(start) << std::endl;
+    // return output_rrt(false, tree);
 
     for (size_t sample_idx = 0; sample_idx < num_samples; ++sample_idx) {
         // get new (random) sample

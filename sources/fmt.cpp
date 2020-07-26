@@ -15,10 +15,13 @@ std::vector <labeled_node <double>> induced_graph (
     const double stepsize
 ) {
     std::vector <labeled_node <double>> lgraph(graph.begin(), graph.end());
+    //std::cout << "induced_graph =" << std::endl;
 
     for (auto&& vertex : lgraph) {
+        //std::cout << vertex.get_point() << std::endl;
         for (auto&& other_vertex : lgraph) {
             // if they are different points and distance is smaller than radius
+            //std::cout << "    " << other_vertex.get_point() << std::endl;
             if (vertex.get_point() != other_vertex.get_point() && distance(vertex.get_point(), other_vertex.get_point()) < radius) {
                 vertex.add_neighbor(&other_vertex);
             }
@@ -79,9 +82,17 @@ output fmt (
     const double stepsize,
     const double radius
 ) {
+    if (collision_check(start)) {
+        throw std::domain_error("Start has to be in free space");
+    }
+    if (collision_check(goal)) {
+        throw std::domain_error("Goal has to be in free space");
+    }
+    
     // obtain all samples
     std::vector <point <double>> samples(get_samples(num_samples, get_sample, collision_check));
 
+    std::cout << "num_samples = " << samples.size() << std::endl;
     size_t free_samples = samples.size();
     std::vector <node <double>> graph(free_samples + 2);
 

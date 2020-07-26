@@ -32,9 +32,3 @@ std::vector <point<double>> backtrack (
     labeled_node <double>* start,
     labeled_node <double>* goal
 );
-
-std::vector <point <double>> get_samples(
-    unsigned int num_samples,
-    const std::function <point<double>()>& get_sample,
-    const std::function <bool(point<double>)>& collision_check
-);

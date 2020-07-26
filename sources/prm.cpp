@@ -109,6 +109,17 @@ output prm (
     const double stepsize,
     const double radius
 ) { 
+    for (auto &st : start) {
+        if (collision_check(st)) {
+            throw std::domain_error("Starts have to be in free space");
+        }
+    }
+    for (auto &go : goal) {
+        if (collision_check(go)) {
+            throw std::domain_error("Goals have to be in free space");
+        }
+    }
+
     std::vector <point <double>> samples(get_samples(num_samples, get_sample, collision_check));
 
     size_t free_samples = samples.size();

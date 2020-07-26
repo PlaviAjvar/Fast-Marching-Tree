@@ -118,6 +118,24 @@ public:
 
 class test_battery {
 public:
+    // parameters
+    constexpr static unsigned int num_samplesA = 500;
+    constexpr static double stepsizeA = 1e-2;
+    constexpr static double radiusA = 0.1; // 50 / num_samples
+
+    constexpr static unsigned int num_samplesB = 500;
+    constexpr static double stepsizeB = 1e-2;
+    constexpr static double radiusB = 0.1; // 50 / num_samples
+
+    constexpr static unsigned int num_samplesC = 1000;
+    constexpr static double stepsizeC = 1e-2;
+    constexpr static double radiusC = 1e-1; // same as old
+
+    constexpr static unsigned int num_samplesD = 300; // since there are more collisions
+    constexpr static double stepsizeD = 3e-2; // around PI * old_value
+    constexpr static double radiusD = 3; // since weighed euclidean, have to scale
+    // new_radius = total_length * strech_scaler * old_radius = 5 * 3 * 1e-1 = 3
+
     /***************************
     TEST A (pointlike robot 2D)
     ***************************/
@@ -153,10 +171,6 @@ public:
     static std::function <double(const point <double>&, const point <double>&)> distanceA () {
         return euclidean_distance <double>;
     }
-
-    constexpr static unsigned int num_samplesA = 500;
-    constexpr static double stepsizeA = 1e-2;
-    constexpr static double radiusA = 0.1; // 50 / num_samples
 
     static bool test_collisionA (const point <double> P) {
         const double eps = 1e-3;
@@ -220,11 +234,6 @@ public:
     static std::function <double(const point <double>&, const point <double>&)> distanceB () {
         return euclidean_distance <double>;
     }
-
-    constexpr static unsigned int num_samplesB = 500;
-    constexpr static double stepsizeB = 1e-2;
-    constexpr static double radiusB = 0.1; // 50 / num_samples
-
 
     static bool test_collisionB (const point <double> P) {
         const double eps = 1e-3;
@@ -333,10 +342,6 @@ public:
         return euclidean_distance <double>;
     }
 
-    constexpr static unsigned int num_samplesC = 2500;
-    constexpr static double stepsizeC = 1e-2;
-    constexpr static double radiusC = 1e-1; // same as old
-
     static bool test_collisionC (const point <double> P) {
         const double eps = 1e-3;
 
@@ -398,11 +403,172 @@ public:
         return 8;
     }
 
+    /***************************
+    TEST D (2D planar manipulator)
+    ***************************/
+
+    static std::vector <std::pair <point2d<double>, point2d<double>>> edgesD_A () {
+        // define points of obstacle
+        point2d <double> A(5.1, 5);
+        point2d <double> B(6.1, 4);
+        point2d <double> C(9, 4);
+        point2d <double> D(9, 7);
+        point2d <double> E(5.1, 5);
+        std::vector <point2d <double>> points{A, B, C, D, E};
+        return edges_from_points(points);
+    }
+
+    static std::vector <std::pair <point2d<double>, point2d<double>>> edgesD_B () {
+        // define points of obstacle
+        point2d <double> A(-2, -2);
+        point2d <double> B(0, -2);
+        point2d <double> C(4, -6);
+        point2d <double> D(-2, -8);
+        point2d <double> E(-2, -2);
+        std::vector <point2d <double>> points{A, B, C, D, E};
+        return edges_from_points(points);
+    }
+
+    static std::vector <std::pair <point2d<double>, point2d<double>>> edgesD_C () {
+        // define points of obstacle
+        double h = 0.3;
+        point2d <double> A(-2, 0);
+        point2d <double> B(-h, 0);
+        point2d <double> C(-h, 7);
+        point2d <double> D(-2, 7);
+        point2d <double> E(-2, 0);
+        std::vector <point2d <double>> points{A, B, C, D, E};
+        return edges_from_points(points);
+    }
+
+    static std::vector <std::pair <point2d<double>, point2d<double>>> edgesDT () {
+        // define points of obstacle
+        double h = 1;
+        point2d <double> A(h, h);
+        point2d <double> B(10, h);
+        point2d <double> C(10, 10);
+        point2d <double> D(h, 10);
+        point2d <double> E(h, h);
+        std::vector <point2d <double>> points{A, B, C, D, E};
+        return edges_from_points(points);
+    }
+
+    static point2d <double> baseD () {
+        point2d <double> base(0, 0);
+        return base;
+    }
+
+    static std::vector <double> link_lengthsD () {
+        std::vector <double> link_lengths{5, 5};
+        return link_lengths;
+    }
+
+    static std::vector <std::pair <double,double>> joint_limitsD () {
+        std::vector <std::pair <double,double>> lims {{-M_PI, M_PI}, {-M_PI, M_PI}};
+        return lims;
+    }
+
+    static workspace <double> workspaceD (const std::string label) {
+        // form polygons from points
+        std::vector <std::pair <point2d<double>, point2d<double>>> edgesA(edgesD_A());
+        std::vector <std::pair <point2d<double>, point2d<double>>> edgesB(edgesD_B());
+        std::vector <std::pair <point2d<double>, point2d<double>>> edgesC(edgesD_C());
+        std::vector <std::pair <point2d<double>, point2d<double>>> edgesT(edgesDT());
+        std::vector <polygon <double>> obstacles;
+
+        if (label == "D") {
+            obstacles.push_back(polygon <double>(edgesA));
+            obstacles.push_back(polygon <double>(edgesB));
+            obstacles.push_back(polygon <double>(edgesC));
+        }
+
+        if (label == "DT") {
+            obstacles.push_back(polygon <double>(edgesT));
+        }
+
+        // create 2D planar arm object
+        point2d <double> base(baseD());
+        std::vector <double> link_lengths{link_lengthsD()};
+        std::vector <std::pair <double,double>> lims(joint_limitsD());
+
+        // std::cout << "base = " << base << std::endl;
+        // std::cout << "linklen = " << std::endl;
+        // for (auto e : link_lengths) std::cout << e << ",";
+        // std::cout << std::endl << "joint_lim = ";
+        // for (auto e : lims) std::cout << "(" << e.first << " " << e.second << ")" << ",";
+        // std::cout << std::endl;
+
+        arm2d <double> planar(base, link_lengths, lims);
+
+        workspace <double> ws(obstacles, planar);
+        return ws;
+    }
+
+    static point <double> startD () {
+        return point <double>(std::vector<double>{0, 0});
+    }
+
+    static point <double> goalD () {
+        return point <double>(std::vector<double>{M_PI_2, -M_PI_2});
+    }
+
+    static point <double> goalDT () {
+        return point <double>(std::vector <double>{-M_PI_2, -M_PI_2});
+    }
+
+    static std::vector<point <double>> startsD () {
+        std::vector <point <double>> starts{startD()};
+        return starts;
+    }
+
+    static std::vector <point <double>> goalsD () {
+        std::vector <point <double>> goals{goalD()};
+        return goals;
+    }
+
+    static std::vector <point <double>> goalsDT () {
+        std::vector <point <double>> goals{goalDT()};
+        return goals;
+    }
+
+    static double distanceD (const point <double>& A, const point <double>& B) {
+        std::vector <double> linklen = workspaceD("D").get_link_lengths();
+        return weighed_euclidean <double>(A, B, linklen);
+    }
+
+    static double distanceDT (const point <double>& A, const point <double>& B) {
+        std::vector <double> linklen = workspaceD("DT").get_link_lengths();
+        return weighed_euclidean <double>(A, B, linklen);
+    }
+
+    static bool test_collisionD (const point <double> config) {
+        return workspaceD("D").collides(config);
+    }
+
+    static bool test_collisionDT (const point <double> config) {
+        return workspaceD("DT").collides(config);
+    }
+
+    static point <double> get_sampleD () {
+        return get_sample_util(joint_limitsD(), 2);
+    }
+
+    static size_t add_obstacle_edgesD (
+        std::vector <point <double>>& current, 
+        std::vector <point <double>>& previous, 
+        const std::function<bool(point<double>)> test_collision
+    ) {
+        size_t first = auto_add_edges(current, previous, edgesD_A());
+        size_t second = auto_add_edges(current, previous, edgesD_B());
+        return first + second;
+    }
+
     // functions returning test info with test label as argument
     static point <double> start (std::string label) {
         if (label == "A") return startA();
         if (label == "B") return startB();
         if (label == "C") return startC();
+        if (label == "D" || label == "DT") return startD();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -412,6 +578,8 @@ public:
         if (label == "A") return goalA();
         if (label == "B") return goalB();
         if (label == "C") return goalC();
+        if (label == "D") return goalD();
+        if (label == "DT") return goalDT();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -421,6 +589,7 @@ public:
         if (label == "A") return startsA();
         if (label == "B") return startsB();
         if (label == "C") return startsC();
+        if (label == "D" || label == "DT") return startsD();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -430,6 +599,8 @@ public:
         if (label == "A") return goalsA();
         if (label == "B") return goalsB();
         if (label == "C") return goalsC();
+        if (label == "D") return goalsD();
+        if (label == "DT") return goalsDT();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -439,6 +610,7 @@ public:
         if (label == "A") return joint_limitsA();
         if (label == "B") return joint_limitsB();
         if (label == "C") return joint_limitsC();
+        if (label == "D" || label == "DT") return joint_limitsD();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -446,6 +618,8 @@ public:
 
     static std::function <double(const point <double>&, const point <double>&)> distance (std::string label) {
         if (label == "A" || label == "B" || label == "C") return euclidean_distance <double>;
+        if (label == "D") return distanceD;
+        if (label == "DT") return distanceDT;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -455,6 +629,7 @@ public:
         if (label == "A") return num_samplesA;
         if (label == "B") return num_samplesB;
         if (label == "C") return num_samplesC;
+        if (label == "D" || label == "DT") return num_samplesD;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -464,6 +639,7 @@ public:
         if (label == "A") return stepsizeA;
         if (label == "B") return stepsizeB;
         if (label == "C") return stepsizeC;
+        if (label == "D" || label == "DT") return stepsizeD;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -473,6 +649,7 @@ public:
         if (label == "A") return radiusA;
         if (label == "B") return radiusB;
         if (label == "C") return radiusC;
+        if (label == "D" || label == "DT") return radiusD;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -482,6 +659,8 @@ public:
         if (label == "A") return test_collisionA;
         if (label == "B") return test_collisionB;
         if (label == "C") return test_collisionC;
+        if (label == "D") return test_collisionD;
+        if (label == "DT") return test_collisionDT;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -491,6 +670,7 @@ public:
         if (label == "A") return get_sampleA;
         if (label == "B") return get_sampleB;
         if (label == "C") return get_sampleC;
+        if (label == "D" || label == "DT") return get_sampleD;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -502,13 +682,33 @@ public:
         if (label == "A") return add_obstacle_edgesA;
         if (label == "B") return add_obstacle_edgesB;
         if (label == "C") return add_obstacle_edgesC;
+        if (label == "D" || label == "DT") return pass;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
     }
 
-    // function which generates random sample
+    static workspace <double> getws (std::string label) {
+        if (label == "D" || label == "DT") return workspaceD(label);
+        
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
 
+
+
+    // get polygon edges from counterclockwise list of points
+    static std::vector <std::pair <point2d<double>, point2d<double>>> edges_from_points (
+        std::vector <point2d <double>> points
+    ) {
+        std::vector <std::pair <point2d<double>, point2d<double>>> edges(points.size() - 1);
+        for (size_t i = 0; i < points.size()-1; ++i) {
+            edges[i] = {points[i], points[i+1]};
+        }
+        return edges;
+    }
+
+    // function which generates random sample
     static point <double> get_sample_util (const std::vector <std::pair <double,double>>& joint_limits, size_t dimension) {
         std::vector <double> components;
         std::random_device r;
@@ -524,7 +724,30 @@ public:
         point <double> sample(components);
         return sample;
     }
+
+    // automatized adding of edges from edge list
+    static size_t auto_add_edges (
+        std::vector <point <double>>& current, 
+        std::vector <point <double>>& previous, 
+        const std::vector <std::pair <point2d<double>, point2d<double>>>& edges
+    ) {
+        for (const auto& edge : edges) {
+            previous.push_back(edge.first);
+            current.push_back(edge.second);
+        }
+        return edges.size();
+    }
+
+    // function which passes
+    static size_t pass (
+        std::vector <point <double>>& current, 
+        std::vector <point <double>>& previous, 
+        const std::function<bool(point<double>)> test_collision
+    ) {
+        return 0;
+    }
 };
+
 
 size_t add_graph_edges(
     std::vector <point <double>>& current, 
@@ -576,6 +799,7 @@ void plot_graph (
     const output& result,
     const std::function<bool(point<double>)>& test_collision,
     const std::function <size_t(std::vector <point <double>>&, std::vector <point <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges,
+    const std::vector <std::pair <double, double>> joint_lims,
     bool delay_active = true,
     bool save_image = false
 ) {
@@ -591,17 +815,14 @@ void plot_graph (
     // add path edges
     size_t cutoffC = add_path_edges(current, previous, result.get_paths());
 
-    plt::xlim(0, 1);
-    plt::ylim(0, 1);
-
-    plt::plot(std::vector <double>{0.4}, std::vector <double>{0.1}, "rx");
-    plt::plot(std::vector <double>{0.1}, std::vector <double>{0.4}, "rx");
+    plt::xlim(joint_lims[0].first, joint_lims[0].second);
+    plt::ylim(joint_lims[1].first, joint_lims[1].second);
 
     for (size_t i = 0; i < cutoffC; ++i) {
         std::string lineflag;
 
         if (i < cutoffA) lineflag = "g-";
-        else if (i < cutoffB) lineflag = "-b";
+        else if (i < cutoffB) lineflag = "b-";
         else lineflag = "r-";
 
         point2d <double> prev(previous[i]);
@@ -659,6 +880,7 @@ void plot_3d (
     const output& result,
     const std::function<bool(point<double>)>& test_collision,
     const std::function <size_t(std::vector <point <double>>&, std::vector <point <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges,
+    const std::vector <std::pair <double, double>> joint_lims,
     bool delay_active = true,
     bool save_image = false,
     double zlim = 1
@@ -675,8 +897,8 @@ void plot_3d (
     // add path edges
     size_t cutoffC = add_path_edges(current, previous, result.get_paths());
 
-    plt::xlim(0, 1);
-    plt::ylim(0, 1);
+    plt::xlim(joint_lims[0].first, joint_lims[0].second);
+    plt::ylim(joint_lims[1].first, joint_lims[1].second);
 
     std::vector <std::string> levels(get_levels());
 
@@ -711,15 +933,69 @@ void plot_3d (
     }
 }
 
+// display single snapshot
+void disp_snapshot(
+    const workspace <double>& ws, 
+    const point <double> config, 
+    const std::string color,
+    const std::string name
+) {
+    auto robot = ws.get_robot();
+    auto edges = robot.dir_kine(config);
+    std::vector <double> xs;
+    std::vector <double> ys;
+
+    for (const auto& edge : edges) {
+        xs.push_back(edge.first.getx());
+        xs.push_back(edge.second.getx());
+        ys.push_back(edge.first.gety());
+        ys.push_back(edge.second.gety());
+    }
+
+    plt::named_plot(name, xs, ys, color + "-");
+}
+
+
+// display snapshots of 2D planar arm in its movement from start to goal
+void display_snapshots (
+    const workspace <double>& ws,
+    const std::vector <point <double>>& path
+) {
+    std::vector <std::string> names{"start","2nd","3rd","4th","5th","goal"};
+    std::vector <std::string> colors{"y", "m", "c", "r", "g", "b"};
+    size_t num_snapshots = colors.size();
+
+    for (const auto& polygon : ws.get_obstacles()) {
+        for (const auto& edge : polygon.get_edges()) {
+            point2d <double> prev = edge.first;
+            point2d <double> cur = edge.second;
+            plt::plot(std::vector <double>{prev.getx(), cur.getx()}, std::vector <double>{prev.gety(), cur.gety()}, "g-");
+        }
+    }
+
+    disp_snapshot(ws, path[0], colors[0], names[0]);
+
+    for (size_t i = 1; i < num_snapshots - 1; ++i) {
+        double jump = double(path.size()) / num_snapshots;
+        size_t path_idx = i * jump;
+        disp_snapshot(ws, path[path_idx], colors[i], names[i]);
+    }
+
+    disp_snapshot(ws, path.back(), colors.back(), names.back());
+    plt::legend();
+    plt::show();
+}
+
 
 int main (int argc, char *argv[]) {
     test_battery tb;
     test test_sq, test_mq;
 
-    std::string algorithm = "FMT";
-    std::string test_label = "A";
+    std::string algorithm = "RRT";
+    std::string test_label = "D";
     bool one_by_one = false;
     bool write_to_file = false;
+    bool snapshot = false;
     std::string mode = "-normal";
 
     for (size_t i = 0; i < argc; ++i) {
@@ -727,12 +1003,14 @@ int main (int argc, char *argv[]) {
         if (flag == "RRT" || flag == "PRM" || flag == "FMT") {
             algorithm = flag;
         }
-        if (flag == "A" || flag == "B" || flag == "C") {
+        if (flag == "A" || flag == "B" || flag == "C" || flag == "D" || flag == "DT") {
             test_label = flag;
         }
         if (flag == "point2D-A") test_label = "A";
         if (flag == "point2D-B") test_label = "B";
         if (flag == "point3D") test_label = "C";
+        if (flag == "arm2D" || flag == "planar") test_label = "D";
+        if (flag == "trivial") test_label = "DT";
         if (flag == "-seq") {
             one_by_one = true;
         }
@@ -741,6 +1019,9 @@ int main (int argc, char *argv[]) {
         }
         if (flag == "-sim" || flag == "-param" || flag == "-normal") {
             mode = flag;
+        }
+        if (flag == "-snapshot") {
+            snapshot = true;
         }
     }
 
@@ -788,12 +1069,17 @@ int main (int argc, char *argv[]) {
             std::cout << std::endl << "Path length: NaN" << std::endl << std::endl;
         }
 
-        // plot graph
-        if (test_label == "A" || test_label == "B") {
-            plot_graph(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label), one_by_one, write_to_file);
+        if (snapshot) {
+            display_snapshots(tb.getws(test_label), path);
         }
-        else{
-            plot_3d(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label), one_by_one, write_to_file);
+        // plot graph
+        else {
+            if (test_label == "A" || test_label == "B" || test_label == "D" || test_label == "DT") {
+                plot_graph(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label), tb.joint_limits(test_label), one_by_one, write_to_file);
+            }
+            else{
+                plot_3d(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label), tb.joint_limits(test_label), one_by_one, write_to_file);
+            }
         }
     }
 
