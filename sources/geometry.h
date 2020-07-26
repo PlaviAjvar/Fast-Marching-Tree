@@ -370,19 +370,16 @@ bool lines_intersect2d (
         real x = (B2 * C1 - B1 * C2) / det;
         real y = (A1 * C2 - A2 * C1) / det;
         // std::cout << "intersection = " << "(" << x << "," << y << ")" << std::endl; 
+
         bool betweenxA = (x <= linea.first.getx() && x >= linea.second.getx()) ||  (x <= linea.second.getx() && x >= linea.first.getx());
         bool betweenyA = (y <= linea.first.gety() && y >= linea.second.gety()) ||  (y <= linea.second.gety() && y >= linea.first.gety());
         bool betweenxB = (x <= lineb.first.getx() && x >= lineb.second.getx()) ||  (x <= lineb.second.getx() && x >= lineb.first.getx());
         bool betweenyB = (y <= lineb.first.gety() && y >= lineb.second.gety()) ||  (y <= lineb.second.gety() && y >= lineb.first.gety());
-        if ((betweenxA && betweenyA && betweenxB && betweenyB)) {
-            // std::cout << "linea = " << linea.first << "," << linea.second << std::endl;
-            // std::cout << "lineb = " << lineb.first << "," << lineb.second << std::endl;
-            // std::cout << "intersection = " << "(" << x << "," << y << ")" << std::endl; 
-        }
         return (betweenxA && betweenyA && betweenxB && betweenyB);
     }
 
     // otherwise lines are parallel or overlapping
+
     // test if overlapping
     if (on_line <real>(linea.first, lineb) || on_line <real>(linea.second, lineb)) {
         return true;
@@ -451,11 +448,24 @@ public:
         const polygon <real>& obstacle,
         const point <real>& configuration
     ) const {
+        auto links = get_links(configuration);
 
-        for (const auto& link : get_links(configuration)) {
+        // check intersection of links with obstacles
+        for (const auto& link : links) {
             for (const auto& edge : obstacle.get_edges()) {
                 if (lines_intersect2d(link, edge)) {
                     return true;
+                }
+            }
+        }
+
+        // check intersection of links amongst themselves
+        for (auto it = links.begin(); it != links.end(); ++it) {
+            if (std::next(it, 1) != links.end()) {
+                for (auto jt = std::next(it, 2); jt != links.end(); ++jt) {
+                    if (lines_intersect2d(*it, *jt)) {
+                        return true;
+                    }
                 }
             }
         }

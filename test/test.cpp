@@ -991,7 +991,7 @@ int main (int argc, char *argv[]) {
     test_battery tb;
     test test_sq, test_mq;
 
-    std::string algorithm = "RRT";
+    std::string algorithm = "FMT";
     std::string test_label = "D";
     bool one_by_one = false;
     bool write_to_file = false;
