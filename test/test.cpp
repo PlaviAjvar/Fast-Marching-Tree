@@ -128,12 +128,16 @@ public:
 
     constexpr static unsigned int num_samplesC = 1000;
     constexpr static double stepsizeC = 1e-2;
-    constexpr static double radiusC = 1e-1; // same as old
+    constexpr static double radiusC = 0.1; // same as old
 
     constexpr static unsigned int num_samplesD = 300; // since there are more collisions
     constexpr static double stepsizeD = 3e-2; // around PI * old_value
     constexpr static double radiusD = 3; // since weighed euclidean, have to scale
     // new_radius = total_length * strech_scaler * old_radius = 5 * 3 * 1e-1 = 3
+
+    constexpr static unsigned int num_samplesE = 500;
+    constexpr static double stepsizeE = 3e-2;
+    constexpr static double radiusE = 4.5;
 
     /***************************
     TEST A (pointlike robot 2D)
@@ -363,6 +367,46 @@ public:
         return true;
     }
 
+    static box <double> box_downleft() {
+        std::vector <std::pair <double, double>> lims{
+            {0, 0.4}, {0, 0.4}, {0, 1}
+        };
+        return box <double>(lims);
+    }
+
+    static box <double> box_upright() {
+        std::vector <std::pair <double, double>> lims{
+            {0.6, 1}, {0.6, 1}, {0, 1}
+        };
+        return box <double>(lims);
+    }
+
+    static box <double> box_downright() {
+        std::vector <std::pair <double, double>> lims{
+            {0.6, 1}, {0, 0.4}, {0, 1}
+        };
+        return box <double>(lims);
+    }
+
+    static box <double> box_upleft() {
+        std::vector <std::pair <double, double>> lims{
+            {0, 0.4}, {0.6, 1}, {0, 1}
+        };
+        return box <double>(lims);
+    }
+
+    static workspace3d <double> workspaceC () {
+        std::vector <box <double>> obstacles;
+        obstacles.push_back(box_upleft());
+        obstacles.push_back(box_upright());
+        obstacles.push_back(box_downleft());
+        obstacles.push_back(box_downright());
+
+        arm <double>* planar = nullptr;
+        workspace3d <double> ws(obstacles, planar);
+        return ws;
+    }
+
     static point <double> get_sampleC () {
         return get_sample_util(joint_limitsC(), 3);
     }
@@ -497,7 +541,7 @@ public:
         // for (auto e : lims) std::cout << "(" << e.first << " " << e.second << ")" << ",";
         // std::cout << std::endl;
 
-        arm2d <double>* planar = new arm2d <double>(base, link_lengths, lims);
+        arm <double>* planar = new arm2d <double>(base, link_lengths, lims);
         workspace2d <double> ws(obstacles, planar);
         return ws;
     }
@@ -561,12 +605,140 @@ public:
         return first + second;
     }
 
+    /***************************
+    TEST E (antropomorphic arm)
+    ***************************/
+
+    static box <double> box_baseE () {
+        // box as base (table, ground or whatever)
+        std::vector <std::pair <double, double>> lims {
+            {-15, 15}, {-15, 15}, {-15, 0}
+        };
+        return box <double>(lims);
+    }
+
+    static box <double> floating_boxE () {
+        // floating box which will need to be avoided
+        std::vector <std::pair <double, double>> lims {
+            {-2, 2}, {-15, 15}, {6, 15}
+        };
+        return box <double>(lims);
+    }
+
+    static point3d <double> baseE () {
+        point3d <double> base(0, 0, 0);
+        return base;
+    }
+
+    static std::vector <double> link_lengthsE () {
+        std::vector <double> link_lengths{5, 5, 5};
+        return link_lengths;
+    }
+
+    static std::vector <std::pair <double,double>> joint_limitsE () {
+        std::vector <std::pair <double,double>> lims {{-M_PI, M_PI}, {-M_PI, M_PI}, {-M_PI, M_PI}};
+        return lims;
+    }
+
+    static workspace3d <double> workspaceE () {
+        std::vector <box <double>> obstacles;
+        obstacles.push_back(box_baseE());
+        obstacles.push_back(floating_boxE());
+
+        point3d <double> base(baseE());
+        std::vector <double> link_lengths{link_lengthsE()};
+        std::vector <std::pair <double,double>> lims(joint_limitsE());
+
+        // std::cout << "base = " << base << std::endl;
+        // std::cout << "linklen = " << std::endl;
+        // for (auto e : link_lengths) std::cout << e << ",";
+        // std::cout << std::endl << "joint_lim = ";
+        // for (auto e : lims) std::cout << "(" << e.first << " " << e.second << ")" << ",";
+        // std::cout << std::endl;
+
+        arm <double>* planar = new antropomorphic_arm <double>(base, link_lengths, lims);
+        workspace3d <double> ws(obstacles, planar);
+        return ws;
+    }
+
+    static point <double> startE () {
+        return point <double>(std::vector<double>{0, 0.2, 1.7});
+    }
+
+    static point <double> goalE () {
+        return point <double>(std::vector<double>{M_PI, 0.2, 1.7});
+    }
+
+    static std::vector<point <double>> startsE () {
+        std::vector <point <double>> starts{startE()};
+        return starts;
+    }
+
+    static std::vector <point <double>> goalsE () {
+        std::vector <point <double>> goals{goalE()};
+        return goals;
+    }
+
+    static double distanceE (const point <double>& A, const point <double>& B) {
+        std::vector <double> linklen = workspaceE().get_link_lengths();
+        return weighed_euclidean <double>(A, B, linklen);
+    }
+
+    static bool test_collisionE (const point <double> config) {
+        return workspaceE().collides(config);
+    }
+
+    static point <double> get_sampleE () {
+        return get_sample_util(joint_limitsD(), 3);
+    }
+
+    static size_t add_obstacle_edgesE (
+        std::vector <point <double>>& current, 
+        std::vector <point <double>>& previous, 
+        const std::function<bool(point<double>)> test_collision
+    ) {
+        // floating box
+
+        previous.push_back(point2d <double>(-2, -2));
+        current.push_back(point2d <double>(-2, 2));
+
+        previous.push_back(point2d <double>(-2, 2));
+        current.push_back(point2d <double>(2, 2));
+
+        previous.push_back(point2d <double>(2, 2));
+        current.push_back(point2d <double>(2, -2));
+        
+        previous.push_back(point2d <double>(2, -2));
+        current.push_back(point2d <double>(-2, -2));
+
+        // base
+
+        previous.push_back(point2d <double>(-15, -15));
+        current.push_back(point2d <double>(-15, 15));
+
+        previous.push_back(point2d <double>(-15, 15));
+        current.push_back(point2d <double>(15, 15));
+
+        previous.push_back(point2d <double>(15, 15));
+        current.push_back(point2d <double>(15, -15));
+        
+        previous.push_back(point2d <double>(15, -15));
+        current.push_back(point2d <double>(-15, -15));
+
+        return 8;
+    }
+
+    /**********************
+    HELPER FUNCTIONS
+    ***********************/
+
     // functions returning test info with test label as argument
     static point <double> start (std::string label) {
         if (label == "A") return startA();
         if (label == "B") return startB();
         if (label == "C") return startC();
         if (label == "D" || label == "DT") return startD();
+        if (label == "E") return startE();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -578,6 +750,7 @@ public:
         if (label == "C") return goalC();
         if (label == "D") return goalD();
         if (label == "DT") return goalDT();
+        if (label == "E") return goalE();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -588,6 +761,7 @@ public:
         if (label == "B") return startsB();
         if (label == "C") return startsC();
         if (label == "D" || label == "DT") return startsD();
+        if (label == "E") return startsE();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -599,6 +773,7 @@ public:
         if (label == "C") return goalsC();
         if (label == "D") return goalsD();
         if (label == "DT") return goalsDT();
+        if (label == "E") return goalsE();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -609,6 +784,7 @@ public:
         if (label == "B") return joint_limitsB();
         if (label == "C") return joint_limitsC();
         if (label == "D" || label == "DT") return joint_limitsD();
+        if (label == "E") return joint_limitsE();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -618,6 +794,7 @@ public:
         if (label == "A" || label == "B" || label == "C") return euclidean_distance <double>;
         if (label == "D") return distanceD;
         if (label == "DT") return distanceDT;
+        if (label == "E") return distanceE;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -628,6 +805,7 @@ public:
         if (label == "B") return num_samplesB;
         if (label == "C") return num_samplesC;
         if (label == "D" || label == "DT") return num_samplesD;
+        if (label == "E") return num_samplesE;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -638,6 +816,7 @@ public:
         if (label == "B") return stepsizeB;
         if (label == "C") return stepsizeC;
         if (label == "D" || label == "DT") return stepsizeD;
+        if (label == "E") return stepsizeE;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -648,6 +827,7 @@ public:
         if (label == "B") return radiusB;
         if (label == "C") return radiusC;
         if (label == "D" || label == "DT") return radiusD;
+        if (label == "E") return radiusE;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -659,6 +839,7 @@ public:
         if (label == "C") return test_collisionC;
         if (label == "D") return test_collisionD;
         if (label == "DT") return test_collisionDT;
+        if (label == "E") return test_collisionE;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -669,6 +850,7 @@ public:
         if (label == "B") return get_sampleB;
         if (label == "C") return get_sampleC;
         if (label == "D" || label == "DT") return get_sampleD;
+        if (label == "E") return get_sampleE;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -681,6 +863,7 @@ public:
         if (label == "B") return add_obstacle_edgesB;
         if (label == "C") return add_obstacle_edgesC;
         if (label == "D" || label == "DT") return pass;
+        if (label == "E") return add_obstacle_edgesE;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -693,6 +876,13 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
+    static workspace3d <double> getws3 (std::string label) {
+        if (label == "C") return workspaceC();
+        if (label == "E") return workspaceE();
+
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
 
     // get polygon edges from counterclockwise list of points
     static std::vector <std::pair <point2d<double>, point2d<double>>> edges_from_points (
@@ -750,25 +940,34 @@ int main (int argc, char *argv[]) {
     test test_sq, test_mq;
 
     std::string algorithm = "FMT";
-    std::string test_label = "D";
+    std::string test_label = "E";
     bool one_by_one = false;
     bool write_to_file = false;
     bool snapshot = false;
     std::string mode = "-normal";
+    bool show_path = false;
+    bool show_obstacles = true;
 
     for (size_t i = 0; i < argc; ++i) {
         std::string flag(argv[i]);
         if (flag == "RRT" || flag == "PRM" || flag == "FMT") {
             algorithm = flag;
         }
-        if (flag == "A" || flag == "B" || flag == "C" || flag == "D" || flag == "DT") {
+        if (flag == "A" || flag == "B" || flag == "C" || flag == "D" || flag == "DT" || flag == "E") {
             test_label = flag;
+        }
+        if (flag == "E") {
+            show_obstacles = false;
         }
         if (flag == "point2D-A") test_label = "A";
         if (flag == "point2D-B") test_label = "B";
         if (flag == "point3D") test_label = "C";
         if (flag == "arm2D" || flag == "planar") test_label = "D";
         if (flag == "trivial") test_label = "DT";
+        if (flag == "antro") {
+            test_label = "E";
+            show_obstacles = false;
+        }
         if (flag == "-seq") {
             one_by_one = true;
         }
@@ -780,6 +979,9 @@ int main (int argc, char *argv[]) {
         }
         if (flag == "-snapshot") {
             snapshot = true;
+        }
+        if (flag == "-path") {
+            show_path = true;
         }
     }
 
@@ -827,8 +1029,17 @@ int main (int argc, char *argv[]) {
             std::cout << std::endl << "Path length: NaN" << std::endl << std::endl;
         }
 
+
         if (snapshot) {
-            display_snapshots(tb.getws(test_label), path);
+            if (test_label == "D" || test_label == "DT") {
+                display_snapshots(tb.getws(test_label), path);
+            }
+            else if (test_label == "E") {
+                display_snapshots3d(tb.getws3(test_label), path);
+            }
+            else {
+                std::cout << "Cannot take snapshots for test " << test_label << std::endl;
+            }
         }
         // plot graph
         else {
@@ -836,7 +1047,7 @@ int main (int argc, char *argv[]) {
                 plot_graph(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label), tb.joint_limits(test_label), one_by_one, write_to_file);
             }
             else{
-                plot_3d(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label), tb.joint_limits(test_label), one_by_one, write_to_file);
+                plot3d(out, tb.getws3(test_label), tb.joint_limits(test_label), show_path, write_to_file, show_obstacles);
             }
         }
     }

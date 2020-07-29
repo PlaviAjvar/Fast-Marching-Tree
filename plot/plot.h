@@ -41,7 +41,7 @@ std::string scale_color (
     const double zlim
 );
 
-void plot_3d (
+void plot_bird (
     const output& result,
     const std::function<bool(point<double>)>& test_collision,
     const std::function <size_t(std::vector <point <double>>&, std::vector <point <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges,
@@ -63,3 +63,24 @@ void display_snapshots (
     const std::vector <point <double>>& path
 );
 
+void plot3d (
+    const output& result,
+    const workspace3d <double>& ws,
+    const std::vector <std::pair <double, double>> joint_lims,
+    bool show_path = false,
+    bool save_image = false,
+    bool show_obstacles = true
+);
+
+void disp_snapshot3d (
+    const workspace3d <double>& ws, 
+    const point <double> config, 
+    std::vector <double>& xs,
+    std::vector <double>& ys,
+    std::vector <double>& zs
+);
+
+void display_snapshots3d (
+    const workspace3d <double>& ws,
+    const std::vector <point <double>>& path
+);
