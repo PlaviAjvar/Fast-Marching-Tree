@@ -1,5 +1,25 @@
 [
 {
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/googletest/googlemock",
+  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googlemock/include -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googlemock -isystem /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest/include -isystem /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -Wall -Wshadow -Werror -Wconversion -DGTEST_HAS_PTHREAD=1 -fexceptions -W -Wpointer-arith -Wreturn-type -Wcast-qual -Wwrite-strings -Wswitch -Wunused-parameter -Wcast-align -Wchar-subscripts -Winline -Wredundant-decls -std=c++11 -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googlemock/src/gmock-all.cc",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googlemock/src/gmock-all.cc"
+},
+{
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/googletest/googlemock",
+  "command": "/usr/bin/clang++   -isystem /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googlemock/include -isystem /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googlemock -isystem /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest/include -isystem /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -Wall -Wshadow -Werror -Wconversion -DGTEST_HAS_PTHREAD=1 -fexceptions -W -Wpointer-arith -Wreturn-type -Wcast-qual -Wwrite-strings -Wswitch -Wunused-parameter -Wcast-align -Wchar-subscripts -Winline -Wredundant-decls -std=c++11 -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googlemock/src/gmock_main.cc",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googlemock/src/gmock_main.cc"
+},
+{
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/googletest/googletest",
+  "command": "/usr/bin/clang++   -isystem /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest/include -isystem /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -Wall -Wshadow -Werror -Wconversion -DGTEST_HAS_PTHREAD=1 -fexceptions -W -Wpointer-arith -Wreturn-type -Wcast-qual -Wwrite-strings -Wswitch -Wunused-parameter -Wcast-align -Wchar-subscripts -Winline -Wredundant-decls -std=c++11 -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest/src/gtest_main.cc",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest/src/gtest_main.cc"
+},
+{
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/googletest/googletest",
+  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest/include -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -Wall -Wshadow -Werror -Wconversion -DGTEST_HAS_PTHREAD=1 -fexceptions -W -Wpointer-arith -Wreturn-type -Wcast-qual -Wwrite-strings -Wswitch -Wunused-parameter -Wcast-align -Wchar-subscripts -Winline -Wredundant-decls -std=c++11 -o CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest/src/gtest-all.cc",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest/src/gtest-all.cc"
+},
+{
   "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources",
   "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/src.dir/fmt.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp",
   "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp"
@@ -25,13 +45,18 @@
   "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.cpp"
 },
 {
-  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test",
-  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/../sources -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/../plot -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/test -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/test.dir/test.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp",
-  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/test/test.cpp"
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/main",
+  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/main/../sources -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/main/../plot -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/main -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/main.dir/main.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/main/main.cpp",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/main/main.cpp"
 },
 {
   "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/plot",
   "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/plot/../plot -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/plot/../sources -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/plot -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -isystem /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/plot.dir/plot.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/plot/plot.cpp",
   "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/plot/plot.cpp"
+},
+{
+  "directory": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/unit",
+  "command": "/usr/bin/clang++   -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/unit/../sources -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/unit/../googletest -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/unit -I/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources -isystem /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest/include -isystem /Users/tanja.ah/Desktop/Fast-Marching-Tree/googletest/googletest  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -std=gnu++11 -o CMakeFiles/unit.dir/unit.cpp.o -c /Users/tanja.ah/Desktop/Fast-Marching-Tree/unit/unit.cpp",
+  "file": "/Users/tanja.ah/Desktop/Fast-Marching-Tree/unit/unit.cpp"
 }
 ]

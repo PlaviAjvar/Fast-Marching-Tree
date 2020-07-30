@@ -33,11 +33,28 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for each subdirectory.
-  include("/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources/cmake_install.cmake")
-  include("/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/test/cmake_install.cmake")
-  include("/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/plot/cmake_install.cmake")
+  # Include the install script for the subdirectory.
+  include("/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/googletest/cmake_install.cmake")
+endif()
 
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/sources/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/main/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/plot/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/unit/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)

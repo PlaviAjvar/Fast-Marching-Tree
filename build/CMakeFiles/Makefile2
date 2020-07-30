@@ -73,25 +73,109 @@ CMAKE_BINARY_DIR = /Users/tanja.ah/Desktop/Fast-Marching-Tree/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
+all: googletest/all
 all: sources/all
-all: test/all
+all: main/all
 all: plot/all
+all: unit/all
 
 .PHONY : all
 
 # The main recursive "preinstall" target.
+preinstall: googletest/preinstall
 preinstall: sources/preinstall
-preinstall: test/preinstall
+preinstall: main/preinstall
 preinstall: plot/preinstall
+preinstall: unit/preinstall
 
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: googletest/clean
 clean: sources/clean
-clean: test/clean
+clean: main/clean
 clean: plot/clean
+clean: unit/clean
 
 .PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory googletest
+
+# Recursive "all" directory target.
+googletest/all: googletest/googlemock/all
+
+.PHONY : googletest/all
+
+# Recursive "preinstall" directory target.
+googletest/preinstall: googletest/googlemock/preinstall
+
+.PHONY : googletest/preinstall
+
+# Recursive "clean" directory target.
+googletest/clean: googletest/googlemock/clean
+
+.PHONY : googletest/clean
+
+#=============================================================================
+# Directory level rules for directory googletest/googlemock
+
+# Recursive "all" directory target.
+googletest/googlemock/all: googletest/googlemock/CMakeFiles/gmock.dir/all
+googletest/googlemock/all: googletest/googlemock/CMakeFiles/gmock_main.dir/all
+googletest/googlemock/all: googletest/googletest/all
+
+.PHONY : googletest/googlemock/all
+
+# Recursive "preinstall" directory target.
+googletest/googlemock/preinstall: googletest/googletest/preinstall
+
+.PHONY : googletest/googlemock/preinstall
+
+# Recursive "clean" directory target.
+googletest/googlemock/clean: googletest/googlemock/CMakeFiles/gmock.dir/clean
+googletest/googlemock/clean: googletest/googlemock/CMakeFiles/gmock_main.dir/clean
+googletest/googlemock/clean: googletest/googletest/clean
+
+.PHONY : googletest/googlemock/clean
+
+#=============================================================================
+# Directory level rules for directory googletest/googletest
+
+# Recursive "all" directory target.
+googletest/googletest/all: googletest/googletest/CMakeFiles/gtest_main.dir/all
+googletest/googletest/all: googletest/googletest/CMakeFiles/gtest.dir/all
+
+.PHONY : googletest/googletest/all
+
+# Recursive "preinstall" directory target.
+googletest/googletest/preinstall:
+
+.PHONY : googletest/googletest/preinstall
+
+# Recursive "clean" directory target.
+googletest/googletest/clean: googletest/googletest/CMakeFiles/gtest_main.dir/clean
+googletest/googletest/clean: googletest/googletest/CMakeFiles/gtest.dir/clean
+
+.PHONY : googletest/googletest/clean
+
+#=============================================================================
+# Directory level rules for directory main
+
+# Recursive "all" directory target.
+main/all: main/CMakeFiles/main.dir/all
+
+.PHONY : main/all
+
+# Recursive "preinstall" directory target.
+main/preinstall:
+
+.PHONY : main/preinstall
+
+# Recursive "clean" directory target.
+main/clean: main/CMakeFiles/main.dir/clean
+
+.PHONY : main/clean
 
 #=============================================================================
 # Directory level rules for directory plot
@@ -130,22 +214,131 @@ sources/clean: sources/CMakeFiles/src.dir/clean
 .PHONY : sources/clean
 
 #=============================================================================
-# Directory level rules for directory test
+# Directory level rules for directory unit
 
 # Recursive "all" directory target.
-test/all: test/CMakeFiles/test.dir/all
+unit/all: unit/CMakeFiles/unit.dir/all
 
-.PHONY : test/all
+.PHONY : unit/all
 
 # Recursive "preinstall" directory target.
-test/preinstall:
+unit/preinstall:
 
-.PHONY : test/preinstall
+.PHONY : unit/preinstall
 
 # Recursive "clean" directory target.
-test/clean: test/CMakeFiles/test.dir/clean
+unit/clean: unit/CMakeFiles/unit.dir/clean
 
-.PHONY : test/clean
+.PHONY : unit/clean
+
+#=============================================================================
+# Target rules for target googletest/googlemock/CMakeFiles/gmock.dir
+
+# All Build rule for target.
+googletest/googlemock/CMakeFiles/gmock.dir/all: googletest/googletest/CMakeFiles/gtest.dir/all
+	$(MAKE) $(MAKESILENT) -f googletest/googlemock/CMakeFiles/gmock.dir/build.make googletest/googlemock/CMakeFiles/gmock.dir/depend
+	$(MAKE) $(MAKESILENT) -f googletest/googlemock/CMakeFiles/gmock.dir/build.make googletest/googlemock/CMakeFiles/gmock.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=1,2 "Built target gmock"
+.PHONY : googletest/googlemock/CMakeFiles/gmock.dir/all
+
+# Build rule for subdir invocation for target.
+googletest/googlemock/CMakeFiles/gmock.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 googletest/googlemock/CMakeFiles/gmock.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 0
+.PHONY : googletest/googlemock/CMakeFiles/gmock.dir/rule
+
+# Convenience name for target.
+gmock: googletest/googlemock/CMakeFiles/gmock.dir/rule
+
+.PHONY : gmock
+
+# clean rule for target.
+googletest/googlemock/CMakeFiles/gmock.dir/clean:
+	$(MAKE) $(MAKESILENT) -f googletest/googlemock/CMakeFiles/gmock.dir/build.make googletest/googlemock/CMakeFiles/gmock.dir/clean
+.PHONY : googletest/googlemock/CMakeFiles/gmock.dir/clean
+
+#=============================================================================
+# Target rules for target googletest/googlemock/CMakeFiles/gmock_main.dir
+
+# All Build rule for target.
+googletest/googlemock/CMakeFiles/gmock_main.dir/all: googletest/googlemock/CMakeFiles/gmock.dir/all
+googletest/googlemock/CMakeFiles/gmock_main.dir/all: googletest/googletest/CMakeFiles/gtest.dir/all
+	$(MAKE) $(MAKESILENT) -f googletest/googlemock/CMakeFiles/gmock_main.dir/build.make googletest/googlemock/CMakeFiles/gmock_main.dir/depend
+	$(MAKE) $(MAKESILENT) -f googletest/googlemock/CMakeFiles/gmock_main.dir/build.make googletest/googlemock/CMakeFiles/gmock_main.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=3,4 "Built target gmock_main"
+.PHONY : googletest/googlemock/CMakeFiles/gmock_main.dir/all
+
+# Build rule for subdir invocation for target.
+googletest/googlemock/CMakeFiles/gmock_main.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 googletest/googlemock/CMakeFiles/gmock_main.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 0
+.PHONY : googletest/googlemock/CMakeFiles/gmock_main.dir/rule
+
+# Convenience name for target.
+gmock_main: googletest/googlemock/CMakeFiles/gmock_main.dir/rule
+
+.PHONY : gmock_main
+
+# clean rule for target.
+googletest/googlemock/CMakeFiles/gmock_main.dir/clean:
+	$(MAKE) $(MAKESILENT) -f googletest/googlemock/CMakeFiles/gmock_main.dir/build.make googletest/googlemock/CMakeFiles/gmock_main.dir/clean
+.PHONY : googletest/googlemock/CMakeFiles/gmock_main.dir/clean
+
+#=============================================================================
+# Target rules for target googletest/googletest/CMakeFiles/gtest_main.dir
+
+# All Build rule for target.
+googletest/googletest/CMakeFiles/gtest_main.dir/all: googletest/googletest/CMakeFiles/gtest.dir/all
+	$(MAKE) $(MAKESILENT) -f googletest/googletest/CMakeFiles/gtest_main.dir/build.make googletest/googletest/CMakeFiles/gtest_main.dir/depend
+	$(MAKE) $(MAKESILENT) -f googletest/googletest/CMakeFiles/gtest_main.dir/build.make googletest/googletest/CMakeFiles/gtest_main.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=7,8 "Built target gtest_main"
+.PHONY : googletest/googletest/CMakeFiles/gtest_main.dir/all
+
+# Build rule for subdir invocation for target.
+googletest/googletest/CMakeFiles/gtest_main.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 googletest/googletest/CMakeFiles/gtest_main.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 0
+.PHONY : googletest/googletest/CMakeFiles/gtest_main.dir/rule
+
+# Convenience name for target.
+gtest_main: googletest/googletest/CMakeFiles/gtest_main.dir/rule
+
+.PHONY : gtest_main
+
+# clean rule for target.
+googletest/googletest/CMakeFiles/gtest_main.dir/clean:
+	$(MAKE) $(MAKESILENT) -f googletest/googletest/CMakeFiles/gtest_main.dir/build.make googletest/googletest/CMakeFiles/gtest_main.dir/clean
+.PHONY : googletest/googletest/CMakeFiles/gtest_main.dir/clean
+
+#=============================================================================
+# Target rules for target googletest/googletest/CMakeFiles/gtest.dir
+
+# All Build rule for target.
+googletest/googletest/CMakeFiles/gtest.dir/all:
+	$(MAKE) $(MAKESILENT) -f googletest/googletest/CMakeFiles/gtest.dir/build.make googletest/googletest/CMakeFiles/gtest.dir/depend
+	$(MAKE) $(MAKESILENT) -f googletest/googletest/CMakeFiles/gtest.dir/build.make googletest/googletest/CMakeFiles/gtest.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=5,6 "Built target gtest"
+.PHONY : googletest/googletest/CMakeFiles/gtest.dir/all
+
+# Build rule for subdir invocation for target.
+googletest/googletest/CMakeFiles/gtest.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 googletest/googletest/CMakeFiles/gtest.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 0
+.PHONY : googletest/googletest/CMakeFiles/gtest.dir/rule
+
+# Convenience name for target.
+gtest: googletest/googletest/CMakeFiles/gtest.dir/rule
+
+.PHONY : gtest
+
+# clean rule for target.
+googletest/googletest/CMakeFiles/gtest.dir/clean:
+	$(MAKE) $(MAKESILENT) -f googletest/googletest/CMakeFiles/gtest.dir/build.make googletest/googletest/CMakeFiles/gtest.dir/clean
+.PHONY : googletest/googletest/CMakeFiles/gtest.dir/clean
 
 #=============================================================================
 # Target rules for target sources/CMakeFiles/src.dir
@@ -154,7 +347,7 @@ test/clean: test/CMakeFiles/test.dir/clean
 sources/CMakeFiles/src.dir/all:
 	$(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/depend
 	$(MAKE) $(MAKESILENT) -f sources/CMakeFiles/src.dir/build.make sources/CMakeFiles/src.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=3,4,5,6,7,8 "Built target src"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=13,14,15,16,17,18 "Built target src"
 .PHONY : sources/CMakeFiles/src.dir/all
 
 # Build rule for subdir invocation for target.
@@ -175,32 +368,32 @@ sources/CMakeFiles/src.dir/clean:
 .PHONY : sources/CMakeFiles/src.dir/clean
 
 #=============================================================================
-# Target rules for target test/CMakeFiles/test.dir
+# Target rules for target main/CMakeFiles/main.dir
 
 # All Build rule for target.
-test/CMakeFiles/test.dir/all: sources/CMakeFiles/src.dir/all
-test/CMakeFiles/test.dir/all: plot/CMakeFiles/plot.dir/all
-	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/depend
-	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=9,10 "Built target test"
-.PHONY : test/CMakeFiles/test.dir/all
+main/CMakeFiles/main.dir/all: sources/CMakeFiles/src.dir/all
+main/CMakeFiles/main.dir/all: plot/CMakeFiles/plot.dir/all
+	$(MAKE) $(MAKESILENT) -f main/CMakeFiles/main.dir/build.make main/CMakeFiles/main.dir/depend
+	$(MAKE) $(MAKESILENT) -f main/CMakeFiles/main.dir/build.make main/CMakeFiles/main.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=9,10 "Built target main"
+.PHONY : main/CMakeFiles/main.dir/all
 
 # Build rule for subdir invocation for target.
-test/CMakeFiles/test.dir/rule: cmake_check_build_system
+main/CMakeFiles/main.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 10
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/test.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 main/CMakeFiles/main.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 0
-.PHONY : test/CMakeFiles/test.dir/rule
+.PHONY : main/CMakeFiles/main.dir/rule
 
 # Convenience name for target.
-test: test/CMakeFiles/test.dir/rule
+main: main/CMakeFiles/main.dir/rule
 
-.PHONY : test
+.PHONY : main
 
 # clean rule for target.
-test/CMakeFiles/test.dir/clean:
-	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/clean
-.PHONY : test/CMakeFiles/test.dir/clean
+main/CMakeFiles/main.dir/clean:
+	$(MAKE) $(MAKESILENT) -f main/CMakeFiles/main.dir/build.make main/CMakeFiles/main.dir/clean
+.PHONY : main/CMakeFiles/main.dir/clean
 
 #=============================================================================
 # Target rules for target plot/CMakeFiles/plot.dir
@@ -209,7 +402,7 @@ test/CMakeFiles/test.dir/clean:
 plot/CMakeFiles/plot.dir/all: sources/CMakeFiles/src.dir/all
 	$(MAKE) $(MAKESILENT) -f plot/CMakeFiles/plot.dir/build.make plot/CMakeFiles/plot.dir/depend
 	$(MAKE) $(MAKESILENT) -f plot/CMakeFiles/plot.dir/build.make plot/CMakeFiles/plot.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=1,2 "Built target plot"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=11,12 "Built target plot"
 .PHONY : plot/CMakeFiles/plot.dir/all
 
 # Build rule for subdir invocation for target.
@@ -228,6 +421,35 @@ plot: plot/CMakeFiles/plot.dir/rule
 plot/CMakeFiles/plot.dir/clean:
 	$(MAKE) $(MAKESILENT) -f plot/CMakeFiles/plot.dir/build.make plot/CMakeFiles/plot.dir/clean
 .PHONY : plot/CMakeFiles/plot.dir/clean
+
+#=============================================================================
+# Target rules for target unit/CMakeFiles/unit.dir
+
+# All Build rule for target.
+unit/CMakeFiles/unit.dir/all: googletest/googletest/CMakeFiles/gtest_main.dir/all
+unit/CMakeFiles/unit.dir/all: googletest/googletest/CMakeFiles/gtest.dir/all
+unit/CMakeFiles/unit.dir/all: sources/CMakeFiles/src.dir/all
+	$(MAKE) $(MAKESILENT) -f unit/CMakeFiles/unit.dir/build.make unit/CMakeFiles/unit.dir/depend
+	$(MAKE) $(MAKESILENT) -f unit/CMakeFiles/unit.dir/build.make unit/CMakeFiles/unit.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=19,20 "Built target unit"
+.PHONY : unit/CMakeFiles/unit.dir/all
+
+# Build rule for subdir invocation for target.
+unit/CMakeFiles/unit.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 12
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unit/CMakeFiles/unit.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles 0
+.PHONY : unit/CMakeFiles/unit.dir/rule
+
+# Convenience name for target.
+unit: unit/CMakeFiles/unit.dir/rule
+
+.PHONY : unit
+
+# clean rule for target.
+unit/CMakeFiles/unit.dir/clean:
+	$(MAKE) $(MAKESILENT) -f unit/CMakeFiles/unit.dir/build.make unit/CMakeFiles/unit.dir/clean
+.PHONY : unit/CMakeFiles/unit.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

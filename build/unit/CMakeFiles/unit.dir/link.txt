@@ -1,0 +1,1 @@
+/usr/bin/clang++  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/unit.dir/unit.cpp.o  -o unit  ../sources/libsrc.a ../lib/libgtest_maind.a ../lib/libgtestd.a 

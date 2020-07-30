@@ -330,7 +330,7 @@ void disp_snapshot3d (
 
     for (const auto& space_edge : edges) {
         std::pair <point3d <double>, point3d <double>> edge = linkto3d(space_edge);
-        std::cout << edge.first << " " << edge.second << std::endl;
+        // std::cout << edge.first << " " << edge.second << std::endl;
         xs.push_back(edge.first.getx());
         xs.push_back(edge.second.getx());
         ys.push_back(edge.first.gety());

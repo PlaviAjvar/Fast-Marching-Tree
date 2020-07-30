@@ -87,6 +87,9 @@ public:
     // implementing with safe floating point comparisson
 
     bool operator== (const point <real>& other) const {
+        if (components.size() != other.get_dimension()) {
+            return false;
+        }
         const real epsilon = 1e-6;
 
         for (size_t dim = 0; dim < components.size(); ++dim) {
@@ -107,6 +110,10 @@ public:
 
     // scalar product
     real operator* (const point <real>& other) const {
+        if (components.size() != other.get_dimension()) {
+            throw std::length_error("Vectors have to have same dimensions in dot product");
+        }
+
         real total = 0;
         for (size_t dim = 0; dim < components.size(); ++dim) {
             total += components[dim] * other[dim];
@@ -119,10 +126,11 @@ public:
         for (size_t dim = 0; dim < components.size(); ++dim) {
             total += components[dim] * components[dim];
         }
-        return total;
+        return sqrt(total);
     }
 
-    point <real> normalize () const {
+    point <real> normalize (const real epsilon = 1e-6) const {
+        if (magnitude() < epsilon) return *this;
         return (*this) / magnitude();
     }
 
@@ -163,16 +171,6 @@ public:
 
 template <typename real>
 class point3d : public point <real> {
-private:
-    // function implementing cross product
-    point3d <real> cross_product (
-        const point3d <real>& a,
-        const point3d <real>& b
-    ) const {
-        std::vector <real> comp{a[2]*b[3] - a[3]*b[2], a[3]*b[1] - a[1]*b[3], a[1]*b[2] - a[2]*b[1]};
-        return point3d <real>(comp);
-    }
-
 public:
     point3d () {}
 
@@ -190,6 +188,8 @@ public:
         point<real>::components[1] = y;
         point<real>::components[2] = z;
     }
+
+    point3d (const std::vector <real>& _components) : point<real>(_components) {}
     
     real getx () const {
         return point<real>::components[0];
@@ -203,8 +203,11 @@ public:
         return point<real>::components[2];
     }
 
+    // cross product
     point3d <real> operator^ (const point3d <real>& other) const {
-        return cross_product(*this, other);
+        std::vector <real> a(point <real>::components), b(other.components);
+        std::vector <real> comp{a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0]};
+        return point3d <real>(comp);
     }
 };
 
@@ -320,7 +323,7 @@ real weighed_euclidean (
         total += cum_weight[index] * (A[index] - B[index]) * (A[index] - B[index]);
     }
 
-    return total;
+    return sqrt(total);
 }
 
 // bind weighed euclidean to link lengths
@@ -358,7 +361,7 @@ template <typename real>
 bool on_line (
     const point <real> endpoint,
     const std::pair <point <real>, point <real>>& line,
-    const real epsilon = 1e-6
+    const real epsilon = 1e-10
 ) {
     // if and only if dist(A,B) + dist(B,C) = dist(A,C)
     return abs(euclidean_distance(endpoint, line.first) + euclidean_distance(endpoint, line.second) - euclidean_distance(line.first, line.second)) < epsilon;
@@ -404,23 +407,17 @@ bool lines_intersect2d (
         // if point lies on both of the line segments
         real x = (B2 * C1 - B1 * C2) / det;
         real y = (A1 * C2 - A2 * C1) / det;
-        // std::cout << "intersection = " << "(" << x << "," << y << ")" << std::endl; 
-
-        bool betweenxA = (x <= linea.first.getx() && x >= linea.second.getx()) ||  (x <= linea.second.getx() && x >= linea.first.getx());
-        bool betweenyA = (y <= linea.first.gety() && y >= linea.second.gety()) ||  (y <= linea.second.gety() && y >= linea.first.gety());
-        bool betweenxB = (x <= lineb.first.getx() && x >= lineb.second.getx()) ||  (x <= lineb.second.getx() && x >= lineb.first.getx());
-        bool betweenyB = (y <= lineb.first.gety() && y >= lineb.second.gety()) ||  (y <= lineb.second.gety() && y >= lineb.first.gety());
-        return (betweenxA && betweenyA && betweenxB && betweenyB);
+        point2d <real> inter(x, y);
+        // std::cout << inter << std::endl;
+        // std::cout << "A = " << on_line<real>(inter, linea) << std::endl;
+        // std::cout << "B = " << on_line<real>(inter, lineb) << std::endl;
+        return (on_line<real>(inter, linea) && on_line<real>(inter, lineb));
     }
 
-    // otherwise lines are parallel or overlapping
-
-    // test if overlapping
+    // otherwise lines are overlapping (parallel is impossible because of zero distance between lines)
     if (on_line<real>(linea.first, lineb) || on_line<real>(linea.second, lineb) || on_line<real>(lineb.first, linea) || on_line<real>(lineb.second, linea)) {
         return true;
     }
-
-    // otherwise parallel
     return false;
 }
 
@@ -563,6 +560,11 @@ bool line_intersects_box (
         throw std::length_error("Dimension of link differs from dimension of box");
     }
 
+    // line is inside box
+    if (in_box_bounds(link.first, box_limits) || in_box_bounds(link.second, box_limits)) {
+        return true;
+    }
+
     for (size_t dim = 0; dim < box_limits.size(); ++dim) {
         // get base poit and direction vector
         point <real> p0 = link.first;
@@ -581,8 +583,12 @@ bool line_intersects_box (
             low_int = p0 + r * t_low;
             high_int = p0 + r * t_high;
 
-            // check if these points are inside box limits
-            if (in_box_bounds(low_int, box_limits) || in_box_bounds(high_int, box_limits)) {
+            // check if these points are inside box limits, and that the intersection is not edge point
+            if (t_low >= -epsilon && t_low <= 1+epsilon && in_box_bounds(low_int, box_limits)) {
+                return true;
+            }
+
+            if (t_high >= -epsilon && t_high <= 1+epsilon && in_box_bounds(high_int, box_limits)) {
                 return true;
             }
         }
@@ -621,6 +627,16 @@ real line_distance (
     const point3d <real> u
 ) {
     point3d <real> v = r ^ s;
+    
+    // if r and s are parallel
+    if (v == point3d <real>(0, 0, 0)) {
+        // calculate distance as area of rhombus |u ^ r| over base of rhombus |r|
+        return magnitude(u ^ r) / magnitude(r);
+    }
+
+    // otherwise they aren´t parallel
+    // find projection of vector u
+    // onto vector v, which is perpendicular to both r and s
     return (u * v) / v.magnitude();
 }
 
@@ -629,8 +645,10 @@ real line_distance (
 template <typename real>
 bool same_direction (
     const point <real> v,
-    const point <real> u
+    const point <real> u,
+    const real epsilon = 1e-6
 ) {
+    if (magnitude(v) < epsilon || magnitude(u) < epsilon) return false;
     return v.normalize() == u.normalize();
 }
 
@@ -677,7 +695,7 @@ bool lines_intersect3d(
     point3d <real> s = lineb.second - lineb.first;
 
     // vector between lines
-    point3d <real> u = p0 - q0;
+    point3d <real> u = q0 - p0;
 
     // check that distance between lines is zero
     if (line_distance(r, s, u) > epsilon) {
@@ -983,6 +1001,8 @@ public:
                 return true;
             }
         }
+
+        // std::cout << "box intersect clear" << std::endl;
 
         // check intersection of links amongst themselves
         for (auto it = links.begin(); it != links.end(); ++it) {
