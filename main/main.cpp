@@ -198,7 +198,7 @@ public:
     }
 
     static point <double> get_sampleA () {
-        return get_sample_util(joint_limitsA(), 2);
+        return get_sample_util(joint_limitsA());
     }
 
     /***************************
@@ -311,7 +311,7 @@ public:
     }
 
     static point <double> get_sampleB () {
-        return get_sample_util(joint_limitsB(), 2);
+        return get_sample_util(joint_limitsB());
     }
 
     /***************************
@@ -407,7 +407,7 @@ public:
     }
 
     static point <double> get_sampleC () {
-        return get_sample_util(joint_limitsC(), 3);
+        return get_sample_util(joint_limitsC());
     }
 
     static size_t add_obstacle_edgesC (
@@ -584,7 +584,7 @@ public:
     }
 
     static point <double> get_sampleD () {
-        return get_sample_util(joint_limitsD(), 2);
+        return get_sample_util(joint_limitsD());
     }
 
     static size_t add_obstacle_edgesD (
@@ -623,7 +623,7 @@ public:
     }
 
     static std::vector <double> link_lengthsE () {
-        std::vector <double> link_lengths{5, 5, 5};
+        std::vector <double> link_lengths{5, 5, 6};
         return link_lengths;
     }
 
@@ -641,8 +641,8 @@ public:
         std::vector <double> link_lengths{link_lengthsE()};
         std::vector <std::pair <double,double>> lims(joint_limitsE());
 
-        arm <double>* planar = new antropomorphic_arm <double>(base, link_lengths, lims);
-        workspace3d <double> ws(obstacles, planar);
+        arm <double>* antro = new antropomorphic_arm <double>(base, link_lengths, lims);
+        workspace3d <double> ws(obstacles, antro);
         return ws;
     }
 
@@ -674,7 +674,7 @@ public:
     }
 
     static point <double> get_sampleE () {
-        return get_sample_util(joint_limitsD(), 3);
+        return get_sample_util(joint_limitsE());
     }
 
     static size_t add_obstacle_edgesE (
@@ -881,8 +881,9 @@ public:
     }
 
     // function which generates random sample
-    static point <double> get_sample_util (const std::vector <std::pair <double,double>>& joint_limits, size_t dimension) {
-        std::vector <double> components;
+    static point <double> get_sample_util (const std::vector <std::pair <double,double>>& joint_limits) {
+        size_t dimension = joint_limits.size();
+        std::vector <double> components(dimension);
         std::random_device r;
 
         for (size_t dim = 0; dim < dimension; ++dim) {
@@ -890,7 +891,7 @@ public:
             double upper = joint_limits[dim].second;
             std::uniform_real_distribution<double> unif(lower, upper);
             std::default_random_engine re(r());
-            components.push_back(unif(re));
+            components[dim] = unif(re);
         }
 
         point <double> sample(components);

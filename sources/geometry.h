@@ -478,6 +478,12 @@ public:
         throw std::logic_error("Never should call this method in base class");
     }
 
+    virtual bool intersects_self (
+        const point <real>& configuration
+    ) const {
+        throw std::logic_error("Never should call this method in base class");
+    }
+
     virtual std::vector <std::pair <point <real>, point <real>>> dir_kine (
         const point <real> configuration
     ) const {
@@ -980,7 +986,7 @@ public:
         const std::vector <std::pair <real,real>>& _joint_limits
     ) : arm<real>(_base, _link_lengths, _joint_limits) {}
 
-    // check if antropomorphic arm intersects a 3D box
+    // check if 3D arm intersects a 3D box
     bool intersects (
         const box <real>& obstacle,
         const point <real>& configuration
@@ -994,6 +1000,15 @@ public:
                 return true;
             }
         }
+
+        return false;
+    }
+
+    // check if 3D arm intersects itself
+    bool intersects_self (
+        const point <real>& configuration
+    ) const override {
+        std::vector <std::pair <point <real>, point <real>>> links = dir_kine(configuration);
 
         // check intersection of links amongst themselves
         for (auto it = links.begin(); it != links.end(); ++it) {
@@ -1017,7 +1032,14 @@ public:
     ) const override {
         if (configuration.get_dimension() != dh.size()) {
             throw std::length_error("More parameters than links in manipulator");
-        }
+        }   
+        
+        for (size_t dim = 0; dim < configuration.get_dimension(); ++dim) {
+            const real eps = 1e-6;
+            if (configuration[dim] < arm<real>::joint_limits[dim].first - eps || configuration[dim] > arm<real>::joint_limits[dim].second + eps) {
+                throw std::domain_error("Configuration coordinates lie outside joint limits");
+            }
+        } 
 
         std::vector <real> comp = configuration.get_components();
         std::vector <matrix <real>> homtr(comp.size());
@@ -1119,6 +1141,15 @@ public:
             }
         }
 
+        return false;
+    }
+
+    // if robot intersects self
+    bool intersects_self (
+        const point <real>& configuration
+    ) const override {
+        auto links = dir_kine(configuration);
+    
         // check intersection of links amongst themselves
         for (auto it = links.begin(); it != links.end(); ++it) {
             if (std::next(it, 1) != links.end()) {
@@ -1145,7 +1176,8 @@ public:
         }
 
         for (size_t dim = 0; dim < configuration.get_dimension(); ++dim) {
-            if (configuration[dim] < arm<real>::joint_limits[dim].first || configuration[dim] > arm<real>::joint_limits[dim].second) {
+            const real eps = 1e-6;
+            if (configuration[dim] < arm<real>::joint_limits[dim].first - eps || configuration[dim] > arm<real>::joint_limits[dim].second + eps) {
                 throw std::domain_error("Configuration coordinates lie outside joint limits");
             }
         }   
@@ -1234,6 +1266,9 @@ public:
                 return true;
             }
         }
+        if (workspace<real>::robot->intersects_self(configuration)) {
+            return true;
+        }
         return false;
     }
 
@@ -1270,6 +1305,9 @@ public:
             if (workspace<real>::robot->intersects(obstacle, configuration)) {
                 return true;
             }
+        }
+        if (workspace<real>::robot->intersects_self(configuration)) {
+            return true;
         }
         return false;
     }

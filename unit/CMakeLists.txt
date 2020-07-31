@@ -71,3 +71,13 @@ add_test(
     NAME intersect3D
     COMMAND intersect3D
 )
+
+add_test(
+    NAME collides2D
+    COMMAND collides2D
+)
+
+add_test(
+    NAME collides3D
+    COMMAND collides3D
+)

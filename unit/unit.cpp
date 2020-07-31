@@ -774,6 +774,137 @@ TEST (intersect3D, parallel) {
     EXPECT_TRUE(lines_intersect3d(G, H));
 }
 
+/*************************
+workspace2d::collides
+*************************/
+
+TEST (collides2D, threesegment) {
+    point2d <double> base(0, 0);
+    std::vector <double> link_lengths{2, 2, 4};
+    std::vector <std::pair <double,double>> lims{
+        {-M_PI, M_PI}, {-M_PI, M_PI}, {-M_PI, M_PI}
+    };
+
+    arm <double>* planar = new arm2d <double>(base, link_lengths, lims);
+    std::vector <polygon <double>> obstacles;
+    workspace2d <double> ws(obstacles, planar);
+
+    point <double> A(
+        std::vector <double>{0, 0, 0}
+    );
+    point <double> B(
+        std::vector <double>{0, 0, M_PI - 1e-3}
+    );
+    point <double> C(
+        std::vector <double>{0, 0, M_PI}
+    );
+    point <double> D(
+        std::vector <double>{0, M_PI_2, 3*M_PI_4 - 1e-3}
+    );
+    point <double> E(
+        std::vector <double>{0, M_PI_2, 3*M_PI_4 + 1e-3}
+    );
+
+    EXPECT_FALSE(ws.collides(A));
+    EXPECT_FALSE(ws.collides(B));
+    EXPECT_TRUE(ws.collides(C));
+    EXPECT_FALSE(ws.collides(D));
+    EXPECT_TRUE(ws.collides(E));
+}
+
+TEST (collides2D, foursegment) {
+    point2d <double> base(0, 0);
+    std::vector <double> link_lengths{5, 5, 5, 5};
+    std::vector <std::pair <double,double>> lims{
+        {-M_PI, M_PI}, {-M_PI, M_PI}, {-M_PI, M_PI}, {-M_PI, M_PI} 
+    };
+
+    arm <double>* planar = new arm2d <double>(base, link_lengths, lims);
+    std::vector <polygon <double>> obstacles;
+    workspace2d <double> ws(obstacles, planar);
+
+    point <double> A(
+        std::vector <double>{0, 0, 0, 0}
+    );
+    point <double> B(
+        std::vector <double>{0, M_PI_2, M_PI_2, 0}
+    );
+    point <double> C(
+        std::vector <double>{0, -M_PI_2, -M_PI_2-0.1, 0}
+    );
+    point <double> D(
+        std::vector <double>{0, 2*M_PI/3, 2*M_PI/3, 0}
+    );
+    point <double> E(
+        std::vector <double>{0, M_PI_2, -M_PI, 0}
+    );
+    point <double> F(
+        std::vector <double>{0, -M_PI_2, -M_PI_2-1, 0}
+    );
+
+    EXPECT_FALSE(ws.collides(A));
+    EXPECT_FALSE(ws.collides(B));
+    EXPECT_FALSE(ws.collides(C));
+    EXPECT_TRUE(ws.collides(D));
+    EXPECT_TRUE(ws.collides(E));
+    EXPECT_TRUE(ws.collides(F));
+
+    // edge case : equilateral triangle
+    point <double> G(
+        std::vector <double>{2*M_PI/3, 2*M_PI/3, 2*M_PI/3 - 1e-3, 0}
+    );
+    point <double> H(
+        std::vector <double>{2*M_PI/3, 2*M_PI/3, 2*M_PI/3 + 1e-3, 0}
+    );
+
+    EXPECT_FALSE(ws.collides(G));
+    EXPECT_TRUE(ws.collides(H));
+}
+
+/*************************
+workspace3d::collides
+*************************/
+
+TEST (collides3D, antropomorphic) {
+    std::vector <box <double>> obstacles;
+
+    point3d <double> base(0, 0, 0);
+    std::vector <double> link_lengths{5, 5, 8};
+    std::vector <std::pair <double,double>> lims{
+        {-M_PI, M_PI}, {-M_PI, M_PI}, {-M_PI, M_PI}
+    };
+
+    arm <double>* antro = new antropomorphic_arm <double>(base, link_lengths, lims);
+    workspace3d <double> ws(obstacles, antro);
+
+    point <double> A(
+        std::vector <double>{0, 0, 0}
+    );
+    point <double> B(
+        std::vector <double>{0, 0, -M_PI}
+    );
+    point <double> C(
+        std::vector <double>{M_PI, 0, -M_PI}
+    );
+    point <double> D(
+        std::vector <double>{0, 0, -3*M_PI/4 - 1e-6}
+    );
+    point <double> E(
+        std::vector <double>{M_PI_2, 0, -3*M_PI/4 - 1e-6}
+    );
+    point <double> F(
+        std::vector <double>{M_PI_2, 0, -7*M_PI_2 / 5}
+    );
+
+    EXPECT_FALSE(ws.collides(A));
+    EXPECT_TRUE(ws.collides(B));
+    EXPECT_TRUE(ws.collides(C));
+    EXPECT_TRUE(ws.collides(D));
+    EXPECT_TRUE(ws.collides(E));
+    EXPECT_FALSE(ws.collides(F));
+}
+
+
 int main (int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

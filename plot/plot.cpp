@@ -228,6 +228,11 @@ void display_snapshots (
         }
     }
 
+    if (path.empty()) {
+        std::cout << "Path empty" << std::endl;
+        return;
+    }
+
     disp_snapshot(ws, path[0], colors[0], names[0]);
 
     for (size_t i = 1; i < num_snapshots - 1; ++i) {
@@ -371,6 +376,11 @@ void display_snapshots3d (
         xs.push_back(NAN);
         ys.push_back(NAN);
         zs.push_back(NAN);
+    }
+
+    if (path.empty()) {
+        std::cout << "Path empty" << std::endl;
+        return;
     }
     
     disp_snapshot3d(ws, path[0], xs, ys, zs);
