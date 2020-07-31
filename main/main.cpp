@@ -940,7 +940,7 @@ int main (int argc, char *argv[]) {
     test test_sq, test_mq;
 
     std::string algorithm = "FMT";
-    std::string test_label = "E";
+    std::string test_label = "A";
     bool one_by_one = false;
     bool write_to_file = false;
     bool snapshot = false;
@@ -959,8 +959,8 @@ int main (int argc, char *argv[]) {
         if (flag == "point2D-A") test_label = "A";
         if (flag == "point2D-B") test_label = "B";
         if (flag == "point3D") test_label = "C";
-        if (flag == "arm2D" || flag == "planar") test_label = "D";
-        if (flag == "trivial") test_label = "DT";
+        if (flag == "arm2D") test_label = "D";
+        if (flag == "trivial2D") test_label = "DT";
         if (flag == "antro") test_label = "E";
         if (flag == "-seq") {
             one_by_one = true;

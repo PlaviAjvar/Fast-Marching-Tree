@@ -1,0 +1,31 @@
+Diagnostic information
+Path length and runtime averaged over 5 executions
+Connected if path was found in all 5 executions
+
+testA (num_samples = 250, stepsize = 0.005, radius = 0.05) : is not connected
+testA (num_samples = 250, stepsize = 0.005, radius = 0.1) : is not connected
+testA (num_samples = 250, stepsize = 0.005, radius = 0.2) : is connected (path_length = 1.48797, elapsed_time = 0.263699)
+testA (num_samples = 250, stepsize = 0.01, radius = 0.05) : is not connected
+testA (num_samples = 250, stepsize = 0.01, radius = 0.1) : is not connected
+testA (num_samples = 250, stepsize = 0.01, radius = 0.2) : is connected (path_length = 1.48707, elapsed_time = 0.205739)
+testA (num_samples = 250, stepsize = 0.02, radius = 0.05) : is not connected
+testA (num_samples = 250, stepsize = 0.02, radius = 0.1) : is not connected
+testA (num_samples = 250, stepsize = 0.02, radius = 0.2) : is connected (path_length = 1.49187, elapsed_time = 0.163498)
+testA (num_samples = 500, stepsize = 0.005, radius = 0.05) : is not connected
+testA (num_samples = 500, stepsize = 0.005, radius = 0.1) : is connected (path_length = 1.50315, elapsed_time = 0.740665)
+testA (num_samples = 500, stepsize = 0.005, radius = 0.2) : is connected (path_length = 1.45256, elapsed_time = 0.828259)
+testA (num_samples = 500, stepsize = 0.01, radius = 0.05) : is not connected
+testA (num_samples = 500, stepsize = 0.01, radius = 0.1) : is connected (path_length = 1.50197, elapsed_time = 0.651114)
+testA (num_samples = 500, stepsize = 0.01, radius = 0.2) : is connected (path_length = 1.47008, elapsed_time = 0.716893)
+testA (num_samples = 500, stepsize = 0.02, radius = 0.05) : is not connected
+testA (num_samples = 500, stepsize = 0.02, radius = 0.1) : is connected (path_length = 1.50058, elapsed_time = 0.692022)
+testA (num_samples = 500, stepsize = 0.02, radius = 0.2) : is connected (path_length = 1.45634, elapsed_time = 0.746657)
+testA (num_samples = 1000, stepsize = 0.005, radius = 0.05) : is connected (path_length = 1.68597, elapsed_time = 2.7155)
+testA (num_samples = 1000, stepsize = 0.005, radius = 0.1) : is connected (path_length = 1.44434, elapsed_time = 2.53211)
+testA (num_samples = 1000, stepsize = 0.005, radius = 0.2) : is connected (path_length = 1.43693, elapsed_time = 3.48617)
+testA (num_samples = 1000, stepsize = 0.01, radius = 0.05) : is connected (path_length = 1.66289, elapsed_time = 2.82989)
+testA (num_samples = 1000, stepsize = 0.01, radius = 0.1) : is connected (path_length = 1.44735, elapsed_time = 2.63782)
+testA (num_samples = 1000, stepsize = 0.01, radius = 0.2) : is connected (path_length = 1.4424, elapsed_time = 2.49752)
+testA (num_samples = 1000, stepsize = 0.02, radius = 0.05) : is connected (path_length = 1.64554, elapsed_time = 2.17249)
+testA (num_samples = 1000, stepsize = 0.02, radius = 0.1) : is connected (path_length = 1.44668, elapsed_time = 2.15765)
+testA (num_samples = 1000, stepsize = 0.02, radius = 0.2) : is connected (path_length = 1.434, elapsed_time = 2.37743)
