@@ -133,7 +133,6 @@ public:
     constexpr static unsigned int num_samplesD = 300; // since there are more collisions
     constexpr static double stepsizeD = 3e-2; // around PI * old_value
     constexpr static double radiusD = 1.7; // since weighed euclidean, have to scale
-    // new_radius = total_length * strech_scaler * old_radius = 5 * 3 * 1e-1 = 3
 
     constexpr static unsigned int num_samplesE = 500;
     constexpr static double stepsizeE = 3e-2;
@@ -534,13 +533,6 @@ public:
         std::vector <double> link_lengths{link_lengthsD()};
         std::vector <std::pair <double,double>> lims(joint_limitsD());
 
-        // std::cout << "base = " << base << std::endl;
-        // std::cout << "linklen = " << std::endl;
-        // for (auto e : link_lengths) std::cout << e << ",";
-        // std::cout << std::endl << "joint_lim = ";
-        // for (auto e : lims) std::cout << "(" << e.first << " " << e.second << ")" << ",";
-        // std::cout << std::endl;
-
         arm <double>* planar = new arm2d <double>(base, link_lengths, lims);
         workspace2d <double> ws(obstacles, planar);
         return ws;
@@ -648,13 +640,6 @@ public:
         point3d <double> base(baseE());
         std::vector <double> link_lengths{link_lengthsE()};
         std::vector <std::pair <double,double>> lims(joint_limitsE());
-
-        // std::cout << "base = " << base << std::endl;
-        // std::cout << "linklen = " << std::endl;
-        // for (auto e : link_lengths) std::cout << e << ",";
-        // std::cout << std::endl << "joint_lim = ";
-        // for (auto e : lims) std::cout << "(" << e.first << " " << e.second << ")" << ",";
-        // std::cout << std::endl;
 
         arm <double>* planar = new antropomorphic_arm <double>(base, link_lengths, lims);
         workspace3d <double> ws(obstacles, planar);

@@ -15,13 +15,10 @@ std::vector <labeled_node <double>> induced_graph (
     const double stepsize
 ) {
     std::vector <labeled_node <double>> lgraph(graph.begin(), graph.end());
-    //std::cout << "induced_graph =" << std::endl;
 
     for (auto&& vertex : lgraph) {
-        //std::cout << vertex.get_point() << std::endl;
         for (auto&& other_vertex : lgraph) {
             // if they are different points and distance is smaller than radius
-            //std::cout << "    " << other_vertex.get_point() << std::endl;
             if (vertex.get_point() != other_vertex.get_point() && distance(vertex.get_point(), other_vertex.get_point()) < radius) {
                 vertex.add_neighbor(&other_vertex);
             }

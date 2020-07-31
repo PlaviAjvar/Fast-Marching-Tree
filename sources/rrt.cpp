@@ -19,7 +19,6 @@ tree_node <double>* find_nearest(
         }
     }
 
-    // std::cout << nearest << " " << nearest->get_point() << std::endl;
     return nearest;
 }
 
@@ -57,7 +56,6 @@ tree_node <double>* connect_closest (
         }
     }
 
-    // std::cout << nearest << " " << nearest->get_point() << std::endl;
     return nearest;
 }
 
@@ -122,9 +120,6 @@ output rrt(
     std::vector <tree_node <double>> tree;
     tree.reserve(num_samples + 2);
     tree.push_back(tree_node <double>(start, nullptr));
-
-    // std::cout << "collision_check(" << start << ") = " << collision_check(start) << std::endl;
-    // return output_rrt(false, tree);
 
     for (size_t sample_idx = 0; sample_idx < num_samples; ++sample_idx) {
         // get new (random) sample

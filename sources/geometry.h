@@ -399,18 +399,13 @@ bool lines_intersect2d (
     real det = A1 * B2 - A2 * B1;
     real x, y;
 
-    // std::cout << "linea = " << linea.first << "," << linea.second << std::endl;
-    // std::cout << "lineb = " << lineb.first << "," << lineb.second << std::endl;
-
     // if determinant is nonzero we have unique intersection point
     if (abs(det) > epsilon) {
         // if point lies on both of the line segments
         real x = (B2 * C1 - B1 * C2) / det;
         real y = (A1 * C2 - A2 * C1) / det;
         point2d <real> inter(x, y);
-        // std::cout << inter << std::endl;
-        // std::cout << "A = " << on_line<real>(inter, linea) << std::endl;
-        // std::cout << "B = " << on_line<real>(inter, lineb) << std::endl;
+
         return (on_line<real>(inter, linea) && on_line<real>(inter, lineb));
     }
 
@@ -812,8 +807,6 @@ public:
     }
 
     matrix <real> operator* (const matrix <real> other) const {
-        // std::cout << "Multiply:" << std::endl << *this << std::endl << other << std::endl;
-
         if (colcount() != other.rowcount()) {
             throw std::length_error("Number of columns of first matrix must equal the number of rows of the second");
         }
@@ -1002,8 +995,6 @@ public:
             }
         }
 
-        // std::cout << "box intersect clear" << std::endl;
-
         // check intersection of links amongst themselves
         for (auto it = links.begin(); it != links.end(); ++it) {
             if (std::next(it, 1) != links.end()) {
@@ -1031,13 +1022,11 @@ public:
         std::vector <real> comp = configuration.get_components();
         std::vector <matrix <real>> homtr(comp.size());
         homtr[0] = dh[0].get_matrix(std::vector<real>{comp[0]});
-        // std::cout << "homtr(0) = " << homtr[0] << std::endl;
 
         // find homogeneus transformation matrix for every segment
         for (size_t lid = 1; lid < comp.size(); ++lid) {
             matrix <real> tmat = dh[lid].get_matrix(std::vector <real>{comp[lid]});
             homtr[lid] = homtr[lid-1] * tmat;
-            // std::cout << "homtr(" << lid << ") = " << homtr[lid] << std::endl;
         }
 
         // multiply each matrix by (0,0,0,1)^T
@@ -1169,7 +1158,6 @@ public:
         for (size_t dim = 0; dim < configuration.get_dimension(); ++dim) {
             total_angle += configuration[dim];
             point <real> next = current + point2d <real>(cos(total_angle), sin(total_angle)) * arm<real>::link_lengths[dim];
-            // std::cout << "link(" << total_angle * 180 / M_PI << ") = " << "(" << current << "," << next << ")" << std::endl;
             links.push_back({current, next});
             current = next;
         }

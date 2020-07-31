@@ -23,7 +23,6 @@ std::vector <point<double>> output_rrt::get_path(
 }
 
 
-
 // get edgelist from node-based graph
 
 std::vector <std::pair<point<double>, point<double>>> output_rrt::edgelist_from_tree (
@@ -33,7 +32,6 @@ std::vector <std::pair<point<double>, point<double>>> output_rrt::edgelist_from_
     elist.reserve(tree.size());
 
     for (auto&& node : tree) {
-        // std::cout << "child = " << node.get_point() << std::endl;
         point <double> parent, child;
         child = node.get_point();
         if (node.get_parent() != nullptr) {
@@ -42,7 +40,6 @@ std::vector <std::pair<point<double>, point<double>>> output_rrt::edgelist_from_
         else {
             parent = node.get_point();
         }
-        // std::cout << "parent = " << parent << std::endl;
         elist.push_back({parent, child});
     }
 
