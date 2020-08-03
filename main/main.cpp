@@ -85,7 +85,7 @@ public:
         output out;
 
         if (algorithm == "RRT") {
-            out = rrt(start, goal, joint_limits, test_collision, get_sample, distance, num_samples, stepsize);
+            out = rrt(start, goal, joint_limits, test_collision, get_sample, distance, num_samples, stepsize, radius);
         }
         else if (algorithm == "FMT") {
             out = fmt(start, goal, joint_limits, test_collision, get_sample, distance, num_samples, stepsize, radius);

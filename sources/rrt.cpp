@@ -29,10 +29,12 @@ bool is_reachable(
     const tree_node <double>& A, 
     const point <double>& B, 
     const double stepsize,
-    const std::function <bool(point<double>)>& collision_check
+    const std::function <bool(point<double>)>& collision_check,
+    const std::function <double(const point <double>&, const point <double>&)> distance,
+    const double radius
 ) {
 
-    point <double> new_cfg(new_state(A, B, stepsize, collision_check));
+    point <double> new_cfg(new_state(A, B, stepsize, collision_check, distance,radius));
     return new_cfg == B;
 }
 
@@ -43,13 +45,14 @@ tree_node <double>* connect_closest (
     std::vector <tree_node <double>>& tree,
     const point <double>& sample,
     const std::function <double(const point <double>&, const point <double>&)> distance,
+    const double radius,
     const double stepsize,
     const std::function <bool(point<double>)>& collision_check
 ) {
     tree_node <double> *nearest(nullptr);
 
     for (auto&& vertex : tree) {
-        if (is_reachable(vertex, sample, stepsize, collision_check)) {
+        if (is_reachable(vertex, sample, stepsize, collision_check, distance, radius)) {
             if (nearest == nullptr || distance(vertex.get_point(), sample) < distance(nearest->get_point(), sample)) {
                 nearest = &vertex;
             }
@@ -64,8 +67,10 @@ tree_node <double>* connect_closest (
 point <double> new_state (
     const tree_node <double>& nearest, 
     const point <double>& sample, 
-    double stepsize, 
+    const double stepsize, 
     const std::function <bool(point<double>)>& collision_check,
+    const std::function <double(const point <double>&, const point <double>&)> distance,
+    const double radius,
     const double epsilon
 ) {
 
@@ -76,7 +81,7 @@ point <double> new_state (
         point <double> step_further = walk(nearest.get_point(), sample, scaler);
 
         // if no collision update new configuration
-        if (collision_check(step_further)) {
+        if (distance(nearest.get_point(), step_further) > radius || collision_check(step_further)) {
             return new_cfg;
         }
         
@@ -107,7 +112,8 @@ output rrt(
     const std::function <point<double>()>& get_sample,
     const std::function <double(const point <double>&, const point <double>&)> distance,
     const unsigned int num_samples,
-    const double stepsize
+    const double stepsize,
+    const double radius
 ) {
     if (collision_check(start)) {
         throw std::domain_error("Start has to be in free space");
@@ -131,7 +137,7 @@ output rrt(
         // find new configuration
         point <double> new_cfg;
         try {
-            new_cfg = new_state(*nearest, sample, stepsize, collision_check);
+            new_cfg = new_state(*nearest, sample, stepsize, collision_check, distance, radius);
         }
         catch (std::length_error err) {
             throw;
@@ -142,7 +148,7 @@ output rrt(
     }
 
     // find nearest tree_node we can connect to directly from goal
-    tree_node <double>* nearest(connect_closest(tree, goal, distance, stepsize, collision_check));
+    tree_node <double>* nearest(connect_closest(tree, goal, distance, radius, stepsize, collision_check));
 
     if (nearest == nullptr) {
         // output failed, return tree with false flag

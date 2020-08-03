@@ -25,13 +25,16 @@ bool is_reachable(
     const tree_node <double>& A, 
     const point <double>& B, 
     const double stepsize,
-    const std::function <bool(point<double>)>& collision_check
+    const std::function <bool(point<double>)>& collision_check,
+    const std::function <double(const point <double>&, const point <double>&)> distance,
+    const double radius
 );
 
 tree_node <double>* connect_closest (
     std::vector <tree_node <double>>& tree,
     const point <double>& sample,
     const std::function <double(const point <double>&, const point <double>&)> distance,
+    const double radius,
     const double stepsize,
     const std::function <bool(point<double>)>& collision_check
 );
@@ -39,8 +42,10 @@ tree_node <double>* connect_closest (
 point <double> new_state (
     const tree_node <double>& nearest, 
     const point <double>& sample, 
-    double stepsize, 
+    const double stepsize, 
     const std::function <bool(point<double>)>& collision_check,
+    const std::function <double(const point <double>&, const point <double>&)> distance,
+    const double radius,
     const double epsilon = 1e-6
 );
 
@@ -54,5 +59,6 @@ output rrt (
     const std::function <point<double>()>& get_sample,
     const std::function <double(const point <double>&, const point <double>&)> distance,
     const unsigned int num_samples,
-    const double stepsize
+    const double stepsize,
+    const double radius
 );
