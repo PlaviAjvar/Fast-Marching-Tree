@@ -93,8 +93,11 @@ public:
         else if (algorithm == "PRM") {
             out = prm(starts, goals, joint_limits, test_collision, get_sample, distance, num_samples, stepsize, radius);
         }
+        else if (algorithm == "FMT*") {
+            out = fmtstar(start, goal, joint_limits, test_collision, get_sample, distance, num_samples, stepsize);
+        }
         else {
-            throw std::domain_error("Algorithm label has to be either RRT, PRM or FMT");
+            throw std::domain_error("Algorithm label has to be either RRT, PRM, FMT or FMT*");
         }
 
         return out;
@@ -854,6 +857,8 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
+
+
     static workspace2d <double> getws (std::string label) {
         if (label == "D" || label == "DT") return workspaceD(label);
         
@@ -934,9 +939,10 @@ int main (int argc, char *argv[]) {
     bool show_path = false;
     bool show_obstacles = true;
 
+
     for (size_t i = 0; i < argc; ++i) {
         std::string flag(argv[i]);
-        if (flag == "RRT" || flag == "PRM" || flag == "FMT") {
+        if (flag == "RRT" || flag == "PRM" || flag == "FMT" || flag == "FMT*") {
             algorithm = flag;
         }
         if (flag == "A" || flag == "B" || flag == "C" || flag == "D" || flag == "DT" || flag == "E") {
@@ -1086,9 +1092,9 @@ int main (int argc, char *argv[]) {
                 std::cout << "Iteration " << iter+1 << std::endl;
                 std::cout << "*************************" << std::endl;
 
-                radius = radii[iter % 3];
+                num_samples = nums_samples[iter % 3];
                 stepsize = stepsizes[(iter / 3) % 3];
-                num_samples = nums_samples[iter / 9];
+                radius = radii[iter / 9];
 
                 tests[iter] = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
                     tb.get_sample(test_label), tb.distance(test_label), num_samples, stepsize, radius);

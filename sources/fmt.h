@@ -15,6 +15,17 @@ output fmt (
     const double radius
 );
 
+output fmtstar (
+    const point <double> start,
+    const point <double> goal,
+    const std::vector <std::pair<double,double>>& joint_limits,
+    const std::function <bool(point<double>)>& collision_check,
+    const std::function <point<double>()>& get_sample,
+    const std::function <double(const point <double>&, const point <double>&)> distance,
+    const unsigned int num_samples,
+    const double stepsize
+);
+
 std::vector <labeled_node <double>> induced_graph (
     const std::vector <node <double>>& graph, 
     const std::function <double(const point <double>&, const point <double>&)> distance,
@@ -26,4 +37,22 @@ std::vector <labeled_node <double>> induced_graph (
 std::vector <point <double>> reconstruct_path (
     labeled_node <double>* start, 
     labeled_node <double*> goal
+);
+
+double fmtradius (
+    const unsigned int num_samples,
+    const unsigned int dimension,
+    const double gamma
+);
+
+double lebesgue (
+    const std::vector <std::pair<double,double>>& joint_limits
+);
+
+double volume (
+    const unsigned int dim
+);
+
+double fmtgamma (
+    const std::vector <std::pair<double,double>>& joint_limits
 );

@@ -13,7 +13,7 @@ Main is controled using command line parameters. By default, FMT is run on a 2D 
 
 For running tests, list one of the following (E is default): A, B, C, D, DT or E or equivalently point2D-A, point2D-B, point3D, arm2D, trivial2D, antro. A and B correspond to dotlike robots in 2D space. C corresponds to dotlike robot in 3D space. D and DT correspond to a two-segment planar arm. E corresponds to a simplified antropomorphic arm in 3D space.
 
-For setting algorithm of choice list one of the following: FMT, RRT, PRM.
+For setting algorithm of choice list one of the following: FMT, RRT, PRM or FMT*. The last two are nearly identical, except that FMT* has self-tuning radius. Note that the self-tuning radius is adjusted for the Euclidean metric, but not the weighed Euclidean.
 
 The running mode can be either: normal (running testcase and plotting result on graph), time simulation (running algorithm 20 times and averaging runtime), parameter simulation (running algorithm with 27 varying parameter sets), energy simulation (plotting energy as function of number of samples / energy averaged over 3 iterations) or reachability simulation (plotting probability of successful connection as function of number of samples / over 10 iterations). These are set using respective flags:
 

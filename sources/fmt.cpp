@@ -163,3 +163,75 @@ output fmt (
     paths.push_back(path);
     return output(paths, elist);
 }
+
+
+// function for obtaining radius for FMT* algorithm
+// as explained in the original paper
+// gamma is a tuning parameter, which has to satisfy relation given in paper
+
+double fmtradius (
+    const unsigned int num_samples,
+    const unsigned int dimension,
+    const double gamma
+) {
+    double nf = num_samples;
+    double d = dimension;
+    double radius = gamma * pow(log(nf) / nf, 1 / d);
+    return radius;
+}
+
+
+// Lebesgue meassure of configuration space
+// since configuration space is N-d box
+// mu = dim(1) * dim(2) * ... * dim(d)
+
+double lebesgue (
+    const std::vector <std::pair<double,double>>& joint_limits
+) {
+    double mu = 1;
+    for (const auto& lim : joint_limits) {
+        mu *= abs(lim.second - lim.first);
+    }
+    return mu;
+}
+
+// volume of d-dimensional unit hypersphere
+// volume = pi^(n/2) * R^n / gamma(n/2 + 1)
+
+double volume (
+    const unsigned int dim
+) {
+    double d = dim;
+    return pow(M_PI, d / 2) / tgamma(1 + d / 2);
+}
+
+
+// asume whole configuration space is free space (worst case case)
+
+double fmtgamma (
+    const std::vector <std::pair<double,double>>& joint_limits
+) {
+    double eta = 1;
+    double d = joint_limits.size();
+    double gamma = 2 * (1 + eta) * pow(1 / d, 1 / d) * pow(lebesgue(joint_limits) / volume(d), 1 / d);
+    return gamma;
+}
+
+
+// algorithm implementing generic FMT*, with self-tuning radius parameter
+output fmtstar (
+    const point <double> start,
+    const point <double> goal,
+    const std::vector <std::pair<double,double>>& joint_limits,
+    const std::function <bool(point<double>)>& collision_check,
+    const std::function <point<double>()>& get_sample,
+    const std::function <double(const point <double>&, const point <double>&)> distance,
+    const unsigned int num_samples,
+    const double stepsize
+) {
+
+    double gamma = fmtgamma(joint_limits);
+    double radius = fmtradius(num_samples, joint_limits.size(), gamma);
+    std::cout << std::endl << "Radius(" << num_samples << ") = " << radius << std::endl << std::endl;
+    return fmt(start, goal, joint_limits, collision_check, get_sample, distance, num_samples, stepsize, radius);
+}
