@@ -23,11 +23,6 @@ std::vector <labeled_node <double>> induced_graph (
     const double stepsize
 );
 
-class compare {
-public:
-    bool operator() (labeled_node <double> * const lhs, labeled_node <double> * const rhs);
-};
-
 std::vector <point <double>> reconstruct_path (
     labeled_node <double>* start, 
     labeled_node <double*> goal

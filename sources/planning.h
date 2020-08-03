@@ -74,22 +74,14 @@ private:
     bool closed;
     double distance;
     labeled_node <real>* backpointer;
+    const double inf = 1e10;
 
 public:
     labeled_node () {
         backpointer = nullptr;
         mark = false;
         closed = false;
-        distance = 0;
-    }
-
-    labeled_node (const labeled_node <real>& vertex) {
-        node<real>::sample = vertex.get_point();
-        node<real>::neighbor = vertex.get_neighbors();
-        backpointer = nullptr;
-        mark = false;
-        closed = false;
-        distance = 0;
+        distance = inf;
     }
 
     labeled_node (const node <real>& vertex) {
@@ -98,7 +90,7 @@ public:
         backpointer = nullptr;
         mark = false;
         closed = false;
-        distance = 0;
+        distance = inf;
     }
 
     labeled_node (const point <real> _sample) {
@@ -106,7 +98,7 @@ public:
         backpointer = nullptr;
         mark = false;
         closed = false;
-        distance = 0;
+        distance = inf;
     }
 
     labeled_node (
@@ -117,7 +109,7 @@ public:
         backpointer = nullptr;
         mark = false;
         closed = false;
-        distance = 0;
+        distance = inf;
     }
 
     std::vector <labeled_node<real>*> get_labeled_neighbors () const {
@@ -171,6 +163,10 @@ public:
         return closed;
     }
 
+    bool is_inf (const double eps = 1) const {
+        return abs(distance - inf) < eps;
+    }
+
     double get_distance () const {
         return distance;
     }
@@ -191,7 +187,7 @@ public:
         closed = true;
     }
 
-    void set_distance (double dist) {
+    void set_distance (const double dist) {
         distance = dist;
     }
 };
@@ -291,3 +287,14 @@ std::vector <point <double>> get_samples (
     const std::function <bool(point<double>)>& collision_check,
     const size_t max_iter = 10000
 );
+
+template <typename real>
+class compare {
+public:
+// comparisson function for priority queue
+
+    bool operator() (labeled_node <real> * const lhs, labeled_node <real> * const rhs) {
+        return lhs->get_distance() > rhs->get_distance();
+    }
+};
+

@@ -25,7 +25,8 @@ std::vector <labeled_node <double>> prm_connect(
 
 std::vector <point <double>> find_path (
     labeled_node <double>* start,
-    labeled_node <double>* goal
+    labeled_node <double>* goal,
+    const std::function <double(const point <double>&, const point <double>&)> distance
 );
 
 std::vector <point<double>> backtrack (

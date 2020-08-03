@@ -28,13 +28,6 @@ std::vector <labeled_node <double>> induced_graph (
     return lgraph;
 }
 
-// comparisson function for priority queue
-
-bool compare::operator() (labeled_node <double> * const lhs, labeled_node <double> * const rhs) {
-    return lhs->get_distance() > rhs->get_distance();
-}
-
-
 // reconstruct path from shortest path tree
 
 std::vector <point <double>> reconstruct_path (
@@ -112,9 +105,10 @@ output fmt (
 
     // unmarked nodes are treated as infinitely distant
     // add start node to V_open
-    std::priority_queue <labeled_node <double>*, std::vector <labeled_node<double>*>, compare> pq;
+    std::priority_queue <labeled_node <double>*, std::vector <labeled_node<double>*>, compare<double>> pq;
     pq.push(&lgraph[0]);
     lgraph[0].add_mark();
+    lgraph[0].set_distance(0);
     bool found_path = false;
 
     while (!pq.empty()) {

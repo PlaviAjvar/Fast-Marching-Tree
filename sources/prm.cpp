@@ -55,36 +55,48 @@ std::vector <point<double>> backtrack (
 
 std::vector <point <double>> find_path (
     labeled_node <double>* start,
-    labeled_node <double>* goal
+    labeled_node <double>* goal,
+    const std::function <double(const point <double>&, const point <double>&)> distance
 ) {
 
-    // BFS starting from start, ending at goal
+    // Apply Dijkstra´s algorithm to find shortest path through graph
 
-    std::queue <labeled_node <double>*> q;
-    q.push(start);
-    start->add_mark();
+    std::priority_queue <labeled_node <double>*, std::vector <labeled_node <double>*>, compare<double>> pq;
+    pq.push(start);
+    start->set_distance(0);
 
-    while (!q.empty()) {
-        labeled_node <double>* front_node = q.front();
-        q.pop();    
+    while (!pq.empty()) {
+        labeled_node <double>* top_node = pq.top();
+        pq.pop();    
 
-        // if goal is reached break bfs
-        if (front_node == goal) {
+        // if node has already been processed
+        if (top_node->is_marked()) {
+            continue;
+        }
+        
+        top_node->add_mark();
+
+        // if goal is reached return solution
+        if (top_node == goal) {
+            return backtrack(start, goal);
+        }
+
+        // there is no path in this case
+        if (top_node->is_inf()) {
             break;
         }
 
-        for (auto&& neighbor : front_node->get_labeled_neighbors()) {
-            if (!(neighbor->is_marked())) {
-                neighbor->add_mark();
-                neighbor->set_backpointer(front_node);
-                q.push(neighbor);
+        for (auto&& neighbor : top_node->get_unmarked_neighbors()) {
+            if (top_node->get_distance() + distance(top_node->get_point(), neighbor->get_point()) < neighbor->get_distance()) {
+                neighbor->set_distance(top_node->get_distance() + distance(top_node->get_point(), neighbor->get_point()));
+                neighbor->set_backpointer(top_node);
+                pq.push(neighbor);
             }
         }
     }
 
-    if (!goal->is_marked()) return std::vector <point <double>>();
-
-    return backtrack(start, goal);
+    // if we´ve reached here a path has not been found
+    return std::vector <point <double>>();
 }
 
 /*
@@ -145,7 +157,7 @@ output prm (
 
     // process queries
     for (size_t query_idx = 0; query_idx < num_queries; ++query_idx) {
-        std::vector <point <double>> path (find_path(&lgraph[free_samples + 2 * query_idx], &lgraph[free_samples + 2 * query_idx + 1]));
+        std::vector <point <double>> path (find_path(&lgraph[free_samples + 2 * query_idx], &lgraph[free_samples + 2 * query_idx + 1], distance));
 
         for (auto&& vertex : lgraph) {
             vertex.remove_mark();
