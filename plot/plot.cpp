@@ -213,12 +213,20 @@ void disp_snapshot(
 // display snapshots of 2D planar arm in its movement from start to goal
 void display_snapshots (
     const workspace2d <double>& ws,
-    const std::vector <point <double>>& path
+    const std::vector <point <double>>& path,
+    const double xlow,
+    const double xhigh,
+    const double ylow,
+    const double yhigh
 ) {
     plt::backend("TkAgg");
     std::vector <std::string> names{"start","2nd","3rd","4th","5th","goal"};
-    std::vector <std::string> colors{"y", "m", "c", "r", "g", "b"};
+    std::vector <std::string> colors{"y", "m", "c", "r", "b", "k"};
     size_t num_snapshots = colors.size();
+
+    plt::figure_size(800, 800);
+    plt::xlim(xlow, xhigh);
+    plt::ylim(ylow, yhigh);
 
     for (const auto& polygon : ws.get_obstacles()) {
         for (const auto& edge : polygon.get_edges()) {

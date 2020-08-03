@@ -60,7 +60,11 @@ void disp_snapshot(
 
 void display_snapshots (
     const workspace2d <double>& ws,
-    const std::vector <point <double>>& path
+    const std::vector <point <double>>& path,
+    const double xlow = -4,
+    const double xhigh = 11,
+    const double ylow = -8,
+    const double yhigh = 7
 );
 
 void plot3d (
