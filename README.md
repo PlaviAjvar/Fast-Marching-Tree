@@ -30,6 +30,11 @@ The other flags are:
 
 Unit testing was done using gtest, and can be run from the build/unit folder. The unit tests focus on the geomertic functions.
 
+## Using as library
+
+Using the code as a library is pretty straightforward. To construct workspace/configuration space use geometry.h, which defines obstacles, implements collision detection and defines various simplified robotic arms. File planning.h defines the output information objects and defines graph nodes. The algorithms are implemented in fmt.h, rrt.h, prm.h. All kinds of plotting is implemented in plot.h.
+
+
 ![](images/testA.png)
 ![](images/testC.png)
 ![](images/snapshotD.png)
