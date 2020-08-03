@@ -224,7 +224,7 @@ void display_snapshots (
     std::vector <std::string> colors{"y", "m", "c", "r", "b", "k"};
     size_t num_snapshots = colors.size();
 
-    plt::figure_size(800, 800);
+    plt::figure_size(500, 500);
     plt::xlim(xlow, xhigh);
     plt::ylim(ylow, yhigh);
 
