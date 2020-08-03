@@ -15,9 +15,9 @@ For running tests, list one of the following (E is default): A, B, C, D, DT or E
 
 For setting algorithm of choice list one of the following: FMT, RRT, PRM.
 
-The running mode can be either: normal (running testcase and plotting result on graph), time simulation (running algorithm 20 times and averaging runtime) and parameter simulation (running algorithm with 27 varying parameter sets). These are set using respective flags:
+The running mode can be either: normal (running testcase and plotting result on graph), time simulation (running algorithm 20 times and averaging runtime), parameter simulation (running algorithm with 27 varying parameter sets), energy simulation (plotting energy as function of number of samples / energy averaged over 3 iterations) or reachability simulation (plotting probability of successful connection as function of number of samples / over 10 iterations). These are set using respective flags:
 
--normal, -sim, -param
+-normal, -timesim, -paramsim, -energysim, -reachsim
 
 The other flags are:
 

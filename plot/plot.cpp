@@ -404,3 +404,18 @@ void display_snapshots3d (
     plt::plot3(xs, ys, zs);
     plt::show();
 }
+
+void plot_function (
+    const std::vector <double>& xs,
+    const std::vector <double>& ys,
+    const std::string xlabel,
+    const std::string ylabel,
+    const std::string title
+) {
+    plt::backend("TkAgg");
+    plt::plot(xs, ys);
+    plt::title(title);
+    plt::xlabel(xlabel);
+    plt::ylabel(ylabel);
+    plt::show();
+}

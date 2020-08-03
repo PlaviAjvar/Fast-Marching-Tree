@@ -88,3 +88,11 @@ void display_snapshots3d (
     const workspace3d <double>& ws,
     const std::vector <point <double>>& path
 );
+
+void plot_function (
+    const std::vector <double>& xs,
+    const std::vector <double>& ys,
+    const std::string xlabel,
+    const std::string ylabel,
+    const std::string title
+);

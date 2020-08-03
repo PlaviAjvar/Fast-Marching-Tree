@@ -954,7 +954,7 @@ int main (int argc, char *argv[]) {
         if (flag == "-file") {
             write_to_file = true;
         }
-        if (flag == "-sim" || flag == "-param" || flag == "-normal") {
+        if (flag == "-timesim" || flag == "-paramsim" || flag == "-energysim" || flag == "-reachsim" || flag == "-normal") {
             mode = flag;
         }
         if (flag == "-snapshot") {
@@ -1035,7 +1035,7 @@ int main (int argc, char *argv[]) {
     }
 
     // if simulation mode is active run algorithm num_iter times and average the execution times
-    else if (mode == "-sim") {
+    else if (mode == "-timesim") {
         // number of repeats
         size_t num_iter = 20;
 
@@ -1061,7 +1061,7 @@ int main (int argc, char *argv[]) {
     }
 
     // simulate various parameter values
-    else if (mode == "-param") {
+    else if (mode == "-paramsim") {
         // number of iterations
         const size_t num_iter = 27;
         const size_t num_repeats = 5;
@@ -1139,6 +1139,88 @@ int main (int argc, char *argv[]) {
             std::cout << err.what() << std::endl;
             throw;
         }
+    }
+
+    else if (mode == "-energysim") {
+        // number of repeats
+        std::vector <double> samplecnt_scaler; 
+        const double lower = 0.2;
+        const double upper = 5;
+        const double jump = 0.4;
+        for (double step = lower; step <= upper; step += jump) {
+            samplecnt_scaler.push_back(step);
+        }
+        std::vector <double> xs, ys;
+
+        output out;
+        const size_t num_iter = 3;
+
+        for (size_t level = 0; level < samplecnt_scaler.size(); ++level) {
+            size_t num_samples = tb.num_samples(test_label) * samplecnt_scaler[level];
+            double energy = 0;
+            unsigned int pathcnt = 0;
+
+            for (size_t iter = 0; iter < num_iter; ++iter) {
+                try {
+                    test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
+                        tb.get_sample(test_label), tb.distance(test_label), num_samples, tb.stepsize(test_label), tb.radius(test_label));
+
+                    out = test_sq.run_test(algorithm);
+                    auto path = out.get_paths()[0];
+                    if (path.empty()) {
+                        energy = NAN;
+                    }
+                    else {
+                        energy += path_length(path, tb.distance(test_label));
+                    }
+                }
+                catch (std::logic_error err) {
+                    std::cout << err.what() << std::endl;
+                    throw;
+                }
+            }
+        
+            xs.push_back(samplecnt_scaler[level]);
+            ys.push_back(energy / num_iter);
+        }
+
+        plot_function(xs, ys, "number of samples", "energy", "Energy vs. Number of samples");
+    }
+
+    else if (mode == "-reachsim") {
+        // number of repeats
+        std::vector <double> samplecnt_scaler{0.01, 0.02, 0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9, 1}; 
+        std::vector <double> xs, ys;
+
+        output out;
+        const size_t num_iter = 10;
+
+        for (size_t level = 0; level < samplecnt_scaler.size(); ++level) {
+            size_t num_samples = tb.num_samples(test_label) * samplecnt_scaler[level];
+            double pathcnt = 0;
+
+            for (size_t iter = 0; iter < num_iter; ++iter) {
+                try {
+                    test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
+                        tb.get_sample(test_label), tb.distance(test_label), num_samples, tb.stepsize(test_label), tb.radius(test_label));
+
+                    out = test_sq.run_test(algorithm);
+                    auto path = out.get_paths()[0];
+                    if (!path.empty()) {
+                        pathcnt += 1;
+                    }
+                }
+                catch (std::logic_error err) {
+                    std::cout << err.what() << std::endl;
+                    throw;
+                }
+            }
+        
+            xs.push_back(samplecnt_scaler[level]);
+            ys.push_back(pathcnt / num_iter);
+        }
+
+        plot_function(xs, ys, "number of samples", "probability", "Probability of finding path vs. Number of samples");
     }
 
     return 0;

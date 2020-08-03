@@ -101,7 +101,7 @@ output fmt (
     std::vector <labeled_node <double>> lgraph = induced_graph(graph, distance, collision_check, radius, stepsize);
     std::vector <std::pair <point<double>, point<double>>> elist;
 
-    std::cout << std::endl << "Induced graph connected " << "(" << lgraph.size() << " nodes)" << std::endl;
+    std::cout << "Induced graph connected " << "(" << lgraph.size() << " nodes)" << std::endl << std::endl;
 
     // unmarked nodes are treated as infinitely distant
     // add start node to V_open
