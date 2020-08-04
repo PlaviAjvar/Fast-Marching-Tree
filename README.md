@@ -32,7 +32,7 @@ Unit testing was done using gtest, and can be run from the build/unit folder. Th
 
 ## Using as library
 
-Using the code as a library is pretty straightforward. To construct workspace/configuration space use geometry.h, which defines obstacles, implements collision detection and defines various simplified robotic arms. File planning.h defines the output information objects and defines graph nodes. The algorithms are implemented in fmt.h, rrt.h, prm.h. All kinds of plotting is implemented in plot.h.
+Using the code as a library is pretty straightforward. To construct workspace/configuration space use geometry.h, which defines obstacles, implements collision detection and defines various simplified robotic arms. File planning.h defines the output information objects and defines graph nodes. The algorithms are implemented in fmt.h, rrt.h, prm.h. PRM supports multiple queries, unlike RRT and FMT*. All kinds of plotting is implemented in plot.h.
 
 
 ![](images/testA.png)

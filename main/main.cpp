@@ -976,16 +976,16 @@ int main (int argc, char *argv[]) {
         auto begin = std::chrono::high_resolution_clock::now();
         output out;
 
-        // try {
+        try {
             test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
                 tb.get_sample(test_label), tb.distance(test_label), tb.num_samples(test_label), tb.stepsize(test_label), tb.radius(test_label));
 
             out = test_sq.run_test(algorithm);
-        // }
-        // catch (std::logic_error err) {
-        //     std::cout << err.what() << std::endl;
-        //     throw;
-        // }
+        }
+        catch (std::logic_error err) {
+            std::cout << err.what() << std::endl;
+            throw;
+        }
 
         auto end = std::chrono::high_resolution_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);

@@ -1242,7 +1242,7 @@ public:
 
     workspace2d (
         const std::vector <polygon<real>> _obstacles,
-        const arm <real>& _robot
+        const std::shared_ptr <arm <real>>& _robot
     ) : obstacles(_obstacles), workspace <real>(_robot) {}
 
     workspace2d (
@@ -1282,7 +1282,7 @@ public:
 
     workspace3d (
         const std::vector <box<real>> _obstacles,
-        const arm <real>& _robot
+        const std::shared_ptr <arm <real>>& _robot
     ) : obstacles(_obstacles), workspace <real>(_robot) {}
 
     workspace3d (
