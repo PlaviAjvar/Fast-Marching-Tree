@@ -56,3 +56,8 @@ double volume (
 double fmtgamma (
     const std::vector <std::pair<double,double>>& joint_limits
 );
+
+double adjust_weight(
+    const std::vector <std::pair<double,double>>& joint_limits,
+    const std::function <double(const point <double>&, const point <double>&)> distance
+);

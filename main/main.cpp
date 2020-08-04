@@ -840,21 +840,25 @@ public:
     }
 
     plot_object add_obstacle_edges (
-        const std::string label
+        const std::string label,
+        const bool obs = true
     ) {
         if (label == "A") return plot_object(add_obstacle_edgesA);
         if (label == "B") return plot_object(add_obstacle_edgesB);
-        if (label == "D" || label == "DT") return plot_object(joint_limitsD(), test_collisionD);
+        if (obs && (label == "D" || label == "DT")) return plot_object(joint_limitsD(), test_collisionD);
+        if (!obs && (label == "D" || label == "DT")) return plot_object(joint_limitsD(), test_collisionD, 1);
 
         // invalid test label
         throw std::domain_error("Invalid test label");
     }
 
     plot_object obstacle_edges_3d (
-        const std::string label
+        const std::string label,
+        const bool obs = true
     ) {
         if (label == "C") return plot_object(workspaceC());
-        if (label == "E") return plot_object(joint_limitsE(), test_collisionE, 10);
+        if (obs && label == "E") return plot_object(joint_limitsE(), test_collisionE, 10);
+        if (!obs && label == "E") return plot_object(joint_limitsE(), test_collisionE, 1);
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -938,6 +942,7 @@ int main (int argc, char *argv[]) {
     bool snapshot = false;
     std::string mode = "-normal";
     bool show_path = false;
+    bool obs = true;
 
     for (size_t i = 0; i < argc; ++i) {
         std::string flag(argv[i]);
@@ -967,6 +972,9 @@ int main (int argc, char *argv[]) {
         }
         if (flag == "-path") {
             show_path = true;
+        }
+        if (flag == "-nobs") {
+            obs = false;
         }
     }
 
@@ -1029,10 +1037,10 @@ int main (int argc, char *argv[]) {
         // plot graph
         else {
             if (test_label == "A" || test_label == "B" || test_label == "D" || test_label == "DT") {
-                plot_graph(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label), tb.joint_limits(test_label), one_by_one, write_to_file);
+                plot_graph(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label, obs), tb.joint_limits(test_label), one_by_one, write_to_file);
             }
             else{
-                plot3d(out, tb.obstacle_edges_3d(test_label), tb.joint_limits(test_label), show_path, write_to_file);
+                plot3d(out, tb.obstacle_edges_3d(test_label, obs), tb.joint_limits(test_label), show_path, write_to_file);
             }
         }
     }

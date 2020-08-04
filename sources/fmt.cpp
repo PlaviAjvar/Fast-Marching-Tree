@@ -211,7 +211,7 @@ double volume (
 double fmtgamma (
     const std::vector <std::pair<double,double>>& joint_limits
 ) {
-    double eta = 1;
+    double eta = 0.1;
     double d = joint_limits.size();
     double gamma = 2 * (1 + eta) * pow(1 / d, 1 / d) * pow(lebesgue(joint_limits) / volume(d), 1 / d);
     return gamma;
@@ -232,6 +232,42 @@ output fmtstar (
 
     double gamma = fmtgamma(joint_limits);
     double radius = fmtradius(num_samples, joint_limits.size(), gamma);
-    std::cout << std::endl << "Radius(" << num_samples << ") = " << radius << std::endl << std::endl;
+    double adjust = adjust_weight(joint_limits, distance);  // adjust for weighed euclidean metric (if it´s active)
+    radius *= adjust;
+
+    std::cout << std::endl << "Radius(" << num_samples << ") = " << radius << std::endl;
+    std::cout << "Adjust(weighed euclidean) = " << adjust << std::endl << std::endl;
     return fmt(start, goal, joint_limits, collision_check, get_sample, distance, num_samples, stepsize, radius);
+}
+
+double adjust_weight(
+    const std::vector <std::pair<double,double>>& joint_limits,
+    const std::function <double(const point <double>&, const point <double>&)> distance
+) {
+
+    double scale = 1;
+    std::vector <double> components(joint_limits.size());
+
+    for (size_t dim = 0; dim < joint_limits.size(); ++dim) {
+        double dif = joint_limits[dim].second - joint_limits[dim].first;
+
+        // set vector with leftmost corner point
+        for (size_t dim = 0; dim < joint_limits.size(); ++dim) {
+            components[dim] = joint_limits[dim].first;
+        }
+        point <double> lower(components);
+
+        // change current coordinate to max limit
+        components[dim] = joint_limits[dim].second;
+        point <double> upper(components);
+
+        // calculate distance and compare to coordinate difference
+        double dist = distance(lower, upper);
+        double ratio = dist / dif;
+
+        // adjust for current dimension scaling (multiply by sqrt(ratio))
+        scale *= sqrt(ratio);
+    }
+
+    return scale;
 }
