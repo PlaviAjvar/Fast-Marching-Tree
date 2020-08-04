@@ -185,8 +185,7 @@ public:
 
     static size_t add_obstacle_edgesA (
         std::vector <point <double>>& current, 
-        std::vector <point <double>>& previous, 
-        const std::function<bool(point<double>)> test_collision
+        std::vector <point <double>>& previous
     ) {
         previous.push_back(point2d <double>(0, 0.2));
         current.push_back(point2d <double>(0.6, 0.8));
@@ -267,8 +266,7 @@ public:
 
     static size_t add_obstacle_edgesB (
         std::vector <point <double>>& current, 
-        std::vector <point <double>>& previous, 
-        const std::function<bool(point<double>)> test_collision
+        std::vector <point <double>>& previous
     ) {
         // left part
         previous.push_back(point2d <double>(0, 0.45));
@@ -415,8 +413,7 @@ public:
 
     static size_t add_obstacle_edgesC (
         std::vector <point <double>>& current, 
-        std::vector <point <double>>& previous, 
-        const std::function<bool(point<double>)> test_collision
+        std::vector <point <double>>& previous 
     ) {
         // left side
         previous.push_back(point2d <double>(0, 0.4));
@@ -592,8 +589,7 @@ public:
 
     static size_t add_obstacle_edgesD (
         std::vector <point <double>>& current, 
-        std::vector <point <double>>& previous, 
-        const std::function<bool(point<double>)> test_collision
+        std::vector <point <double>>& previous
     ) {
         size_t first = auto_add_edges(current, previous, edgesD_A());
         size_t second = auto_add_edges(current, previous, edgesD_B());
@@ -682,8 +678,7 @@ public:
 
     static size_t add_obstacle_edgesE (
         std::vector <point <double>>& current, 
-        std::vector <point <double>>& previous, 
-        const std::function<bool(point<double>)> test_collision
+        std::vector <point <double>>& previous 
     ) {
         // floating box
 
@@ -721,7 +716,7 @@ public:
     ***********************/
 
     // functions returning test info with test label as argument
-    static point <double> start (std::string label) {
+    static point <double> start (const std::string label) {
         if (label == "A") return startA();
         if (label == "B") return startB();
         if (label == "C") return startC();
@@ -732,7 +727,7 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    static point <double> goal (std::string label) {
+    static point <double> goal (const std::string label) {
         if (label == "A") return goalA();
         if (label == "B") return goalB();
         if (label == "C") return goalC();
@@ -744,7 +739,7 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    static std::vector<point <double>> starts (std::string label) {
+    static std::vector<point <double>> starts (const std::string label) {
         if (label == "A") return startsA();
         if (label == "B") return startsB();
         if (label == "C") return startsC();
@@ -755,7 +750,7 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    static std::vector <point <double>> goals (std::string label) {
+    static std::vector <point <double>> goals (const std::string label) {
         if (label == "A") return goalsA();
         if (label == "B") return goalsB();
         if (label == "C") return goalsC();
@@ -767,7 +762,7 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    static std::vector <std::pair<double,double>> joint_limits (std::string label) {
+    static std::vector <std::pair<double,double>> joint_limits (const std::string label) {
         if (label == "A") return joint_limitsA();
         if (label == "B") return joint_limitsB();
         if (label == "C") return joint_limitsC();
@@ -778,7 +773,7 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    static std::function <double(const point <double>&, const point <double>&)> distance (std::string label) {
+    static std::function <double(const point <double>&, const point <double>&)> distance (const std::string label) {
         if (label == "A" || label == "B" || label == "C") return euclidean_distance <double>;
         if (label == "D") return distanceD;
         if (label == "DT") return distanceDT;
@@ -788,7 +783,7 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    static unsigned int num_samples (std::string label) {
+    static unsigned int num_samples (const std::string label) {
         if (label == "A") return num_samplesA;
         if (label == "B") return num_samplesB;
         if (label == "C") return num_samplesC;
@@ -799,7 +794,7 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    static double stepsize (std::string label) {
+    static double stepsize (const std::string label) {
         if (label == "A") return stepsizeA;
         if (label == "B") return stepsizeB;
         if (label == "C") return stepsizeC;
@@ -810,7 +805,7 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    static double radius (std::string label) {
+    static double radius (const std::string label) {
         if (label == "A") return radiusA;
         if (label == "B") return radiusB;
         if (label == "C") return radiusC;
@@ -821,7 +816,7 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    std::function<bool(point<double>)> test_colision (std::string label) {
+    std::function<bool(point<double>)> test_colision (const std::string label) {
         if (label == "A") return test_collisionA;
         if (label == "B") return test_collisionB;
         if (label == "C") return test_collisionC;
@@ -833,7 +828,7 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    std::function<point<double>()> get_sample (std::string label) {
+    std::function<point<double>()> get_sample (const std::string label) {
         if (label == "A") return get_sampleA;
         if (label == "B") return get_sampleB;
         if (label == "C") return get_sampleC;
@@ -844,20 +839,26 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    std::function <size_t(std::vector <point <double>>&, std::vector <point <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges (
-        std::string label
+    plot_object add_obstacle_edges (
+        const std::string label
     ) {
-        if (label == "A") return add_obstacle_edgesA;
-        if (label == "B") return add_obstacle_edgesB;
-        if (label == "C") return add_obstacle_edgesC;
-        if (label == "D" || label == "DT") return pass;
-        if (label == "E") return add_obstacle_edgesE;
+        if (label == "A") return plot_object(add_obstacle_edgesA);
+        if (label == "B") return plot_object(add_obstacle_edgesB);
+        if (label == "D" || label == "DT") return plot_object(joint_limitsD(), test_collisionD);
 
         // invalid test label
         throw std::domain_error("Invalid test label");
     }
 
+    plot_object obstacle_edges_3d (
+        const std::string label
+    ) {
+        if (label == "C") return plot_object(workspaceC());
+        if (label == "E") return plot_object(joint_limitsE(), test_collisionE, 10);
 
+        // invalid test label
+        throw std::domain_error("Invalid test label");
+    }
 
     static workspace2d <double> getws (std::string label) {
         if (label == "D" || label == "DT") return workspaceD(label);
@@ -931,14 +932,12 @@ int main (int argc, char *argv[]) {
     test test_sq, test_mq;
 
     std::string algorithm = "FMT";
-    std::string test_label = "A";
+    std::string test_label = "D";
     bool one_by_one = false;
     bool write_to_file = false;
     bool snapshot = false;
     std::string mode = "-normal";
     bool show_path = false;
-    bool show_obstacles = true;
-
 
     for (size_t i = 0; i < argc; ++i) {
         std::string flag(argv[i]);
@@ -971,24 +970,22 @@ int main (int argc, char *argv[]) {
         }
     }
 
-    if (test_label == "E") show_obstacles = false;
-
     // run algorithm normally and display results
 
     if (mode == "-normal") {
         auto begin = std::chrono::high_resolution_clock::now();
         output out;
 
-        try {
+        // try {
             test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
                 tb.get_sample(test_label), tb.distance(test_label), tb.num_samples(test_label), tb.stepsize(test_label), tb.radius(test_label));
 
             out = test_sq.run_test(algorithm);
-        }
-        catch (std::logic_error err) {
-            std::cout << err.what() << std::endl;
-            throw;
-        }
+        // }
+        // catch (std::logic_error err) {
+        //     std::cout << err.what() << std::endl;
+        //     throw;
+        // }
 
         auto end = std::chrono::high_resolution_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
@@ -1035,7 +1032,7 @@ int main (int argc, char *argv[]) {
                 plot_graph(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label), tb.joint_limits(test_label), one_by_one, write_to_file);
             }
             else{
-                plot3d(out, tb.getws3(test_label), tb.joint_limits(test_label), show_path, write_to_file, show_obstacles);
+                plot3d(out, tb.obstacle_edges_3d(test_label), tb.joint_limits(test_label), show_path, write_to_file);
             }
         }
     }

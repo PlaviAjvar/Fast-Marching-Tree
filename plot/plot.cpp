@@ -52,7 +52,7 @@ std::ostream& operator<< (std::ostream& os, std::vector <std::vector <double>> v
 void plot_graph (
     const output& result,
     const std::function<bool(point<double>)>& test_collision,
-    const std::function <size_t(std::vector <point <double>>&, std::vector <point <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges,
+    const plot_object& pltobj,
     const std::vector <std::pair <double, double>> joint_lims,
     bool delay_active,
     bool save_image
@@ -61,7 +61,7 @@ void plot_graph (
     std::vector <point <double>> current, previous;
 
     // add obstacle edges
-    size_t cutoffA = add_obstacle_edges(current, previous, test_collision);
+    pltobj.plot("g-");
 
     // add graph edges
     size_t cutoffB = add_graph_edges(current, previous, result.get_edgelist());
@@ -75,102 +75,11 @@ void plot_graph (
     for (size_t i = 0; i < cutoffC; ++i) {
         std::string lineflag;
 
-        if (i < cutoffA) lineflag = "g-";
-        else if (i < cutoffB) lineflag = "b-";
+        if (i < cutoffB) lineflag = "b-";
         else lineflag = "r-";
 
         point2d <double> prev(previous[i]);
         point2d <double> cur(current[i]);
-        plt::plot(std::vector <double>{prev.getx(), cur.getx()}, std::vector <double>{prev.gety(), cur.gety()}, lineflag); 
-        
-        if (delay_active) {
-            plt::pause(0.001);
-        }
-    }
-
-    if (!save_image) {
-        plt::show();
-    }
-    else {
-        plt::save("./output.png");
-    }
-}
-
-// get as many as possible discrete levels of green-blue
-std::vector <std::string> get_levels () {
-    std::vector <std::string> levels;
-
-    for (unsigned int lev = 1; lev < 256; ++lev) {
-        std::stringstream ss;
-        ss << std::hex << lev;
-        std::string res = ss.str();
-
-        for(auto &ch : res) {
-            ch = toupper(ch);
-        }
-        if (res.size() == 1) res = "0" + res;
-
-        levels.push_back("#00" + res + "FF");
-    }
-
-    return levels;
-}
-
-// get discrete level of blue from z coordinate
-std::string scale_color (
-    const std::vector <std::string>& levels,
-    const double z,
-    const double zlim
-) {
-    size_t levelcnt = levels.size();
-    double quant = zlim / levelcnt;
-    size_t lev = z / quant;
-    return levels[lev];
-}
-
-// plot 3D graph
-void plot_bird (
-    const output& result,
-    const std::function<bool(point<double>)>& test_collision,
-    const std::function <size_t(std::vector <point <double>>&, std::vector <point <double>>&, const std::function<bool(point<double>)>)> add_obstacle_edges,
-    const std::vector <std::pair <double, double>> joint_lims,
-    bool delay_active,
-    bool save_image,
-    double zlim
-) {
-    plt::backend("TkAgg");
-    std::vector <point <double>> current, previous;
-
-    // add obstacle edges
-    size_t cutoffA = add_obstacle_edges(current, previous, test_collision);
-
-    // add graph edges
-    size_t cutoffB = add_graph_edges(current, previous, result.get_edgelist());
-
-    // add path edges
-    size_t cutoffC = add_path_edges(current, previous, result.get_paths());
-
-    plt::xlim(joint_lims[0].first, joint_lims[0].second);
-    plt::ylim(joint_lims[1].first, joint_lims[1].second);
-
-    std::vector <std::string> levels(get_levels());
-
-    for (size_t i = 0; i < cutoffC; ++i) {
-        std::string lineflag;
-        point3d <double> prev(previous[i]);
-        point3d <double> cur(current[i]);
-
-        if (i < cutoffA) {
-            lineflag = "g-";
-        }
-        else if (i < cutoffB) {
-            // if blue scale it
-            lineflag = scale_color(levels, cur.getz(), zlim);
-        }
-        else {
-            lineflag = "r-";
-        }
-
         plt::plot(std::vector <double>{prev.getx(), cur.getx()}, std::vector <double>{prev.gety(), cur.gety()}, lineflag); 
         
         if (delay_active) {
@@ -262,37 +171,17 @@ std::ostream& operator<< (std::ostream& os, std::vector <double> v) {
 // plot in 3d
 void plot3d (
     const output& result,
-    const workspace3d <double>& ws,
+    const plot_object& pltobj,
     const std::vector <std::pair <double, double>> joint_lims,
     bool show_path,
-    bool save_image,
-    bool show_obstacles
+    bool save_image
 ) {
     plt::backend("TkAgg");
     std::vector <point <double>> current, previous;
     std::vector <double> xs, ys, zs;
 
     // plot the obstacles
-    if (show_obstacles) {
-        for (const box <double>& abox : ws.get_obstacles()) {
-            std::vector <std::pair <point <double>, point <double>>> edges = abox.get_edges();
-            
-            for (const auto& edge : edges) {
-                point3d <double> fi = edge.first;
-                point3d <double> se = edge.second;
-                xs.push_back(fi.getx());
-                xs.push_back(se.getx());
-                ys.push_back(fi.gety());
-                ys.push_back(se.gety());
-                zs.push_back(fi.getz());
-                zs.push_back(se.getz());
-            }
-
-            xs.push_back(NAN);
-            ys.push_back(NAN);
-            zs.push_back(NAN);
-        }
-    }
+    pltobj.plot3d(xs, ys, zs);
 
     // add graph edges or path edges
     size_t cutoff;

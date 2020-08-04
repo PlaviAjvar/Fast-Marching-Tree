@@ -5,6 +5,7 @@
 #include <functional>
 #include <iostream>
 #include <cmath>
+#include <memory>
 
 // class implementing point
 template <typename real>
@@ -1202,26 +1203,20 @@ public:
 template <typename real>
 class workspace {
 protected:
-    arm <real>* robot;
+    std::shared_ptr <arm <real>> robot;
 
 public:
     workspace () {}
 
-    workspace (const workspace <real>& W) {
-        robot = new arm <real>(*W.robot);
-    }
-
-    workspace (
-        const arm <real>& _robot
-    ) {
-        robot = new arm <real>(_robot);
-    }
+    workspace (const workspace <real>& W) : robot(W.robot) {}
 
     workspace (
         arm <real>* const _robot
-    ) {
-        robot = _robot;
-    }
+    ) : robot(_robot) {}
+
+    workspace (
+        const std::shared_ptr <arm <real>>& _robot
+    ) : robot(_robot) {}
 
     // return link lengths
     std::vector <real> get_link_lengths () const {
@@ -1230,10 +1225,6 @@ public:
 
     arm <real>& get_robot () const {
         return *robot;
-    }
-
-    ~workspace () {
-        delete robot;
     }
 };
 
@@ -1247,7 +1238,7 @@ private:
 public:
     workspace2d () {}
 
-    workspace2d (const workspace2d <real>& ws) : obstacles(ws.obstacles), workspace <real>(*ws.robot) {}
+    workspace2d (const workspace2d <real>& ws) : obstacles(ws.obstacles), workspace <real>(ws.robot) {}
 
     workspace2d (
         const std::vector <polygon<real>> _obstacles,
@@ -1287,7 +1278,7 @@ private:
 public:
     workspace3d () {}
 
-    workspace3d (const workspace3d <real>& ws) : obstacles(ws.obstacles), workspace <real>(*ws.robot) {}
+    workspace3d (const workspace3d <real>& ws) : obstacles(ws.obstacles), workspace <real>(ws.robot) {}
 
     workspace3d (
         const std::vector <box<real>> _obstacles,
