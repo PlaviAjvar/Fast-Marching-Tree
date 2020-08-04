@@ -119,19 +119,64 @@ void disp_snapshot(
 }
 
 
+void obtain_limits (
+    const std::vector <polygon <double>>& obs,
+    double& xlow,
+    double& xhigh,
+    double& ylow,
+    double& yhigh,
+    const double offset
+) {
+
+    // find leftmost/rightmost x-coordinate and bottommost/topmost y-coordinate
+    for (const auto& polygon : obs) {
+        for (const auto& edge : polygon.get_edges()) {
+            point2d <double> prev = edge.first;
+            point2d <double> cur = edge.second;
+            xlow = std::min(xlow, cur.getx());
+            xhigh = std::max(xhigh, cur.getx());
+            ylow = std::min(ylow, cur.gety());
+            yhigh = std::max(yhigh, cur.gety());
+        }
+    }
+
+    // add offset for visualization
+    xlow -= offset;
+    xhigh += offset;
+    ylow -= offset;
+    yhigh += offset;
+
+    // adjust equal bounds
+    double dif = std::max(xhigh - xlow, yhigh - ylow);
+    const double epsilon = 1e-4;
+
+    if (xhigh - xlow < dif - epsilon) {
+        double half = (dif - (xhigh - xlow)) / 2;
+        xlow -= half;
+        xhigh += half;
+    }
+
+    if (yhigh - ylow < dif - epsilon) {
+        double half = (dif - (yhigh - ylow)) / 2;
+        ylow -= half;
+        yhigh += half;
+    }
+}
+
+
 // display snapshots of 2D planar arm in its movement from start to goal
 void display_snapshots (
     const workspace2d <double>& ws,
-    const std::vector <point <double>>& path,
-    const double xlow,
-    const double xhigh,
-    const double ylow,
-    const double yhigh
+    const std::vector <point <double>>& path
 ) {
     plt::backend("TkAgg");
     std::vector <std::string> names{"start","2nd","3rd","4th","5th","goal"};
     std::vector <std::string> colors{"y", "m", "c", "r", "b", "k"};
     size_t num_snapshots = colors.size();
+
+    // obtain xy-limits
+    double xlow, xhigh, ylow, yhigh;
+    obtain_limits(ws.get_obstacles(), xlow, xhigh, ylow, yhigh);
 
     plt::figure_size(500, 500);
     plt::xlim(xlow, xhigh);

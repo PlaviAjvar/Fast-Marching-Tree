@@ -232,14 +232,6 @@ void plot_graph (
     bool save_image = false
 );
 
-std::vector <std::string> get_levels ();
-
-std::string scale_color (
-    const std::vector <std::string>& levels,
-    const double z,
-    const double zlim
-);
-
 void disp_snapshot(
     const workspace2d <double>& ws, 
     const point <double> config, 
@@ -249,11 +241,7 @@ void disp_snapshot(
 
 void display_snapshots (
     const workspace2d <double>& ws,
-    const std::vector <point <double>>& path,
-    const double xlow = -4,
-    const double xhigh = 11,
-    const double ylow = -8,
-    const double yhigh = 7
+    const std::vector <point <double>>& path
 );
 
 void plot3d (
@@ -283,4 +271,13 @@ void plot_function (
     const std::string xlabel,
     const std::string ylabel,
     const std::string title
+);
+
+void obtain_limits (
+    const std::vector <polygon <double>>& obs,
+    double& xlow,
+    double& xhigh,
+    double& ylow,
+    double& yhigh,
+    const double offset = 0.2
 );

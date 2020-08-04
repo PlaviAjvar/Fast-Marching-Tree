@@ -25,6 +25,7 @@ The other flags are:
 -file exports plot to file<br/>
 -path if this is on, path is shown in 3D, rather than the graph/tree; in 2D both are shown always<br/>
 -snapshot displays snapshots of robotic arm, moving in a 2D/3D workspace from start to finish (run with either D, DT or E)
+-nobs turns off configuration space obstacle plotting (for examples with actual robotic arms)
 
 ## Unit tests
 
