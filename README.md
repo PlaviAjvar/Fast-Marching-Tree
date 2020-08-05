@@ -11,7 +11,7 @@ To interact with the implementation, first navigate to the build folder, and exe
 
 Main is controled using command line parameters. By default, FMT is run on a 2D example, and the result is shown in configuration space. The various possible flags are now listed.
 
-For running tests, list one of the following (E is default): A, B, C, D, DT or E or equivalently point2D-A, point2D-B, point3D, arm2D, trivial2D, antro. A and B correspond to dotlike robots in 2D space. C corresponds to dotlike robot in 3D space. D and DT correspond to a two-segment planar arm. E corresponds to a simplified antropomorphic arm in 3D space.
+For running tests, list one of the following (E is default): A, B, C, D, DT, E or F or equivalently point2D-A, point2D-B, point3D, arm2D, trivial2D, antro, hard. A and B correspond to dotlike robots in 2D space. C corresponds to dotlike robot in 3D space. D and DT correspond to a two-segment planar arm. E corresponds to a simplified antropomorphic arm in 3D space. F is a difficult planar planning example.
 
 For setting algorithm of choice list one of the following: FMT, RRT, PRM or FMT*. The last two are nearly identical, except that FMT* has self-tuning radius. Radius is additionaly adjusted for weighed Euclidean metric.
 

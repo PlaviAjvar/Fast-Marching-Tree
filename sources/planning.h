@@ -285,7 +285,7 @@ std::vector <point <double>> get_samples (
     unsigned int num_samples,
     const std::function <point<double>()>& get_sample,
     const std::function <bool(point<double>)>& collision_check,
-    const size_t max_iter = 10000
+    const size_t max_iter = 50000
 );
 
 template <typename real>

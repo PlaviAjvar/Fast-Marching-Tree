@@ -10,6 +10,7 @@
 #include <cmath>
 #include <chrono>
 #include <fstream>
+#include <string>
 
 class test {
 private:
@@ -20,6 +21,7 @@ private:
     std::function<bool(point<double>)> test_collision;
     std::function<point<double>()> get_sample;
     std::function <double(const point <double>&, const point <double>&)> distance;
+    double eta;
 
 public:
     test () {}
@@ -33,9 +35,10 @@ public:
         std::function <double(const point <double>&, const point <double>&)> _distance,
         const unsigned int _num_samples,
         const double _stepsize,
-        const double _radius
+        const double _radius,
+        const double _eta = 1
     ) : starts(_starts), goals(_goals), joint_limits(_joint_limits), num_samples(_num_samples), stepsize(_stepsize), radius(_radius),
-    test_collision(_test_collision), get_sample(_get_sample), distance(_distance) {
+    test_collision(_test_collision), get_sample(_get_sample), distance(_distance), eta(_eta) {
 
         if (_starts.size() != _goals.size()) {
             throw std::length_error("Number of starting points has to equal number of goal points");
@@ -59,9 +62,10 @@ public:
         std::function <double(const point <double>&, const point <double>&)> _distance,
         const unsigned int _num_samples,
         const double _stepsize,
-        const double _radius
+        const double _radius,
+        const double _eta = 1
     ) : joint_limits(_joint_limits), num_samples(_num_samples), stepsize(_stepsize), radius(_radius),
-    test_collision(_test_collision), get_sample(_get_sample), distance(_distance) {
+    test_collision(_test_collision), get_sample(_get_sample), distance(_distance), eta(_eta) {
 
         starts.push_back(start);
         goals.push_back(goal);
@@ -94,7 +98,7 @@ public:
             out = prm(starts, goals, joint_limits, test_collision, get_sample, distance, num_samples, stepsize, radius);
         }
         else if (algorithm == "FMT*") {
-            out = fmtstar(start, goal, joint_limits, test_collision, get_sample, distance, num_samples, stepsize);
+            out = fmtstar(start, goal, joint_limits, test_collision, get_sample, distance, num_samples, stepsize, eta);
         }
         else {
             throw std::domain_error("Algorithm label has to be either RRT, PRM, FMT or FMT*");
@@ -140,6 +144,10 @@ public:
     constexpr static unsigned int num_samplesE = 500;
     constexpr static double stepsizeE = 3e-2;
     constexpr static double radiusE = 4;
+
+    constexpr static unsigned int num_samplesF = 500;
+    constexpr static double stepsizeF = 0.1;
+    constexpr static double radiusF = 20;
 
     /***************************
     TEST A (pointlike robot 2D)
@@ -587,15 +595,6 @@ public:
         return get_sample_util(joint_limitsD());
     }
 
-    static size_t add_obstacle_edgesD (
-        std::vector <point <double>>& current, 
-        std::vector <point <double>>& previous
-    ) {
-        size_t first = auto_add_edges(current, previous, edgesD_A());
-        size_t second = auto_add_edges(current, previous, edgesD_B());
-        return first + second;
-    }
-
     /***************************
     TEST E (antropomorphic arm)
     ***************************/
@@ -711,6 +710,130 @@ public:
         return 8;
     }
 
+    /***************************
+    TEST F (planar arm)
+    ***************************/
+
+    static std::vector <std::pair <point2d<double>, point2d<double>>> edgesF_A () {
+        // define points of obstacle
+        const double hi = 7, lo = 6;
+        point2d <double> A(-hi, 2);
+        point2d <double> B(-hi, -2);
+        point2d <double> C(-lo, -2);
+        point2d <double> D(-lo, 2);
+        point2d <double> E(-hi, 2);
+        std::vector <point2d <double>> points{A, B, C, D, E};
+        return edges_from_points(points);
+    }
+
+    static std::vector <std::pair <point2d<double>, point2d<double>>> edgesF_B () {
+        // define points of obstacle
+        const double hi = 2, lo = 0;
+        point2d <double> A(-hi, 2);
+        point2d <double> B(-hi, -2);
+        point2d <double> C(-lo, -2);
+        point2d <double> D(-lo, 2);
+        point2d <double> E(-hi, 2);
+        std::vector <point2d <double>> points{A, B, C, D, E};
+        return edges_from_points(points);
+    }
+
+    static std::vector <std::pair <point2d<double>, point2d<double>>> edgesF_C () {
+        // define points of obstacle
+        const double hi = 2, lo = 0;
+        point2d <double> A(hi, 2);
+        point2d <double> B(hi, -2);
+        point2d <double> C(lo, -2);
+        point2d <double> D(lo, 2);
+        point2d <double> E(hi, 2);
+        std::vector <point2d <double>> points{A, B, C, D, E};
+        return edges_from_points(points);
+    }
+
+    static std::vector <std::pair <point2d<double>, point2d<double>>> edgesF_D () {
+        // define points of obstacle
+        const double hi = 7, lo = 6;
+        point2d <double> A(hi, 2);
+        point2d <double> B(hi, -2);
+        point2d <double> C(lo, -2);
+        point2d <double> D(lo, 2);
+        point2d <double> E(hi, 2);
+        std::vector <point2d <double>> points{A, B, C, D, E};
+        return edges_from_points(points);
+    }
+
+    static point2d <double> baseF () {
+        point2d <double> base(0, 4.5);
+        return base;
+    }
+
+    static std::vector <double> link_lengthsF () {
+        std::vector <double> link_lengths{4, 4, 4, 4, 4, 4};
+        return link_lengths;
+    }
+
+    static std::vector <std::pair <double,double>> joint_limitsF () {
+        std::vector <std::pair <double,double>> lims {
+            {-2*M_PI, 2*M_PI}, {-2*M_PI, 2*M_PI}, {-2*M_PI, 2*M_PI},
+            {-2*M_PI, 2*M_PI}, {-2*M_PI, 2*M_PI}, {-2*M_PI, 2*M_PI}
+        };
+        return lims;
+    }
+
+    static workspace2d <double> workspaceF () {
+        // form polygons from points
+        std::vector <std::pair <point2d<double>, point2d<double>>> edgesA(edgesF_A());
+        std::vector <std::pair <point2d<double>, point2d<double>>> edgesB(edgesF_B());
+        std::vector <std::pair <point2d<double>, point2d<double>>> edgesC(edgesF_C());
+        std::vector <std::pair <point2d<double>, point2d<double>>> edgesD(edgesF_D());
+        std::vector <polygon <double>> obstacles;
+
+        obstacles.push_back(polygon <double>(edgesA));
+        obstacles.push_back(polygon <double>(edgesB));
+        obstacles.push_back(polygon <double>(edgesC)); 
+        obstacles.push_back(polygon <double>(edgesD));
+
+        // create 2D planar arm object
+        point2d <double> base(baseF());
+        std::vector <double> link_lengths{link_lengthsF()};
+        std::vector <std::pair <double,double>> lims(joint_limitsF());
+
+        arm <double>* planar = new arm2d <double>(base, link_lengths, lims);
+        workspace2d <double> ws(obstacles, planar);
+        return ws;
+    }
+
+    static point <double> startF () {
+        return point <double>(std::vector<double>{-M_PI_4, -M_PI_4, 0, 0, 0, -M_PI_4});
+    }
+
+    static point <double> goalF () {
+        return point <double>(std::vector<double>{5*M_PI_4, M_PI_4, 0, 0, 0, M_PI_4});
+    }
+
+    static std::vector<point <double>> startsF () {
+        std::vector <point <double>> starts{startF()};
+        return starts;
+    }
+
+    static std::vector <point <double>> goalsF () {
+        std::vector <point <double>> goals{goalF()};
+        return goals;
+    }
+
+    static double distanceF (const point <double>& A, const point <double>& B) {
+        std::vector <double> linklen = workspaceF().get_link_lengths();
+        return weighed_euclidean <double>(A, B, linklen);
+    }
+
+    static bool test_collisionF (const point <double> config) {
+        return workspaceF().collides(config);
+    }
+
+    static point <double> get_sampleF () {
+        return get_sample_util(joint_limitsF());
+    }
+
     /**********************
     HELPER FUNCTIONS
     ***********************/
@@ -722,6 +845,7 @@ public:
         if (label == "C") return startC();
         if (label == "D" || label == "DT") return startD();
         if (label == "E") return startE();
+        if (label == "F") return startF();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -734,6 +858,7 @@ public:
         if (label == "D") return goalD();
         if (label == "DT") return goalDT();
         if (label == "E") return goalE();
+        if (label == "F") return goalF();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -745,6 +870,7 @@ public:
         if (label == "C") return startsC();
         if (label == "D" || label == "DT") return startsD();
         if (label == "E") return startsE();
+        if (label == "F") return startsF();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -757,6 +883,7 @@ public:
         if (label == "D") return goalsD();
         if (label == "DT") return goalsDT();
         if (label == "E") return goalsE();
+        if (label == "F") return goalsF();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -768,6 +895,7 @@ public:
         if (label == "C") return joint_limitsC();
         if (label == "D" || label == "DT") return joint_limitsD();
         if (label == "E") return joint_limitsE();
+        if (label == "F") return joint_limitsF();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -778,6 +906,7 @@ public:
         if (label == "D") return distanceD;
         if (label == "DT") return distanceDT;
         if (label == "E") return distanceE;
+        if (label == "F") return distanceF;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -789,6 +918,7 @@ public:
         if (label == "C") return num_samplesC;
         if (label == "D" || label == "DT") return num_samplesD;
         if (label == "E") return num_samplesE;
+        if (label == "F") return num_samplesF;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -800,6 +930,7 @@ public:
         if (label == "C") return stepsizeC;
         if (label == "D" || label == "DT") return stepsizeD;
         if (label == "E") return stepsizeE;
+        if (label == "F") return stepsizeF;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -811,6 +942,7 @@ public:
         if (label == "C") return radiusC;
         if (label == "D" || label == "DT") return radiusD;
         if (label == "E") return radiusE;
+        if (label == "F") return radiusF;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -823,6 +955,7 @@ public:
         if (label == "D") return test_collisionD;
         if (label == "DT") return test_collisionDT;
         if (label == "E") return test_collisionE;
+        if (label == "F") return test_collisionF;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -834,6 +967,7 @@ public:
         if (label == "C") return get_sampleC;
         if (label == "D" || label == "DT") return get_sampleD;
         if (label == "E") return get_sampleE;
+        if (label == "F") return get_sampleF;
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -846,7 +980,7 @@ public:
         if (label == "A") return plot_object(add_obstacle_edgesA);
         if (label == "B") return plot_object(add_obstacle_edgesB);
         if (obs && (label == "D" || label == "DT")) return plot_object(joint_limitsD(), test_collisionD);
-        if (!obs && (label == "D" || label == "DT")) return plot_object(joint_limitsD(), test_collisionD, 1);
+        if (!obs && (label == "D" || label == "DT")) return plot_object(joint_limitsD(), test_collisionD, 1);  
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -866,6 +1000,7 @@ public:
 
     static workspace2d <double> getws (std::string label) {
         if (label == "D" || label == "DT") return workspaceD(label);
+        if (label == "F") return workspaceF();
         
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -935,21 +1070,22 @@ int main (int argc, char *argv[]) {
     test_battery tb;
     test test_sq, test_mq;
 
-    std::string algorithm = "FMT";
-    std::string test_label = "D";
+    std::string algorithm = "RRT";
+    std::string test_label = "F";
     bool one_by_one = false;
     bool write_to_file = false;
     bool snapshot = false;
     std::string mode = "-normal";
     bool show_path = false;
     bool obs = true;
+    double eta = 1;
 
     for (size_t i = 0; i < argc; ++i) {
         std::string flag(argv[i]);
         if (flag == "RRT" || flag == "PRM" || flag == "FMT" || flag == "FMT*") {
             algorithm = flag;
         }
-        if (flag == "A" || flag == "B" || flag == "C" || flag == "D" || flag == "DT" || flag == "E") {
+        if (flag == "A" || flag == "B" || flag == "C" || flag == "D" || flag == "DT" || flag == "E" || flag == "F") {
             test_label = flag;
         }
         if (flag == "point2D-A") test_label = "A";
@@ -958,6 +1094,7 @@ int main (int argc, char *argv[]) {
         if (flag == "arm2D") test_label = "D";
         if (flag == "trivial2D") test_label = "DT";
         if (flag == "antro") test_label = "E";
+        if (flag == "hard") test_label = "F";
         if (flag == "-seq") {
             one_by_one = true;
         }
@@ -976,6 +1113,10 @@ int main (int argc, char *argv[]) {
         if (flag == "-nobs") {
             obs = false;
         }
+        if (flag.substr(0, 4) == "eta=") {
+            std::string num = flag.substr(4);
+            eta = stod(num);
+        }
     }
 
     // run algorithm normally and display results
@@ -986,7 +1127,7 @@ int main (int argc, char *argv[]) {
 
         try {
             test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
-                tb.get_sample(test_label), tb.distance(test_label), tb.num_samples(test_label), tb.stepsize(test_label), tb.radius(test_label));
+                tb.get_sample(test_label), tb.distance(test_label), tb.num_samples(test_label), tb.stepsize(test_label), tb.radius(test_label), eta);
 
             out = test_sq.run_test(algorithm);
         }
@@ -1024,7 +1165,7 @@ int main (int argc, char *argv[]) {
 
 
         if (snapshot) {
-            if (test_label == "D" || test_label == "DT") {
+            if (test_label == "D" || test_label == "DT" || test_label == "F") {
                 display_snapshots(tb.getws(test_label), path);
             }
             else if (test_label == "E") {
@@ -1039,8 +1180,11 @@ int main (int argc, char *argv[]) {
             if (test_label == "A" || test_label == "B" || test_label == "D" || test_label == "DT") {
                 plot_graph(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label, obs), tb.joint_limits(test_label), one_by_one, write_to_file);
             }
-            else{
+            else if (test_label == "C" || test_label == "E") {
                 plot3d(out, tb.obstacle_edges_3d(test_label, obs), tb.joint_limits(test_label), show_path, write_to_file);
+            }
+            else {
+                std::cout << "Cannot plot configuration space for test " << test_label << std::endl;
             }
         }
     }
@@ -1056,7 +1200,7 @@ int main (int argc, char *argv[]) {
         for (size_t iter = 0; iter < num_iter; ++iter) {
             try {
                 test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
-                    tb.get_sample(test_label), tb.distance(test_label), tb.num_samples(test_label), tb.stepsize(test_label), tb.radius(test_label));
+                    tb.get_sample(test_label), tb.distance(test_label), tb.num_samples(test_label), tb.stepsize(test_label), tb.radius(test_label), eta);
 
                 out = test_sq.run_test(algorithm);
             }
@@ -1102,7 +1246,7 @@ int main (int argc, char *argv[]) {
                 radius = radii[iter / 9];
 
                 tests[iter] = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
-                    tb.get_sample(test_label), tb.distance(test_label), num_samples, stepsize, radius);
+                    tb.get_sample(test_label), tb.distance(test_label), num_samples, stepsize, radius, eta);
 
                 // calculate average path length
                 for (size_t repeat = 0; repeat < num_repeats; ++repeat) {
@@ -1174,7 +1318,7 @@ int main (int argc, char *argv[]) {
             for (size_t iter = 0; iter < num_iter; ++iter) {
                 try {
                     test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
-                        tb.get_sample(test_label), tb.distance(test_label), num_samples, tb.stepsize(test_label), tb.radius(test_label));
+                        tb.get_sample(test_label), tb.distance(test_label), num_samples, tb.stepsize(test_label), tb.radius(test_label), eta);
 
                     out = test_sq.run_test(algorithm);
                     auto path = out.get_paths()[0];
@@ -1200,7 +1344,7 @@ int main (int argc, char *argv[]) {
 
     else if (mode == "-reachsim") {
         // number of repeats
-        std::vector <double> samplecnt_scaler{0.01, 0.02, 0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9, 1}; 
+        std::vector <double> samplecnt_scaler{0.01, 0.05, 0.1, 0.2, 0.5, 0.7, 1, 1.5, 2}; 
         std::vector <double> xs, ys;
 
         output out;
@@ -1213,7 +1357,7 @@ int main (int argc, char *argv[]) {
             for (size_t iter = 0; iter < num_iter; ++iter) {
                 try {
                     test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
-                        tb.get_sample(test_label), tb.distance(test_label), num_samples, tb.stepsize(test_label), tb.radius(test_label));
+                        tb.get_sample(test_label), tb.distance(test_label), num_samples, tb.stepsize(test_label), tb.radius(test_label), eta);
 
                     out = test_sq.run_test(algorithm);
                     auto path = out.get_paths()[0];

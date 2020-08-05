@@ -274,7 +274,8 @@ void plot_function (
 );
 
 void obtain_limits (
-    const std::vector <polygon <double>>& obs,
+    const workspace2d <double>& ws,
+    const std::vector <point <double>>& path,
     double& xlow,
     double& xhigh,
     double& ylow,

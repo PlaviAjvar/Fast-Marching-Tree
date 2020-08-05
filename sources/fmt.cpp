@@ -209,9 +209,9 @@ double volume (
 // asume whole configuration space is free space (worst case case)
 
 double fmtgamma (
-    const std::vector <std::pair<double,double>>& joint_limits
+    const std::vector <std::pair<double,double>>& joint_limits,
+    const double eta
 ) {
-    double eta = 0.1;
     double d = joint_limits.size();
     double gamma = 2 * (1 + eta) * pow(1 / d, 1 / d) * pow(lebesgue(joint_limits) / volume(d), 1 / d);
     return gamma;
@@ -227,10 +227,14 @@ output fmtstar (
     const std::function <point<double>()>& get_sample,
     const std::function <double(const point <double>&, const point <double>&)> distance,
     const unsigned int num_samples,
-    const double stepsize
+    const double stepsize,
+    const double eta
 ) {
+    if (eta < 0) {
+        std::cout << "Warning: Eta has to be greater than zero for asympototic optimality guarantee." << std::endl << std::endl;
+    }
 
-    double gamma = fmtgamma(joint_limits);
+    double gamma = fmtgamma(joint_limits, eta);
     double radius = fmtradius(num_samples, joint_limits.size(), gamma);
     double adjust = adjust_weight(joint_limits, distance);  // adjust for weighed euclidean metric (if it´s active)
     radius *= adjust;
@@ -269,5 +273,7 @@ double adjust_weight(
         scale *= sqrt(ratio);
     }
 
-    return scale;
+    // apply pow(scale, 1/d) to obtain actual contribution
+    double d = joint_limits.size();
+    return pow(scale, 1 / d);
 }

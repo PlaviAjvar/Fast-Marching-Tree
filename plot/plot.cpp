@@ -120,7 +120,8 @@ void disp_snapshot(
 
 
 void obtain_limits (
-    const std::vector <polygon <double>>& obs,
+    const workspace2d <double>& ws,
+    const std::vector <point <double>>& path,
     double& xlow,
     double& xhigh,
     double& ylow,
@@ -128,8 +129,8 @@ void obtain_limits (
     const double offset
 ) {
 
-    // find leftmost/rightmost x-coordinate and bottommost/topmost y-coordinate
-    for (const auto& polygon : obs) {
+    // find leftmost/rightmost x-coordinate and bottommost/topmost y-coordinate for obstacles
+    for (const auto& polygon : ws.get_obstacles()) {
         for (const auto& edge : polygon.get_edges()) {
             point2d <double> prev = edge.first;
             point2d <double> cur = edge.second;
@@ -137,6 +138,24 @@ void obtain_limits (
             xhigh = std::max(xhigh, cur.getx());
             ylow = std::min(ylow, cur.gety());
             yhigh = std::max(yhigh, cur.gety());
+        }
+    }
+
+    // find leftmost/rightmost x-coordinate and bottommost/topmost y-coordinate for robot in all configurations
+    for (const auto& config : path) {
+        arm <double>& robot = ws.get_robot();
+        auto edges = robot.dir_kine(config);
+
+        for (const auto& space_edge : edges) {
+            std::pair <point2d <double>, point2d <double>> edge(space_edge);
+            std::vector <double> xs{edge.first.getx(), edge.second.getx()};
+            std::vector <double> ys{edge.first.gety(), edge.second.gety()};
+            for (size_t i = 0; i < 2; ++i) {
+                xlow = std::min(xlow, xs[i]);
+                xhigh = std::max(xhigh, xs[i]);
+                ylow = std::min(ylow, ys[i]);
+                yhigh = std::max(yhigh, ys[i]);
+            }
         }
     }
 
@@ -170,13 +189,13 @@ void display_snapshots (
     const std::vector <point <double>>& path
 ) {
     plt::backend("TkAgg");
-    std::vector <std::string> names{"start","2nd","3rd","4th","5th","goal"};
-    std::vector <std::string> colors{"y", "m", "c", "r", "b", "k"};
+    std::vector <std::string> names{"start","2nd","3rd","4th","5th","6th","7th","8th","9th","goal"};
+    std::vector <std::string> colors{"b", "m", "c", "y", "k", "m", "c", "y", "k", "r"};
     size_t num_snapshots = colors.size();
 
     // obtain xy-limits
     double xlow, xhigh, ylow, yhigh;
-    obtain_limits(ws.get_obstacles(), xlow, xhigh, ylow, yhigh);
+    obtain_limits(ws, path, xlow, xhigh, ylow, yhigh);
 
     plt::figure_size(500, 500);
     plt::xlim(xlow, xhigh);

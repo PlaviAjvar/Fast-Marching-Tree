@@ -23,7 +23,8 @@ output fmtstar (
     const std::function <point<double>()>& get_sample,
     const std::function <double(const point <double>&, const point <double>&)> distance,
     const unsigned int num_samples,
-    const double stepsize
+    const double stepsize,
+    const double eta = 1
 );
 
 std::vector <labeled_node <double>> induced_graph (
@@ -54,7 +55,8 @@ double volume (
 );
 
 double fmtgamma (
-    const std::vector <std::pair<double,double>>& joint_limits
+    const std::vector <std::pair<double,double>>& joint_limits,
+    const double eta
 );
 
 double adjust_weight(
