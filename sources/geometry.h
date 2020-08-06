@@ -365,7 +365,7 @@ bool on_line (
     const real epsilon = 1e-10
 ) {
     // if and only if dist(A,B) + dist(B,C) = dist(A,C)
-    return abs(euclidean_distance(endpoint, line.first) + euclidean_distance(endpoint, line.second) - euclidean_distance(line.first, line.second)) < epsilon;
+    return std::abs(euclidean_distance(endpoint, line.first) + euclidean_distance(endpoint, line.second) - euclidean_distance(line.first, line.second)) < epsilon;
 }
 
 /*
@@ -401,7 +401,7 @@ bool lines_intersect2d (
     real x, y;
 
     // if determinant is nonzero we have unique intersection point
-    if (abs(det) > epsilon) {
+    if (std::abs(det) > epsilon) {
         // if point lies on both of the line segments
         real x = (B2 * C1 - B1 * C2) / det;
         real y = (A1 * C2 - A2 * C1) / det;
@@ -577,7 +577,7 @@ bool line_intersects_box (
 
         // standard case: direction vector is nonzero in this direction 
 
-        if (abs(r[dim]) > epsilon) {
+        if (std::abs(r[dim]) > epsilon) {
             real t_low = (box_limits[dim].first - p0[dim]) / r[dim];
             real t_high = (box_limits[dim].second - p0[dim]) / r[dim];
 

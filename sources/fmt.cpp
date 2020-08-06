@@ -191,7 +191,7 @@ double lebesgue (
 ) {
     double mu = 1;
     for (const auto& lim : joint_limits) {
-        mu *= abs(lim.second - lim.first);
+        mu *= std::abs(lim.second - lim.first);
     }
     return mu;
 }
