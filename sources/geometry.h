@@ -1251,7 +1251,7 @@ public:
     ) : obstacles(_obstacles), workspace <real>(_robot) {}
 
     // test if specific configuration colides
-    bool collides (const point <real> configuration) {
+    bool collides (const point <real> configuration) const {
         for (const auto& obstacle : obstacles) {
             if (workspace<real>::robot->intersects(obstacle, configuration)) {
                 return true;
@@ -1291,7 +1291,7 @@ public:
     ) : obstacles(_obstacles), workspace <real>(_robot) {}
 
     // test if specific configuration colides
-    bool collides (const point <real> configuration) {
+    bool collides (const point <real> configuration) const {
         for (const auto& obstacle : obstacles) {
             if (workspace<real>::robot->intersects(obstacle, configuration)) {
                 return true;

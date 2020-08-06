@@ -366,7 +366,7 @@ void plot_function (
     const std::string title
 ) {
     plt::backend("TkAgg");
-    plt::plot(xs, ys);
+    plt::plot(xs, ys, "x");
     plt::title(title);
     plt::xlabel(xlabel);
     plt::ylabel(ylabel);

@@ -6,8 +6,8 @@ Implementation of Fast Marching Tree (FMT). For comparisson sake, RRT and PRM ar
 
 To interact with the implementation, first navigate to the build folder, and execute cmake then make. If not on mac delete the cache file when prompted, and rerun cmake.
 
-> cd build
-> cmake ..
+> cd build<br/>
+> cmake ..<br/>
 > make
 
 After the project is built, run it from the "main" subfolder. E.g. on mac:
@@ -38,7 +38,7 @@ eta=FLOAT sets the value of the tuning parameter eta to the value FLOAT
 
 Unit testing was done using gtest, and can be run from the build/unit folder. 
 
-> cd unit
+> cd unit<br/>
 > ./unit
 
 The unit tests focus on testing the geomertic functions.

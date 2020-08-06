@@ -145,7 +145,7 @@ public:
     constexpr static double stepsizeE = 3e-2;
     constexpr static double radiusE = 4;
 
-    constexpr static unsigned int num_samplesF = 500;
+    constexpr static unsigned int num_samplesF = 1000;
     constexpr static double stepsizeF = 0.1;
     constexpr static double radiusF = 20;
 
@@ -573,22 +573,36 @@ public:
         return goals;
     }
 
-    static double distanceD (const point <double>& A, const point <double>& B) {
-        std::vector <double> linklen = workspaceD("D").get_link_lengths();
-        return weighed_euclidean <double>(A, B, linklen);
+    static std::function <double(const point <double>&, const point <double>&)> distanceD () {
+        auto linklen = workspaceD("D").get_link_lengths();
+        auto dlam = [linklen](const point <double>& A, const point <double>& B) {
+            return weighed_euclidean <double>(A, B, linklen);
+        };
+        return dlam;
     }
 
-    static double distanceDT (const point <double>& A, const point <double>& B) {
-        std::vector <double> linklen = workspaceD("DT").get_link_lengths();
-        return weighed_euclidean <double>(A, B, linklen);
+    static std::function <double(const point <double>&, const point <double>&)> distanceDT () {
+        auto linklen = workspaceD("DT").get_link_lengths();
+        auto dlam = [linklen](const point <double>& A, const point <double>& B) {
+            return weighed_euclidean <double>(A, B, linklen);
+        };
+        return dlam;
     }
 
-    static bool test_collisionD (const point <double> config) {
-        return workspaceD("D").collides(config);
+    static std::function<bool(point<double>)> test_collisionD () {
+        auto ws = workspaceD("D");
+        auto clam = [ws](const point <double> config) {
+            return ws.collides(config);
+        };
+        return clam;
     }
 
-    static bool test_collisionDT (const point <double> config) {
-        return workspaceD("DT").collides(config);
+    static std::function<bool(point<double>)> test_collisionDT () {
+        auto ws = workspaceD("DT");
+        auto clam = [ws](const point <double> config) {
+            return ws.collides(config);
+        };
+        return clam;
     }
 
     static point <double> get_sampleD () {
@@ -662,13 +676,20 @@ public:
         return goals;
     }
 
-    static double distanceE (const point <double>& A, const point <double>& B) {
-        std::vector <double> linklen = workspaceE().get_link_lengths();
-        return weighed_euclidean <double>(A, B, linklen);
+    static std::function <double(const point <double>&, const point <double>&)> distanceE () {
+        auto linklen = workspaceE().get_link_lengths();
+        auto dlam = [linklen](const point <double>& A, const point <double>& B) {
+            return weighed_euclidean <double>(A, B, linklen);
+        };
+        return dlam;
     }
 
-    static bool test_collisionE (const point <double> config) {
-        return workspaceE().collides(config);
+    static std::function<bool(point<double>)>test_collisionE () {
+        auto ws = workspaceE();
+        auto clam = [ws](const point <double> config) {
+            return ws.collides(config);
+        };
+        return clam;
     }
 
     static point <double> get_sampleE () {
@@ -716,7 +737,7 @@ public:
 
     static std::vector <std::pair <point2d<double>, point2d<double>>> edgesF_A () {
         // define points of obstacle
-        const double hi = 7, lo = 6;
+        const double hi = 8, lo = 6.5;
         point2d <double> A(-hi, 2);
         point2d <double> B(-hi, -2);
         point2d <double> C(-lo, -2);
@@ -752,7 +773,7 @@ public:
 
     static std::vector <std::pair <point2d<double>, point2d<double>>> edgesF_D () {
         // define points of obstacle
-        const double hi = 7, lo = 6;
+        const double hi = 8, lo = 6.5;
         point2d <double> A(hi, 2);
         point2d <double> B(hi, -2);
         point2d <double> C(lo, -2);
@@ -821,13 +842,21 @@ public:
         return goals;
     }
 
-    static double distanceF (const point <double>& A, const point <double>& B) {
-        std::vector <double> linklen = workspaceF().get_link_lengths();
-        return weighed_euclidean <double>(A, B, linklen);
+    static std::function <double(const point <double>&, const point <double>&)> distanceF () {
+        // create lambda and bind link lengths
+        auto linklen = workspaceF().get_link_lengths();
+        auto dlam = [linklen](const point <double>& A, const point <double>& B) {
+            return weighed_euclidean <double>(A, B, linklen);
+        };
+        return dlam;
     }
 
-    static bool test_collisionF (const point <double> config) {
-        return workspaceF().collides(config);
+    static std::function<bool(point<double>)> test_collisionF () {
+        auto ws = workspaceF();
+        auto clam = [ws](const point <double> config) {
+            return ws.collides(config);
+        };
+        return clam;
     }
 
     static point <double> get_sampleF () {
@@ -903,10 +932,10 @@ public:
 
     static std::function <double(const point <double>&, const point <double>&)> distance (const std::string label) {
         if (label == "A" || label == "B" || label == "C") return euclidean_distance <double>;
-        if (label == "D") return distanceD;
-        if (label == "DT") return distanceDT;
-        if (label == "E") return distanceE;
-        if (label == "F") return distanceF;
+        if (label == "D") return distanceD();
+        if (label == "DT") return distanceDT();
+        if (label == "E") return distanceE();
+        if (label == "F") return distanceF();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -952,10 +981,10 @@ public:
         if (label == "A") return test_collisionA;
         if (label == "B") return test_collisionB;
         if (label == "C") return test_collisionC;
-        if (label == "D") return test_collisionD;
-        if (label == "DT") return test_collisionDT;
-        if (label == "E") return test_collisionE;
-        if (label == "F") return test_collisionF;
+        if (label == "D") return test_collisionD();
+        if (label == "DT") return test_collisionDT();
+        if (label == "E") return test_collisionE();
+        if (label == "F") return test_collisionF();
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -979,8 +1008,8 @@ public:
     ) {
         if (label == "A") return plot_object(add_obstacle_edgesA);
         if (label == "B") return plot_object(add_obstacle_edgesB);
-        if (obs && (label == "D" || label == "DT")) return plot_object(joint_limitsD(), test_collisionD);
-        if (!obs && (label == "D" || label == "DT")) return plot_object(joint_limitsD(), test_collisionD, 1);  
+        if (obs && (label == "D" || label == "DT")) return plot_object(joint_limitsD(), test_collisionD());
+        if (!obs && (label == "D" || label == "DT")) return plot_object(joint_limitsD(), test_collisionD(), 1);  
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -991,8 +1020,8 @@ public:
         const bool obs = true
     ) {
         if (label == "C") return plot_object(workspaceC());
-        if (obs && label == "E") return plot_object(joint_limitsE(), test_collisionE, 10);
-        if (!obs && label == "E") return plot_object(joint_limitsE(), test_collisionE, 1);
+        if (obs && label == "E") return plot_object(joint_limitsE(), test_collisionE(), 10);
+        if (!obs && label == "E") return plot_object(joint_limitsE(), test_collisionE(), 1);
 
         // invalid test label
         throw std::domain_error("Invalid test label");
