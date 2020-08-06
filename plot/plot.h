@@ -123,7 +123,6 @@ public:
         std::vector <double>& xs,
         std::vector <double>& ys,
         std::vector <double>& zs,
-        const unsigned int directions = 8,
         const double eps = 0.1
     ) const {
         // 3d normal plotting mode
@@ -176,21 +175,19 @@ public:
                             ys.push_back(y);
                             zs.push_back(z);
 
-                            // apply rotations and plot out points
-                            for (size_t dir = 0; dir < directions; ++dir) {
-                                double phi = dist(gen);
-                                double theta = dist(gen);
-                                double psi = dist(gen);
+                            // construct box in obstacle space
+                            for (int xd = 0; xd <= 1; ++xd) {
+                                for (int yd = 0; yd <= 1; ++yd) {
+                                    for (int zd = 0; zd <= 1; ++zd) {
+                                        double nx = eps * xd;
+                                        double ny = eps * yd;
+                                        double nz = eps * zd;
 
-                                // RPY angles
-                                double nx = eps, ny = 0, nz = 0;
-                                rotate(ny, nz, phi);
-                                rotate(nz, nx, theta);
-                                rotate(nx, ny, psi);
-
-                                xs.push_back(x + nx);
-                                ys.push_back(y + ny);
-                                zs.push_back(z + nz);
+                                        xs.push_back(x + nx);
+                                        ys.push_back(y + ny);
+                                        zs.push_back(z + nz);
+                                    }
+                                }
                             }
 
                             xs.push_back(NAN);
