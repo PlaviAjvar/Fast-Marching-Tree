@@ -3,6 +3,7 @@
 #include "planning.h"
 #include <iostream>
 #include <queue>
+#include <algorithm>
 
 
 // implements connect procedure on fmt graph

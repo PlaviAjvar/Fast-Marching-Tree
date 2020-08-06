@@ -1,5 +1,6 @@
 #include "planning.h"
 #include <iostream>
+#include <algorithm>
 
 // returns path from start to goal in tree
 // the endpoints are the first and last entry of vector

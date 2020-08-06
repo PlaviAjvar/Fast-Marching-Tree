@@ -2,6 +2,7 @@
 #include "geometry.h"
 #include <queue>
 #include <iostream>
+#include <algorithm>
 
 // implements connect procedure on prm graph
 

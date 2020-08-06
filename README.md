@@ -1,10 +1,16 @@
 # Fast-Marching-Tree
 
-Implementation of Fast Marching Tree (FMT). For comparisson sake, RRT and PRM are also implemented. Dependencies are gcc, tkinter and python 3.
+Implementation of Fast Marching Tree (FMT). For comparisson sake, RRT and PRM are also implemented. Dependencies are gcc, make, cmake, tkinter, python 3 and the matplotlicpp dependencies (see matplotlibcpp repo).
 
 ## Run it
 
-To interact with the implementation, first navigate to the build folder, and execute make. After the project is built, run it from the "main" subfolder. E.g. on mac:
+To interact with the implementation, first navigate to the build folder, and execute cmake then make. 
+
+> cd build
+> cmake ..
+> make
+
+After the project is built, run it from the "main" subfolder. E.g. on mac:
 
 > cd main <br/>
 > ./main
@@ -30,7 +36,12 @@ eta=FLOAT sets the value of the tuning parameter eta to the value FLOAT
 
 ## Unit tests
 
-Unit testing was done using gtest, and can be run from the build/unit folder. The unit tests focus on the geomertic functions.
+Unit testing was done using gtest, and can be run from the build/unit folder. 
+
+> cd unit
+> ./unit
+
+The unit tests focus on testing the geomertic functions.
 
 ## Using as library
 
