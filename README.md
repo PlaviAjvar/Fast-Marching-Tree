@@ -4,7 +4,7 @@ Implementation of Fast Marching Tree (FMT). For comparisson sake, RRT and PRM ar
 
 ## Run it
 
-To interact with the implementation, first navigate to the build folder, and execute cmake then make. If not on mac delete the cache file when prompted, and rerun cmake.
+To interact with the implementation, first navigate to the build folder, and execute cmake then make.
 
 > cd build<br/>
 > cmake ..<br/>
