@@ -14,8 +14,8 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../main/../plot"
   "../main"
   "../sources"
-  "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7"
-  "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include"
+  "/usr/local/Cellar/python@3.8/3.8.3_2/Frameworks/Python.framework/Versions/3.8/include/python3.8"
+  "/usr/local/lib/python3.8/site-packages/numpy/core/include"
   )
 
 # Targets to which this target links.

@@ -1,10 +1,10 @@
 # Fast-Marching-Tree
 
-Implementation of Fast Marching Tree (FMT). For comparisson sake, RRT and PRM are also implemented. Dependencies are gcc, make, cmake, tkinter, python 3 and the matplotlicpp dependencies (see matplotlibcpp repo).
+Implementation of Fast Marching Tree (FMT). For comparisson sake, RRT and PRM are also implemented. Dependencies are gcc (clang), make, cmake, tkinter, python 3 and the matplotlicpp dependencies (see matplotlibcpp repo and matplotlib documentation).
 
 ## Run it
 
-To interact with the implementation, first navigate to the build folder, and execute cmake then make. 
+To interact with the implementation, first navigate to the build folder, and execute cmake then make. If not on mac delete the cache file when prompted, and rerun cmake.
 
 > cd build
 > cmake ..

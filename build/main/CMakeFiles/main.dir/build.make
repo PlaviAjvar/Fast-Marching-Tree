@@ -102,7 +102,7 @@ main/main: main/CMakeFiles/main.dir/build.make
 main/main: sources/libsrc.a
 main/main: plot/libplot.a
 main/main: sources/libsrc.a
-main/main: /System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config/libpython2.7.dylib
+main/main: /usr/local/Cellar/python@3.8/3.8.3_2/Frameworks/Python.framework/Versions/3.8/lib/libpython3.8.dylib
 main/main: main/CMakeFiles/main.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable main"
 	cd /Users/tanja.ah/Desktop/Fast-Marching-Tree/build/main && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose=$(VERBOSE)

@@ -47,7 +47,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/local/Cellar/cmake/3.17.3/share/cmake/Modules/FindPackageHandleStandardArgs.cmake"
   "/usr/local/Cellar/cmake/3.17.3/share/cmake/Modules/FindPackageMessage.cmake"
   "/usr/local/Cellar/cmake/3.17.3/share/cmake/Modules/FindPython/Support.cmake"
-  "/usr/local/Cellar/cmake/3.17.3/share/cmake/Modules/FindPython2.cmake"
+  "/usr/local/Cellar/cmake/3.17.3/share/cmake/Modules/FindPython3.cmake"
   "/usr/local/Cellar/cmake/3.17.3/share/cmake/Modules/FindPythonInterp.cmake"
   "/usr/local/Cellar/cmake/3.17.3/share/cmake/Modules/FindThreads.cmake"
   "/usr/local/Cellar/cmake/3.17.3/share/cmake/Modules/GNUInstallDirs.cmake"

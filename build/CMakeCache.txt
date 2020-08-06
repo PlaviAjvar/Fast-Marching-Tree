@@ -512,6 +512,8 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding Python2
 FIND_PACKAGE_MESSAGE_DETAILS_Python2:INTERNAL=[/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config/libpython2.7.dylib][/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7][/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include][cfound components: Development NumPy Interpreter ][v2.7.16()]
+//Details about finding Python3
+FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/usr/local/Cellar/python@3.8/3.8.3_2/Frameworks/Python.framework/Versions/3.8/lib/libpython3.8.dylib][/usr/local/Cellar/python@3.8/3.8.3_2/Frameworks/Python.framework/Versions/3.8/include/python3.8][/usr/local/lib/python3.8/site-packages/numpy/core/include][cfound components: Development NumPy Interpreter ][v3.8.3()]
 //Details about finding PythonInterp
 FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python][v2.7.16()]
 //Details about finding Threads
@@ -533,6 +535,19 @@ _Python2_LIBRARY_RELEASE:INTERNAL=/System/Library/Frameworks/Python.framework/Ve
 _Python2_NUMPY_SIGNATURE:INTERNAL=e9d7bbd4b9a7cfd58cba993fabd408eb
 //Path to a file.
 _Python2_NumPy_INCLUDE_DIR:INTERNAL=/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include
+_Python3_DEVELOPMENT_SIGNATURE:INTERNAL=827d41a5bb347f828c0a9d428e70a54e
+//Path to a program.
+_Python3_EXECUTABLE:INTERNAL=/usr/local/Frameworks/Python.framework/Versions/3.8/bin/python3.8
+//Path to a file.
+_Python3_INCLUDE_DIR:INTERNAL=/usr/local/Cellar/python@3.8/3.8.3_2/Frameworks/Python.framework/Versions/3.8/include/python3.8
+//Python3 Properties
+_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;8;3;64;;cpython-38-darwin;/usr/local/Cellar/python@3.8/3.8.3_2/Frameworks/Python.framework/Versions/3.8/lib/python3.8;/usr/local/Cellar/python@3.8/3.8.3_2/Frameworks/Python.framework/Versions/3.8/lib/python3.8;/usr/local/Cellar/python@3.8/3.8.3_2/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages;/usr/local/Cellar/python@3.8/3.8.3_2/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages
+_Python3_INTERPRETER_SIGNATURE:INTERNAL=4d71a9bf93ec6c90aa986e3535206ad3
+//Path to a library.
+_Python3_LIBRARY_RELEASE:INTERNAL=/usr/local/Cellar/python@3.8/3.8.3_2/Frameworks/Python.framework/Versions/3.8/lib/libpython3.8.dylib
+_Python3_NUMPY_SIGNATURE:INTERNAL=1114097345a0ed23309e3b08939af2ba
+//Path to a file.
+_Python3_NumPy_INCLUDE_DIR:INTERNAL=/usr/local/lib/python3.8/site-packages/numpy/core/include
 generated_dir:INTERNAL=/Users/tanja.ah/Desktop/Fast-Marching-Tree/build/googletest/googletest/generated
 //ADVANCED property for variable: gmock_build_tests
 gmock_build_tests-ADVANCED:INTERNAL=1
