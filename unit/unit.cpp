@@ -84,9 +84,9 @@ TEST (dotproduct, coplanar) {
     EXPECT_DOUBLE_EQ(a * b, 1);
 
     // cos(phi) < 1
-    EXPECT_TRUE(abs(u * v) < magnitude(u) * magnitude(v));
-    EXPECT_TRUE(abs(r * s) < magnitude(r) * magnitude(s));
-    EXPECT_TRUE(abs(a * b) < magnitude(a) * magnitude(b));
+    EXPECT_TRUE(std::abs(u * v) < magnitude(u) * magnitude(v));
+    EXPECT_TRUE(std::abs(r * s) < magnitude(r) * magnitude(s));
+    EXPECT_TRUE(std::abs(a * b) < magnitude(a) * magnitude(b));
 }
 
 // test dot product on colinear cases
@@ -104,8 +104,8 @@ TEST (dotproduct, colinear) {
     EXPECT_DOUBLE_EQ(a * b, 0);
 
     // cos phi = 1
-    EXPECT_NEAR(abs(u * v), magnitude(u) * magnitude(v), epsilon);
-    EXPECT_NEAR(abs(r * s), magnitude(r) * magnitude(s), epsilon);
+    EXPECT_NEAR(std::abs(u * v), magnitude(u) * magnitude(v), epsilon);
+    EXPECT_NEAR(std::abs(r * s), magnitude(r) * magnitude(s), epsilon);
 }
 
 // test dot product on perpendicular cases

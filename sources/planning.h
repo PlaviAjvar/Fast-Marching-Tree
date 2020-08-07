@@ -164,7 +164,7 @@ public:
     }
 
     bool is_inf (const double eps = 1) const {
-        return abs(distance - inf) < eps;
+        return std::abs(distance - inf) < eps;
     }
 
     double get_distance () const {
@@ -189,6 +189,13 @@ public:
 
     void set_distance (const double dist) {
         distance = dist;
+    }
+
+    void clear () {
+        mark = false;
+        closed = false;
+        distance = inf;
+        backpointer = nullptr;
     }
 };
 

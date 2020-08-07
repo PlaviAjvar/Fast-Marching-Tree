@@ -157,12 +157,11 @@ output prm (
     // process queries
     for (size_t query_idx = 0; query_idx < num_queries; ++query_idx) {
         std::vector <point <double>> path (find_path(&lgraph[free_samples + 2 * query_idx], &lgraph[free_samples + 2 * query_idx + 1], distance));
-
-        for (auto&& vertex : lgraph) {
-            vertex.remove_mark();
-        }
-
         paths.push_back(path);
+        
+        for (auto&& vertex : lgraph) {
+            vertex.clear();
+        }
     }
 
     return output(paths, lgraph);
