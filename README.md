@@ -2,7 +2,7 @@
 
 Implementation of Fast Marching Tree (FMT). For comparisson sake, RRT and PRM are also implemented. Dependencies are gcc (clang), make, cmake, tkinter, python 3 and the matplotlicpp dependencies (see matplotlibcpp repo and matplotlib documentation).
 
-# Disclaimer
+## Disclaimer
 
 The implemented version of the algorithm is suboptimal, as it uses a naive O(n^2) approach to evaluate neighbors in the disk graph. Thus, the algorithm requires O(n^2) distance computations and O(n) collision checks. The optimal version uses BBD trees to reduce number of distance computations to O(n log n). This is not an abysmaly drastic differnce, when the collision checks are sufficiently expensive compared to the distance computations.
 
