@@ -189,8 +189,8 @@ void display_snapshots (
     const std::vector <point <double>>& path
 ) {
     plt::backend("TkAgg");
-    std::vector <std::string> names{"start","2nd","3rd","4th","5th","6th","7th","8th","9th","goal"};
-    std::vector <std::string> colors{"b", "m", "c", "y", "k", "m", "c", "y", "k", "r"};
+    std::vector <std::string> names{"start","2nd","3rd","4th","5th","goal"};
+    std::vector <std::string> colors{"b", "m", "c", "y", "k", "r"};
     size_t num_snapshots = colors.size();
 
     // obtain xy-limits
@@ -214,14 +214,13 @@ void display_snapshots (
         return;
     }
 
-    disp_snapshot(ws, path[0], colors[0], names[0]);
-
     for (size_t i = 1; i < num_snapshots - 1; ++i) {
         double jump = double(path.size()) / num_snapshots;
         size_t path_idx = i * jump;
         disp_snapshot(ws, path[path_idx], colors[i], names[i]);
     }
 
+    disp_snapshot(ws, path[0], colors[0], names[0]);
     disp_snapshot(ws, path.back(), colors.back(), names.back());
     plt::legend();
     plt::show();
