@@ -122,6 +122,8 @@ output rrt(
         throw std::domain_error("Goal has to be in free space");
     }
 
+    std::cout << "num_samples = " << num_samples << std::endl;
+
     // initialize tree with starting point
     std::vector <tree_node <double>> tree;
     tree.reserve(num_samples + 2);
@@ -146,6 +148,8 @@ output rrt(
         // add new configuration to tree
         tree.push_back(tree_node <double>(new_cfg, nearest));
     }
+
+    std::cout << "RRT connected" << std::endl << std::endl;
 
     // find nearest tree_node we can connect to directly from goal
     tree_node <double>* nearest(connect_closest(tree, goal, distance, radius, stepsize, collision_check));
