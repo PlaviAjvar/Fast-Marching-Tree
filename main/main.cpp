@@ -150,6 +150,7 @@ public:
     constexpr static double radiusE = 4;
 
     constexpr static unsigned int num_samplesF = 20000;
+    constexpr static unsigned int num_samplesF_RRT = 1000;
     constexpr static double stepsizeF = 0.1;
     constexpr static double radiusF = 20;
 
@@ -901,13 +902,16 @@ public:
         throw std::domain_error("Invalid test label");
     }
 
-    static unsigned int num_samples (const std::string label) {
+    static unsigned int num_samples (const std::string label, const std::string algo) {
         if (label == "A") return num_samplesA;
         if (label == "B") return num_samplesB;
         if (label == "C") return num_samplesC;
         if (label == "D") return num_samplesD;
         if (label == "E") return num_samplesE;
-        if (label == "F") return num_samplesF;
+        if (label == "F") {
+            if (algo != "RRT") return num_samplesF;
+            else return num_samplesF_RRT;
+        }
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -1114,7 +1118,7 @@ int main (int argc, char *argv[]) {
 
         try {
             test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
-                tb.get_sample(test_label), tb.distance(test_label), tb.num_samples(test_label), tb.stepsize(test_label), tb.radius(test_label), eta);
+                tb.get_sample(test_label), tb.distance(test_label), tb.num_samples(test_label, algorithm), tb.stepsize(test_label), tb.radius(test_label), eta);
 
             out = test_sq.run_test(algorithm);
         }
@@ -1187,7 +1191,7 @@ int main (int argc, char *argv[]) {
         for (size_t iter = 0; iter < num_iter; ++iter) {
             try {
                 test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
-                    tb.get_sample(test_label), tb.distance(test_label), tb.num_samples(test_label), tb.stepsize(test_label), tb.radius(test_label), eta);
+                    tb.get_sample(test_label), tb.distance(test_label), tb.num_samples(test_label, algorithm), tb.stepsize(test_label), tb.radius(test_label), eta);
 
                 out = test_sq.run_test(algorithm);
             }
@@ -1215,7 +1219,7 @@ int main (int argc, char *argv[]) {
 
         double radii[] = {tb.radius(test_label) / 2, tb.radius(test_label), tb.radius(test_label) * 2};
         double stepsizes[] = {tb.stepsize(test_label) / 2, tb.stepsize(test_label), tb.stepsize(test_label) * 2};
-        unsigned int nums_samples[] = {tb.num_samples(test_label) / 2, tb.num_samples(test_label), tb.num_samples(test_label) * 2};
+        unsigned int nums_samples[] = {tb.num_samples(test_label,algorithm) / 2, tb.num_samples(test_label,algorithm), tb.num_samples(test_label, algorithm) * 2};
 
         try {
             for (size_t iter = 0; iter < num_iter; ++iter) {
@@ -1297,7 +1301,7 @@ int main (int argc, char *argv[]) {
         std::vector <bool> path_failed(num_iter);
 
         double stepsizes[] = {tb.stepsize(test_label) / 2, tb.stepsize(test_label), tb.stepsize(test_label) * 2};
-        unsigned int nums_samples[] = {tb.num_samples(test_label) / 2, tb.num_samples(test_label), tb.num_samples(test_label) * 2};
+        unsigned int nums_samples[] = {tb.num_samples(test_label, algorithm) / 2, tb.num_samples(test_label, algorithm), tb.num_samples(test_label, algorithm) * 2};
 
         try {
             for (size_t iter = 0; iter < num_iter; ++iter) {
@@ -1375,7 +1379,7 @@ int main (int argc, char *argv[]) {
         const size_t num_iter = 10;
 
         for (size_t level = 0; level < samplecnt_scaler.size(); ++level) {
-            size_t num_samples = tb.num_samples(test_label) * samplecnt_scaler[level];
+            size_t num_samples = tb.num_samples(test_label, algorithm) * samplecnt_scaler[level];
             samplecnt[level] = num_samples;
             double energy = 0;
             unsigned int pathcnt = 0;
@@ -1420,7 +1424,7 @@ int main (int argc, char *argv[]) {
         const size_t num_iter = 10;
 
         for (size_t level = 0; level < samplecnt_scaler.size(); ++level) {
-            size_t num_samples = tb.num_samples(test_label) * samplecnt_scaler[level];
+            size_t num_samples = tb.num_samples(test_label, algorithm) * samplecnt_scaler[level];
             samplecnt[level] = num_samples;
             double pathcnt = 0;
 
@@ -1453,7 +1457,7 @@ int main (int argc, char *argv[]) {
 
     else if (mode == "-ntsim") {
         // number of repeats
-        std::vector <double> samplecnt_scaler{0.1, 0.2, 0.5, 1, 1.5, 2, 3.5, 5}; 
+        std::vector <double> samplecnt_scaler{0.1, 0.2, 0.5, 1, 1.5, 2, 3.5}; 
         std::vector <double> samplecnt(samplecnt_scaler.size());
         std::vector <double> runtime(samplecnt_scaler.size());
         std::vector <double> xs, ys;
@@ -1462,7 +1466,7 @@ int main (int argc, char *argv[]) {
         const size_t num_iter = 10;
 
         for (size_t level = 0; level < samplecnt_scaler.size(); ++level) {
-            size_t num_samples = tb.num_samples(test_label) * samplecnt_scaler[level];
+            size_t num_samples = tb.num_samples(test_label, algorithm) * samplecnt_scaler[level];
             samplecnt[level] = num_samples;
             
             auto begin = std::chrono::high_resolution_clock::now();
