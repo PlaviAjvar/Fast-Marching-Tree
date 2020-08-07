@@ -150,7 +150,7 @@ public:
     constexpr static double radiusE = 4;
 
     constexpr static unsigned int num_samplesF = 20000;
-    constexpr static unsigned int num_samplesF_RRT = 1000;
+    constexpr static unsigned int num_samplesF_RRT = 20000;
     constexpr static double stepsizeF = 0.1;
     constexpr static double radiusF = 20;
 
