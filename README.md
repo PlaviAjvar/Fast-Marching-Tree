@@ -17,7 +17,7 @@ After the project is built, run it from the "main" subfolder. E.g. on mac:
 
 Main is controled using command line parameters. By default, FMT is run on a 2D example, and the result is shown in configuration space. The various possible flags are now listed.
 
-For running tests, list one of the following (E is default): A, B, C, D, DT, E or F or equivalently point2D-A, point2D-B, point3D, arm2D, trivial2D, antro, hard. A and B correspond to dotlike robots in 2D space. C corresponds to dotlike robot in 3D space. D and DT correspond to a two-segment planar arm. E corresponds to a simplified antropomorphic arm in 3D space. F is a difficult planar planning example.
+For running tests, list one of the following (E is default): A, B, C, D, E or F or equivalently point2D-A, point2D-B, point3D, arm2D, antro, hard. A and B correspond to dotlike robots in 2D space. C corresponds to dotlike robot in 3D space. D corresponds to a two-segment planar arm. E corresponds to a simplified antropomorphic arm in 3D space. F is a difficult planar planning example.
 
 For setting algorithm of choice list one of the following: FMT, RRT, PRM or FMT*. The last two are nearly identical, except that FMT* has self-tuning radius. Radius is additionaly adjusted for weighed Euclidean metric.
 
@@ -30,7 +30,7 @@ The other flags are:
 -seq enables sequential plotting of tree edges in RRT/FMT (works only for 2D cases)<br/>
 -file exports plot to file<br/>
 -path if this is on, path is shown in 3D, rather than the graph/tree; in 2D both are shown always<br/>
--snapshot displays snapshots of robotic arm, moving in a 2D/3D workspace from start to finish (run with either D, DT or E)
+-snapshot displays snapshots of robotic arm, moving in a 2D/3D workspace from start to finish (run with either D, E or F)
 -nobs turns off configuration space obstacle plotting (for examples with actual robotic arms)
 eta=FLOAT sets the value of the tuning parameter eta to the value FLOAT
 

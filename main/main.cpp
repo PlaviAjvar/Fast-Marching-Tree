@@ -127,22 +127,22 @@ public:
     // parameters
     constexpr static unsigned int num_samplesA = 500;
     constexpr static double stepsizeA = 1e-2;
-    constexpr static double radiusA = 0.1; // 50 / num_samples
+    constexpr static double radiusA = 0.1;
 
     constexpr static unsigned int num_samplesB = 500;
     constexpr static double stepsizeB = 1e-2;
-    constexpr static double radiusB = 0.1; // 50 / num_samples
+    constexpr static double radiusB = 0.1;
 
     constexpr static unsigned int num_samplesC = 1000;
     constexpr static double stepsizeC = 1e-2;
-    constexpr static double radiusC = 0.1; // same as old
+    constexpr static double radiusC = 0.1; 
 
-    constexpr static unsigned int num_samplesD = 300; // since there are more collisions
-    constexpr static double stepsizeD = 3e-2; // around PI * old_value
+    constexpr static unsigned int num_samplesD = 300; 
+    constexpr static double stepsizeD = 1e-2; 
     constexpr static double radiusD = 1.7; // since weighed euclidean, have to scale
 
     constexpr static unsigned int num_samplesE = 500;
-    constexpr static double stepsizeE = 3e-2;
+    constexpr static double stepsizeE = 1e-2;
     constexpr static double radiusE = 4;
 
     constexpr static unsigned int num_samplesF = 20000;
@@ -491,18 +491,6 @@ public:
         return edges_from_points(points);
     }
 
-    static std::vector <std::pair <point2d<double>, point2d<double>>> edgesDT () {
-        // define points of obstacle
-        double h = 1;
-        point2d <double> A(h, h);
-        point2d <double> B(10, h);
-        point2d <double> C(10, 10);
-        point2d <double> D(h, 10);
-        point2d <double> E(h, h);
-        std::vector <point2d <double>> points{A, B, C, D, E};
-        return edges_from_points(points);
-    }
-
     static point2d <double> baseD () {
         point2d <double> base(0, 0);
         return base;
@@ -523,7 +511,6 @@ public:
         std::vector <std::pair <point2d<double>, point2d<double>>> edgesA(edgesD_A());
         std::vector <std::pair <point2d<double>, point2d<double>>> edgesB(edgesD_B());
         std::vector <std::pair <point2d<double>, point2d<double>>> edgesC(edgesD_C());
-        std::vector <std::pair <point2d<double>, point2d<double>>> edgesT(edgesDT());
         std::vector <polygon <double>> obstacles;
 
         if (label == "D") {
@@ -532,9 +519,6 @@ public:
             obstacles.push_back(polygon <double>(edgesC));
         }
 
-        if (label == "DT") {
-            obstacles.push_back(polygon <double>(edgesT));
-        }
 
         // create 2D planar arm object
         point2d <double> base(baseD());
@@ -554,10 +538,6 @@ public:
         return point <double>(std::vector<double>{M_PI_2, -M_PI_2});
     }
 
-    static point <double> goalDT () {
-        return point <double>(std::vector <double>{-M_PI_2, -M_PI_2});
-    }
-
     static std::vector<point <double>> startsD () {
         std::vector <point <double>> starts{startD()};
         return starts;
@@ -565,11 +545,6 @@ public:
 
     static std::vector <point <double>> goalsD () {
         std::vector <point <double>> goals{goalD()};
-        return goals;
-    }
-
-    static std::vector <point <double>> goalsDT () {
-        std::vector <point <double>> goals{goalDT()};
         return goals;
     }
 
@@ -581,24 +556,8 @@ public:
         return dlam;
     }
 
-    static std::function <double(const point <double>&, const point <double>&)> distanceDT () {
-        auto linklen = workspaceD("DT").get_link_lengths();
-        auto dlam = [linklen](const point <double>& A, const point <double>& B) {
-            return weighed_euclidean <double>(A, B, linklen);
-        };
-        return dlam;
-    }
-
     static std::function<bool(point<double>)> test_collisionD () {
         auto ws = workspaceD("D");
-        auto clam = [ws](const point <double> config) {
-            return ws.collides(config);
-        };
-        return clam;
-    }
-
-    static std::function<bool(point<double>)> test_collisionDT () {
-        auto ws = workspaceD("DT");
         auto clam = [ws](const point <double> config) {
             return ws.collides(config);
         };
@@ -872,7 +831,7 @@ public:
         if (label == "A") return startA();
         if (label == "B") return startB();
         if (label == "C") return startC();
-        if (label == "D" || label == "DT") return startD();
+        if (label == "D") return startD();
         if (label == "E") return startE();
         if (label == "F") return startF();
 
@@ -885,7 +844,6 @@ public:
         if (label == "B") return goalB();
         if (label == "C") return goalC();
         if (label == "D") return goalD();
-        if (label == "DT") return goalDT();
         if (label == "E") return goalE();
         if (label == "F") return goalF();
 
@@ -897,7 +855,7 @@ public:
         if (label == "A") return startsA();
         if (label == "B") return startsB();
         if (label == "C") return startsC();
-        if (label == "D" || label == "DT") return startsD();
+        if (label == "D") return startsD();
         if (label == "E") return startsE();
         if (label == "F") return startsF();
 
@@ -910,7 +868,6 @@ public:
         if (label == "B") return goalsB();
         if (label == "C") return goalsC();
         if (label == "D") return goalsD();
-        if (label == "DT") return goalsDT();
         if (label == "E") return goalsE();
         if (label == "F") return goalsF();
 
@@ -922,7 +879,7 @@ public:
         if (label == "A") return joint_limitsA();
         if (label == "B") return joint_limitsB();
         if (label == "C") return joint_limitsC();
-        if (label == "D" || label == "DT") return joint_limitsD();
+        if (label == "D") return joint_limitsD();
         if (label == "E") return joint_limitsE();
         if (label == "F") return joint_limitsF();
 
@@ -933,7 +890,6 @@ public:
     static std::function <double(const point <double>&, const point <double>&)> distance (const std::string label) {
         if (label == "A" || label == "B" || label == "C") return euclidean_distance <double>;
         if (label == "D") return distanceD();
-        if (label == "DT") return distanceDT();
         if (label == "E") return distanceE();
         if (label == "F") return distanceF();
 
@@ -945,7 +901,7 @@ public:
         if (label == "A") return num_samplesA;
         if (label == "B") return num_samplesB;
         if (label == "C") return num_samplesC;
-        if (label == "D" || label == "DT") return num_samplesD;
+        if (label == "D") return num_samplesD;
         if (label == "E") return num_samplesE;
         if (label == "F") return num_samplesF;
 
@@ -957,7 +913,7 @@ public:
         if (label == "A") return stepsizeA;
         if (label == "B") return stepsizeB;
         if (label == "C") return stepsizeC;
-        if (label == "D" || label == "DT") return stepsizeD;
+        if (label == "D") return stepsizeD;
         if (label == "E") return stepsizeE;
         if (label == "F") return stepsizeF;
 
@@ -969,7 +925,7 @@ public:
         if (label == "A") return radiusA;
         if (label == "B") return radiusB;
         if (label == "C") return radiusC;
-        if (label == "D" || label == "DT") return radiusD;
+        if (label == "D") return radiusD;
         if (label == "E") return radiusE;
         if (label == "F") return radiusF;
 
@@ -982,7 +938,6 @@ public:
         if (label == "B") return test_collisionB;
         if (label == "C") return test_collisionC;
         if (label == "D") return test_collisionD();
-        if (label == "DT") return test_collisionDT();
         if (label == "E") return test_collisionE();
         if (label == "F") return test_collisionF();
 
@@ -994,7 +949,7 @@ public:
         if (label == "A") return get_sampleA;
         if (label == "B") return get_sampleB;
         if (label == "C") return get_sampleC;
-        if (label == "D" || label == "DT") return get_sampleD;
+        if (label == "D") return get_sampleD;
         if (label == "E") return get_sampleE;
         if (label == "F") return get_sampleF;
 
@@ -1008,8 +963,8 @@ public:
     ) {
         if (label == "A") return plot_object(add_obstacle_edgesA);
         if (label == "B") return plot_object(add_obstacle_edgesB);
-        if (obs && (label == "D" || label == "DT")) return plot_object(joint_limitsD(), test_collisionD());
-        if (!obs && (label == "D" || label == "DT")) return plot_object(joint_limitsD(), test_collisionD(), 1);  
+        if (obs && (label == "D")) return plot_object(joint_limitsD(), test_collisionD());
+        if (!obs && (label == "D")) return plot_object(joint_limitsD(), test_collisionD(), 1);  
 
         // invalid test label
         throw std::domain_error("Invalid test label");
@@ -1028,7 +983,7 @@ public:
     }
 
     static workspace2d <double> getws (std::string label) {
-        if (label == "D" || label == "DT") return workspaceD(label);
+        if (label == "D") return workspaceD(label);
         if (label == "F") return workspaceF();
         
         // invalid test label
@@ -1099,8 +1054,8 @@ int main (int argc, char *argv[]) {
     test_battery tb;
     test test_sq, test_mq;
 
-    std::string algorithm = "RRT";
-    std::string test_label = "F";
+    std::string algorithm = "FMT*";
+    std::string test_label = "D";
     bool one_by_one = false;
     bool write_to_file = false;
     bool snapshot = false;
@@ -1114,14 +1069,13 @@ int main (int argc, char *argv[]) {
         if (flag == "RRT" || flag == "PRM" || flag == "FMT" || flag == "FMT*") {
             algorithm = flag;
         }
-        if (flag == "A" || flag == "B" || flag == "C" || flag == "D" || flag == "DT" || flag == "E" || flag == "F") {
+        if (flag == "A" || flag == "B" || flag == "C" || flag == "D" || flag == "E" || flag == "F") {
             test_label = flag;
         }
         if (flag == "point2D-A") test_label = "A";
         if (flag == "point2D-B") test_label = "B";
         if (flag == "point3D") test_label = "C";
         if (flag == "arm2D") test_label = "D";
-        if (flag == "trivial2D") test_label = "DT";
         if (flag == "antro") test_label = "E";
         if (flag == "hard") test_label = "F";
         if (flag == "-seq") {
@@ -1194,7 +1148,7 @@ int main (int argc, char *argv[]) {
 
 
         if (snapshot) {
-            if (test_label == "D" || test_label == "DT" || test_label == "F") {
+            if (test_label == "D" || test_label == "F") {
                 display_snapshots(tb.getws(test_label), path);
             }
             else if (test_label == "E") {
@@ -1206,7 +1160,7 @@ int main (int argc, char *argv[]) {
         }
         // plot graph
         else {
-            if (test_label == "A" || test_label == "B" || test_label == "D" || test_label == "DT") {
+            if (test_label == "A" || test_label == "B" || test_label == "D") {
                 plot_graph(out, tb.test_colision(test_label), tb.add_obstacle_edges(test_label, obs), tb.joint_limits(test_label), one_by_one, write_to_file);
             }
             else if (test_label == "C" || test_label == "E") {
