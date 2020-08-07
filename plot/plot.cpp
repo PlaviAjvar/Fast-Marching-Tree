@@ -128,6 +128,8 @@ void obtain_limits (
     double& yhigh,
     const double offset
 ) {
+    xlow = ylow = 10;
+    xhigh = yhigh = -10;
 
     // find leftmost/rightmost x-coordinate and bottommost/topmost y-coordinate for obstacles
     for (const auto& polygon : ws.get_obstacles()) {
