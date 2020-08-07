@@ -15,14 +15,12 @@ std::vector <labeled_node <double>> prm_connect(
 ) {
     std::vector <labeled_node <double>> lgraph(graph.begin(), graph.end());
 
-    for (auto&& vertex : lgraph) {
-        for (auto&& other_vertex : lgraph) {
-            // if they are different points and distance is smaller than radius
-            if (vertex.get_point() != other_vertex.get_point() && distance(vertex.get_point(), other_vertex.get_point()) < radius) {
-                // check if there is a collision
-                if (path_clear(vertex.get_point(), other_vertex.get_point(), collision_check, stepsize)) {
-                    vertex.add_neighbor(&other_vertex);
-                }
+    for (auto it = lgraph.begin(); it != lgraph.end(); ++it) {
+        for (auto jt = std::next(it); jt != lgraph.end(); ++jt) {
+            // check if there is a collision
+            if (distance(it->get_point(), jt->get_point()) < radius && path_clear(it->get_point(), jt->get_point(), collision_check, stepsize)) {
+                it->add_neighbor(&(*jt));
+                jt->add_neighbor(&(*it));
             }
         }
     }

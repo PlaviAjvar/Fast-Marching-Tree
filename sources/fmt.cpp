@@ -4,6 +4,7 @@
 #include <iostream>
 #include <queue>
 #include <algorithm>
+#include <iterator>
 
 
 // implements connect procedure on fmt graph
@@ -17,11 +18,11 @@ std::vector <labeled_node <double>> induced_graph (
 ) {
     std::vector <labeled_node <double>> lgraph(graph.begin(), graph.end());
 
-    for (auto&& vertex : lgraph) {
-        for (auto&& other_vertex : lgraph) {
-            // if they are different points and distance is smaller than radius
-            if (vertex.get_point() != other_vertex.get_point() && distance(vertex.get_point(), other_vertex.get_point()) < radius) {
-                vertex.add_neighbor(&other_vertex);
+    for (auto it = lgraph.begin(); it != lgraph.end(); ++it) {
+        for (auto jt = std::next(it); jt != lgraph.end(); ++jt) {
+            if (distance(it->get_point(), jt->get_point()) < radius) {
+                it->add_neighbor(&(*jt));
+                jt->add_neighbor(&(*it));
             }
         }
     }
