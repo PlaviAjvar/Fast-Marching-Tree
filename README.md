@@ -21,17 +21,17 @@ For running tests, list one of the following (E is default): A, B, C, D, E or F 
 
 For setting algorithm of choice list one of the following: FMT, RRT, PRM or FMT*. The last two are nearly identical, except that FMT* has self-tuning radius. Radius is additionaly adjusted for weighed Euclidean metric.
 
-The running mode can be either: normal (running testcase and plotting result on graph), time simulation (running algorithm 20 times and averaging runtime), parameter simulation (running algorithm with 27 varying parameter sets), energy simulation (plotting energy as function of number of samples / energy averaged over 3 iterations) or reachability simulation (plotting probability of successful connection as function of number of samples / over 10 iterations). These are set using respective flags:
+The running mode can be either: normal (running testcase and plotting result on graph), time simulation (running algorithm 20 times and averaging runtime), parameter simulation (running algorithm with 27 varying parameter sets), energy simulation (plotting average energy as function of number of samples), reachability simulation (plotting probability of successful connection as function of number of samples) or runtime vs sample count simulation (plotting average runtime vs. number of samples). These are set using respective flags:
 
--normal, -timesim, -paramsim, -energysim, -reachsim
+-normal, -timesim, -paramsim, -energysim, -reachsim, -ntsim
 
 The other flags are:
 
 -seq enables sequential plotting of tree edges in RRT/FMT (works only for 2D cases)<br/>
 -file exports plot to file<br/>
 -path if this is on, path is shown in 3D, rather than the graph/tree; in 2D both are shown always<br/>
--snapshot displays snapshots of robotic arm, moving in a 2D/3D workspace from start to finish (run with either D, E or F)
--nobs turns off configuration space obstacle plotting (for examples with actual robotic arms)
+-snapshot displays snapshots of robotic arm, moving in a 2D/3D workspace from start to finish (run with either D, E or F)<br/>
+-nobs turns off configuration space obstacle plotting (for examples with actual robotic arms)<br/>
 eta=FLOAT sets the value of the tuning parameter eta to the value FLOAT
 
 ## Unit tests

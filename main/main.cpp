@@ -116,8 +116,12 @@ public:
         return radius;
     }
 
-    double get_stepsize() const {
+    double get_stepsize () const {
         return stepsize;
+    }
+
+    double get_eta () const {
+        return eta;
     }
 };
 
@@ -1084,7 +1088,7 @@ int main (int argc, char *argv[]) {
         if (flag == "-file") {
             write_to_file = true;
         }
-        if (flag == "-timesim" || flag == "-paramsim" || flag == "-energysim" || flag == "-reachsim" || flag == "-normal") {
+        if (flag == "-timesim" || flag == "-paramsim" || flag == "-energysim" || flag == "-reachsim" || flag == "-normal" || flag == "-ntsim") {
             mode = flag;
         }
         if (flag == "-snapshot") {
@@ -1199,7 +1203,7 @@ int main (int argc, char *argv[]) {
     }
 
     // simulate various parameter values
-    else if (mode == "-paramsim") {
+    else if (mode == "-paramsim" && algorithm != "FMT*") {
         // number of iterations
         const size_t num_iter = 27;
         const size_t num_repeats = 5;
@@ -1279,22 +1283,100 @@ int main (int argc, char *argv[]) {
         }
     }
 
+    else if (mode == "-paramsim" && algorithm == "FMT*") {
+        // number of iterations
+        std::vector <double> etas{
+            0.1, 1, 5
+        };
+        const size_t num_iter = 27;
+        const size_t num_repeats = 5;
+        std::vector <output> out(num_iter);
+        std::vector <test> tests(num_iter);
+        std::vector <double> elapsed_time(num_iter);
+        std::vector <double> avg_length(num_iter);
+        std::vector <bool> path_failed(num_iter);
+
+        double stepsizes[] = {tb.stepsize(test_label) / 2, tb.stepsize(test_label), tb.stepsize(test_label) * 2};
+        unsigned int nums_samples[] = {tb.num_samples(test_label) / 2, tb.num_samples(test_label), tb.num_samples(test_label) * 2};
+
+        try {
+            for (size_t iter = 0; iter < num_iter; ++iter) {
+                auto begin = std::chrono::high_resolution_clock::now();
+                double radius, stepsize, etai;
+                unsigned int num_samples;
+                
+                std::cout << std::endl;
+                std::cout << "*************************" << std::endl;
+                std::cout << "Iteration " << iter+1 << std::endl;
+                std::cout << "*************************" << std::endl;
+
+                num_samples = nums_samples[iter % 3];
+                stepsize = stepsizes[(iter / 3) % 3];
+                etai = etas[iter / 9];
+
+                tests[iter] = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
+                    tb.get_sample(test_label), tb.distance(test_label), num_samples, stepsize, radius, etai);
+
+                // calculate average path length
+                for (size_t repeat = 0; repeat < num_repeats; ++repeat) {
+                    // get path
+                    out[iter] = tests[iter].run_test(algorithm);
+                    auto path = out[iter].get_paths()[0];
+                    double path_len = path_length(path, tb.distance(test_label));
+
+                    // test existance of path
+                    if (path.size() > 0) {
+                        avg_length[iter] += path_len;
+                    }
+                    else {
+                        path_failed[iter] = true;
+                    }
+                }
+
+                avg_length[iter] /= num_repeats;
+
+                auto end = std::chrono::high_resolution_clock::now();
+                auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+                elapsed_time[iter] = elapsed.count() / num_repeats * 1e-9;
+            }
+
+            // output list of parameter combinations and relevant diagnostics to file
+            std::ofstream ofs("diagnostics" + algorithm + ".txt");
+            ofs << "Diagnostic information" << std::endl;
+            ofs << "Path length and runtime averaged over 5 executions" << std::endl;
+            ofs << "Connected if path was found in all 5 executions" << std::endl << std::endl;
+
+            for (size_t iter = 0; iter < num_iter; ++iter) {
+                ofs << "test" << test_label << " (num_samples = " << tests[iter].get_num_samples();
+                ofs << ", stepsize = " << tests[iter].get_stepsize();
+                ofs << ", eta = " << tests[iter].get_eta() << ") : ";;
+
+                if (!path_failed[iter]) {
+                    ofs << "is connected (path_length = " << avg_length[iter] << ", elapsed_time = " << elapsed_time[iter] << ")" << std::endl;
+                }
+                else {
+                    ofs << "is not connected" << std::endl;
+                }
+            }
+        }
+        catch (std::logic_error err) {
+            std::cout << err.what() << std::endl;
+            throw;
+        }
+    }
+
     else if (mode == "-energysim") {
         // number of repeats
-        std::vector <double> samplecnt_scaler; 
-        const double lower = 0.2;
-        const double upper = 5;
-        const double jump = 0.4;
-        for (double step = lower; step <= upper; step += jump) {
-            samplecnt_scaler.push_back(step);
-        }
+        std::vector <double> samplecnt_scaler{0.01, 0.05, 0.1, 0.2, 0.5, 0.7, 1, 1.5, 2}; 
         std::vector <double> xs, ys;
+        std::vector <double> samplecnt(samplecnt_scaler.size());
 
         output out;
-        const size_t num_iter = 3;
+        const size_t num_iter = 10;
 
         for (size_t level = 0; level < samplecnt_scaler.size(); ++level) {
             size_t num_samples = tb.num_samples(test_label) * samplecnt_scaler[level];
+            samplecnt[level] = num_samples;
             double energy = 0;
             unsigned int pathcnt = 0;
 
@@ -1317,8 +1399,11 @@ int main (int argc, char *argv[]) {
                     throw;
                 }
             }
+
+            std::cout << "num_samples = " << samplecnt[level] << std::endl;
+            std::cout << "energy = " << energy / num_iter << std::endl << std::endl;
         
-            xs.push_back(samplecnt_scaler[level]);
+            xs.push_back(samplecnt[level]);
             ys.push_back(energy / num_iter);
         }
 
@@ -1328,6 +1413,7 @@ int main (int argc, char *argv[]) {
     else if (mode == "-reachsim") {
         // number of repeats
         std::vector <double> samplecnt_scaler{0.01, 0.05, 0.1, 0.2, 0.5, 0.7, 1, 1.5, 2}; 
+        std::vector <double> samplecnt(samplecnt_scaler.size());
         std::vector <double> xs, ys;
 
         output out;
@@ -1335,6 +1421,7 @@ int main (int argc, char *argv[]) {
 
         for (size_t level = 0; level < samplecnt_scaler.size(); ++level) {
             size_t num_samples = tb.num_samples(test_label) * samplecnt_scaler[level];
+            samplecnt[level] = num_samples;
             double pathcnt = 0;
 
             for (size_t iter = 0; iter < num_iter; ++iter) {
@@ -1353,12 +1440,58 @@ int main (int argc, char *argv[]) {
                     throw;
                 }
             }
+
+            std::cout << "num_samples = " << samplecnt[level] << std::endl;
+            std::cout << "probability = " << pathcnt / num_iter << std::endl << std::endl;
         
-            xs.push_back(samplecnt_scaler[level]);
+            xs.push_back(samplecnt[level]);
             ys.push_back(pathcnt / num_iter);
         }
 
         plot_function(xs, ys, "number of samples", "probability", "Probability of finding path vs. Number of samples");
+    }
+
+    else if (mode == "-ntsim") {
+        // number of repeats
+        std::vector <double> samplecnt_scaler{0.1, 0.2, 0.5, 1, 1.5, 2, 3.5, 5}; 
+        std::vector <double> samplecnt(samplecnt_scaler.size());
+        std::vector <double> runtime(samplecnt_scaler.size());
+        std::vector <double> xs, ys;
+
+        output out;
+        const size_t num_iter = 10;
+
+        for (size_t level = 0; level < samplecnt_scaler.size(); ++level) {
+            size_t num_samples = tb.num_samples(test_label) * samplecnt_scaler[level];
+            samplecnt[level] = num_samples;
+            
+            auto begin = std::chrono::high_resolution_clock::now();
+
+            for (size_t iter = 0; iter < num_iter; ++iter) {
+                try {
+                    test_sq = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
+                        tb.get_sample(test_label), tb.distance(test_label), num_samples, tb.stepsize(test_label), tb.radius(test_label), eta);
+
+                    out = test_sq.run_test(algorithm);
+                }
+                catch (std::logic_error err) {
+                    std::cout << err.what() << std::endl;
+                    throw;
+                }
+            }
+
+            auto end = std::chrono::high_resolution_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+            runtime[level] = elapsed.count() / num_iter * 1e-9;
+
+            std::cout << "num_samples = " << samplecnt[level] << std::endl;
+            std::cout << "runtime = " << runtime[level] << std::endl << std::endl;
+        
+            xs.push_back(samplecnt[level]);
+            ys.push_back(runtime[level]);
+        }
+
+        plot_function(xs, ys, "number of samples", "runtime", "Runtime vs. Number of samples");
     }
 
     return 0;
