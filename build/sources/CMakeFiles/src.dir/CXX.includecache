@@ -6,28 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.cpp
-fmt.h
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.h
-geometry.h
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h
-planning.h
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.h
-iostream
--
-queue
--
-algorithm
--
-iterator
--
-
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/fmt.h
-geometry.h
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h
-planning.h
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.h
-
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h
 vector
 -
@@ -42,14 +20,6 @@ cmath
 memory
 -
 
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.cpp
-planning.h
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.h
-iostream
--
-algorithm
--
-
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.h
 geometry.h
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h
@@ -57,24 +27,6 @@ vector
 -
 iostream
 -
-
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/prm.cpp
-prm.h
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/prm.h
-geometry.h
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h
-queue
--
-iostream
--
-algorithm
--
-
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/prm.h
-geometry.h
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/geometry.h
-planning.h
-/Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/planning.h
 
 /Users/tanja.ah/Desktop/Fast-Marching-Tree/sources/rrt.cpp
 rrt.h
