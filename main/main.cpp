@@ -1292,7 +1292,7 @@ int main (int argc, char *argv[]) {
                     }
 
                     // output list of parameter combinations and relevant diagnostics to file
-                    std::ofstream ofs("diagnostics" + algo + ".txt");
+                    std::ofstream ofs("diagnostics" + algo + test_label + ".txt");
                     ofs << "Diagnostic information" << std::endl;
                     ofs << "Path length, runtime and probability of connection averaged over 5 executions" << std::endl;
 
@@ -1377,7 +1377,7 @@ int main (int argc, char *argv[]) {
                     }
 
                     // output list of parameter combinations and relevant diagnostics to file
-                    std::ofstream ofs("diagnostics" + algo + ".txt");
+                    std::ofstream ofs("diagnostics" + algo + test_label + ".txt");
                     ofs << "Diagnostic information" << std::endl;
                     ofs << "Path length and runtime averaged over 5 executions" << std::endl;
                     ofs << "Connected if path was found in all 5 executions" << std::endl << std::endl;
