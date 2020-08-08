@@ -4,7 +4,7 @@ Implementation of Fast Marching Tree (FMT). For comparisson sake, RRT and PRM ar
 
 ## Disclaimer
 
-The implemented version of the algorithm is suboptimal, as it uses a naive O(n^2) approach to evaluate neighbors in the disk graph. Thus, the algorithm requires O(n^2) distance computations and O(n) collision checks. The optimal version uses BBD trees to reduce number of distance computations to O(n log n). This is not an incredibly drastic difference, when the collision checks are sufficiently expensive compared to the distance computations.
+The implemented version of the algorithm is suboptimal, as it uses a naive O(n^2) approach to evaluate neighbors in the disk graph. Thus, the algorithm requires O(n^2) distance computations and O(n) collision checks. The optimal version uses BBD trees to reduce number of distance computations to O(n log n). This is not an terribly drastic difference, when the collision checks are sufficiently expensive compared to the distance computations.
 
 ## Run it
 
@@ -14,7 +14,7 @@ To interact with the implementation, first navigate to the build folder, and exe
 > cmake ..<br/>
 > make
 
-After the project is built, run it from the "main" subfolder. E.g. on mac:
+After the project is built, run it from the build/main subfolder. E.g. on Mac/Linux:
 
 > cd main <br/>
 > ./main
