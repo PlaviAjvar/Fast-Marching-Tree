@@ -263,8 +263,10 @@ void display_snapshots3d (
 );
 
 void plot_function (
-    const std::vector <double>& xs,
-    const std::vector <double>& ys,
+    const std::vector <std::vector <double>>& xss,
+    const std::vector <std::vector <double>>& yss,
+    const std::vector <std::string>& colors,
+    const std::vector <std::string>& algs,
     const std::string xlabel,
     const std::string ylabel,
     const std::string title

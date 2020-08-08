@@ -2,6 +2,7 @@
 #include "matplotlibcpp.h"
 #include "geometry.h"
 #include <sstream>
+#include <map>
 namespace plt = matplotlibcpp;
 
 size_t add_graph_edges(
@@ -360,16 +361,23 @@ void display_snapshots3d (
 }
 
 void plot_function (
-    const std::vector <double>& xs,
-    const std::vector <double>& ys,
+    const std::vector <std::vector <double>>& xss,
+    const std::vector <std::vector <double>>& yss,
+    const std::vector <std::string>& colors,
+    const std::vector <std::string>& algs,
     const std::string xlabel,
     const std::string ylabel,
     const std::string title
 ) {
     plt::backend("TkAgg");
-    plt::plot(xs, ys, "x");
+
+    for (size_t ex = 0; ex < xss.size(); ++ex) {
+        plt::named_plot(algs[ex], xss[ex], yss[ex], colors[ex] + "-x");
+    }
+
     plt::title(title);
     plt::xlabel(xlabel);
     plt::ylabel(ylabel);
+    plt::legend();
     plt::show();
 }
