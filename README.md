@@ -37,7 +37,7 @@ The other flags are:
 -snapshot displays snapshots of robotic arm, moving in a 2D/3D workspace from start to finish (run with either D, E or F)<br/>
 -nobs turns off configuration space obstacle plotting (for examples with actual robotic arms)<br/>
 eta=FLOAT sets the value of the tuning parameter eta to the value FLOAT<br/>
--all is used in conjuction with the "sim" flags; it ignores the algorithm of choice and executes them all (and displays on same graph); only runs FMT* option with self-tuning radius
+-all is used in conjuction with the "sim" flags; it ignores the algorithm of choice and executes them all (and displays on same graph)
 
 
 ## Unit tests

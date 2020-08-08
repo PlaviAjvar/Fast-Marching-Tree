@@ -1119,7 +1119,7 @@ int main (int argc, char *argv[]) {
         }
         if (flag == "-all") {
             algs = std::vector <std::string>{
-                "FMT*", "RRT", "PRM"
+                "FMT*", "FMT", "RRT", "PRM"
             };
         }
     }
@@ -1242,7 +1242,7 @@ int main (int argc, char *argv[]) {
                 std::vector <test> tests(num_iter);
                 std::vector <double> elapsed_time(num_iter);
                 std::vector <double> avg_length(num_iter);
-                std::vector <bool> path_failed(num_iter);
+                std::vector <int> times_connected(num_iter);
 
                 double radii[] = {tb.radius(test_label) / 2, tb.radius(test_label), tb.radius(test_label) * 2};
                 double stepsizes[] = {tb.stepsize(test_label) / 2, tb.stepsize(test_label), tb.stepsize(test_label) * 2};
@@ -1266,6 +1266,8 @@ int main (int argc, char *argv[]) {
                         tests[iter] = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
                             tb.get_sample(test_label), tb.distance(test_label), num_samples, stepsize, radius, eta);
 
+                        unsigned int count_repeats = 0;
+
                         // calculate average path length
                         for (size_t repeat = 0; repeat < num_repeats; ++repeat) {
                             // get path
@@ -1276,13 +1278,13 @@ int main (int argc, char *argv[]) {
                             // test existance of path
                             if (path.size() > 0) {
                                 avg_length[iter] += path_len;
-                            }
-                            else {
-                                path_failed[iter] = true;
+                                ++count_repeats;
+                                times_connected[iter]++;
                             }
                         }
 
-                        avg_length[iter] /= num_repeats;
+                        if (count_repeats > 0) avg_length[iter] /= count_repeats;
+                        else avg_length[iter] = NAN;
 
                         auto end = std::chrono::high_resolution_clock::now();
                         auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
@@ -1292,16 +1294,16 @@ int main (int argc, char *argv[]) {
                     // output list of parameter combinations and relevant diagnostics to file
                     std::ofstream ofs("diagnostics" + algo + ".txt");
                     ofs << "Diagnostic information" << std::endl;
-                    ofs << "Path length and runtime averaged over 5 executions" << std::endl;
-                    ofs << "Connected if path was found in all 5 executions" << std::endl << std::endl;
+                    ofs << "Path length, runtime and probability of connection averaged over 5 executions" << std::endl;
 
                     for (size_t iter = 0; iter < num_iter; ++iter) {
                         ofs << "test" << test_label << " (num_samples = " << tests[iter].get_num_samples();
                         ofs << ", stepsize = " << tests[iter].get_stepsize();
-                        ofs << ", radius = " << tests[iter].get_radius() << ") : ";;
+                        ofs << ", radius = " << tests[iter].get_radius() << ") : ";
 
-                        if (!path_failed[iter]) {
-                            ofs << "is connected (path_length = " << avg_length[iter] << ", elapsed_time = " << elapsed_time[iter] << ")" << std::endl;
+                        if (!isnan(avg_length[iter])) {
+                            ofs << "(path_length = " << avg_length[iter] << ", elapsed_time = " << elapsed_time[iter];
+                            ofs << ", probability of success = " << double(times_connected[iter]) / num_repeats << ")" << std::endl;
                         }
                         else {
                             ofs << "is not connected" << std::endl;
@@ -1325,7 +1327,7 @@ int main (int argc, char *argv[]) {
                 std::vector <test> tests(num_iter);
                 std::vector <double> elapsed_time(num_iter);
                 std::vector <double> avg_length(num_iter);
-                std::vector <bool> path_failed(num_iter);
+                std::vector <int> times_connected(num_iter);
 
                 double stepsizes[] = {tb.stepsize(test_label) / 2, tb.stepsize(test_label), tb.stepsize(test_label) * 2};
                 unsigned int nums_samples[] = {tb.num_samples(test_label, algo) / 2, tb.num_samples(test_label, algo), tb.num_samples(test_label, algo) * 2};
@@ -1347,6 +1349,8 @@ int main (int argc, char *argv[]) {
 
                         tests[iter] = test(tb.start(test_label), tb.goal(test_label), tb.joint_limits(test_label), tb.test_colision(test_label), 
                             tb.get_sample(test_label), tb.distance(test_label), num_samples, stepsize, radius, etai);
+                        
+                        unsigned int count_repeats = 0;
 
                         // calculate average path length
                         for (size_t repeat = 0; repeat < num_repeats; ++repeat) {
@@ -1358,13 +1362,14 @@ int main (int argc, char *argv[]) {
                             // test existance of path
                             if (path.size() > 0) {
                                 avg_length[iter] += path_len;
-                            }
-                            else {
-                                path_failed[iter] = true;
+                                ++count_repeats;
+                                times_connected[iter]++;
                             }
                         }
 
-                        avg_length[iter] /= num_repeats;
+                        if (count_repeats > 0) avg_length[iter] /= count_repeats;
+                        else avg_length[iter] = NAN;
+
 
                         auto end = std::chrono::high_resolution_clock::now();
                         auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
@@ -1382,8 +1387,9 @@ int main (int argc, char *argv[]) {
                         ofs << ", stepsize = " << tests[iter].get_stepsize();
                         ofs << ", eta = " << tests[iter].get_eta() << ") : ";;
 
-                        if (!path_failed[iter]) {
-                            ofs << "is connected (path_length = " << avg_length[iter] << ", elapsed_time = " << elapsed_time[iter] << ")" << std::endl;
+                        if (!isnan(avg_length[iter])) {
+                            ofs << "(path_length = " << avg_length[iter] << ", elapsed_time = " << elapsed_time[iter];
+                            ofs << ", probability of success = " << double(times_connected[iter]) / num_repeats << ")" << std::endl;
                         }
                         else {
                             ofs << "is not connected" << std::endl;
@@ -1555,7 +1561,7 @@ int main (int argc, char *argv[]) {
             yss.push_back(ys);
             col.push_back(color[algo]);
         }
-        
+
         plot_function(xss, yss, col, algs, "number of samples", "runtime", "Runtime vs. Number of samples");
     }
 
