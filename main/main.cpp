@@ -1420,7 +1420,7 @@ int main (int argc, char *argv[]) {
             std::cout << std::endl;
 
             // number of repeats
-            std::vector <double> samplecnt_scaler{0.01, 0.05, 0.1, 0.2, 0.5, 0.7, 1, 1.5, 2}; 
+            std::vector <double> samplecnt_scaler{0.01, 0.05, 0.1, 0.2, 0.5, 0.7, 1, 1.5, 2};
             std::vector <double> xs, ys;
             std::vector <double> samplecnt(samplecnt_scaler.size());
 
@@ -1484,7 +1484,7 @@ int main (int argc, char *argv[]) {
             std::cout << std::endl;
 
             // number of repeats
-            std::vector <double> samplecnt_scaler{0.01, 0.05, 0.1, 0.2, 0.5, 0.7, 1, 1.5, 2}; 
+            std::vector <double> samplecnt_scaler{0.01, 0.05, 0.1, 0.2, 0.5, 0.7, 1, 1.5, 2};
             std::vector <double> samplecnt(samplecnt_scaler.size());
             std::vector <double> xs, ys;
 
@@ -1539,7 +1539,7 @@ int main (int argc, char *argv[]) {
             std::cout << std::endl;
             
             // number of repeats
-            std::vector <double> samplecnt_scaler{0.1, 0.2, 0.5, 1, 1.5, 2, 3.5}; 
+            std::vector <double> samplecnt_scaler{0.01, 0.05, 0.1, 0.2, 0.5, 0.7, 1, 1.5, 2};
             std::vector <double> samplecnt(samplecnt_scaler.size());
             std::vector <double> runtime(samplecnt_scaler.size());
             std::vector <double> xs, ys;
