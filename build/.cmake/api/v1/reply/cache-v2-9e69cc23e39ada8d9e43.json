@@ -1462,18 +1462,6 @@
 			"value" : "FALSE"
 		},
 		{
-			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_Python2",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Details about finding Python2"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "[/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config/libpython2.7.dylib][/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7][/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include][cfound components: Development NumPy Interpreter ][v2.7.16()]"
-		},
-		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_Python3",
 			"properties" : 
 			[
@@ -1548,102 +1536,6 @@
 			],
 			"type" : "INTERNAL",
 			"value" : "/usr/local"
-		},
-		{
-			"name" : "_Python2_DEVELOPMENT_SIGNATURE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : ""
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "4d3a17127dda8440dfeec272afc5da13"
-		},
-		{
-			"name" : "_Python2_EXECUTABLE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Path to a program."
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "/System/Library/Frameworks/Python.framework/Versions/2.7/bin/python2.7"
-		},
-		{
-			"name" : "_Python2_INCLUDE_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Path to a file."
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7"
-		},
-		{
-			"name" : "_Python2_INTERPRETER_PROPERTIES",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Python2 Properties"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "Python;2;7;16;64;;;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7;/Library/Python/2.7/site-packages;/Library/Python/2.7/site-packages"
-		},
-		{
-			"name" : "_Python2_INTERPRETER_SIGNATURE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : ""
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "8fe377a35d0ac4c518176df93f5d3465"
-		},
-		{
-			"name" : "_Python2_LIBRARY_RELEASE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Path to a library."
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config/libpython2.7.dylib"
-		},
-		{
-			"name" : "_Python2_NUMPY_SIGNATURE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : ""
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "e9d7bbd4b9a7cfd58cba993fabd408eb"
-		},
-		{
-			"name" : "_Python2_NumPy_INCLUDE_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Path to a file."
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include"
 		},
 		{
 			"name" : "_Python3_DEVELOPMENT_SIGNATURE",

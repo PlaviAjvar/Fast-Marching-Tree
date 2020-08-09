@@ -1582,7 +1582,7 @@ int main (int argc, char *argv[]) {
             col.push_back(color[algo]);
         }
 
-        plot_function(xss, yss, col, algs, "number of samples", "runtime", "Runtime vs. Number of samples");
+        plot_function(xss, yss, col, algs, "number of samples", "runtime [seconds]", "Runtime vs. Number of samples");
     }
 
     return 0;
