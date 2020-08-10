@@ -53,7 +53,9 @@ tree_node <double>* connect_closest (
 
     for (auto&& vertex : tree) {
         if (is_reachable(vertex, sample, stepsize, collision_check, distance, radius)) {
-            if (nearest == nullptr || distance(vertex.get_point(), sample) < distance(nearest->get_point(), sample)) {
+            if (nearest == nullptr || vertex.get_distance() + distance(vertex.get_point(), sample) < 
+                nearest->get_distance() + distance(nearest->get_point(), sample)) {
+                
                 nearest = &vertex;
             }
         }
@@ -127,7 +129,7 @@ output rrt(
     // initialize tree with starting point
     std::vector <tree_node <double>> tree;
     tree.reserve(num_samples + 2);
-    tree.push_back(tree_node <double>(start, nullptr));
+    tree.push_back(tree_node <double>(start, nullptr, 0));
 
     for (size_t sample_idx = 0; sample_idx < num_samples; ++sample_idx) {
         // get new (random) sample
@@ -146,7 +148,8 @@ output rrt(
         }
 
         // add new configuration to tree
-        tree.push_back(tree_node <double>(new_cfg, nearest));
+        double dist = nearest->get_distance() + distance(nearest->get_point(), new_cfg);
+        tree.push_back(tree_node <double>(new_cfg, nearest, dist));
     }
 
     std::cout << "RRT connected" << std::endl << std::endl;

@@ -42,27 +42,37 @@ public:
 
 template <typename real>
 class tree_node : public node <real> {
+private:
+    real distance;
+
 public:
     tree_node () {}
 
     tree_node (const tree_node <real>& vertex) {
         node<real>::sample = vertex.get_point();
         node<real>::neighbor = vertex.get_neighbors();
+        distance = vertex.get_distance();
     }
 
     tree_node (
         const point <real> _sample,
-        tree_node <real> *parent
+        tree_node <real> *parent,
+        const real dist = 0
     ) {
 
         node<real>::sample = _sample;
         node<real>::neighbor.resize(1);
         node<real>::neighbor[0] = parent;
+        distance = dist;
     }
 
     tree_node <real>* get_parent () const {
         if (node<real>::neighbor.size() == 0) return nullptr;
         return dynamic_cast <tree_node <real>*> (node<real>::neighbor[0]);
+    }
+
+    real get_distance () const {
+        return distance;
     }
 };
 
